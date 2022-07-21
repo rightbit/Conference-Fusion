@@ -1,4 +1,4 @@
-# Call 4: A Conference Schedule Builder
+# Conference-Fusion: A Conference Schedule Builder
 
 ## Placeholder Readme
 
