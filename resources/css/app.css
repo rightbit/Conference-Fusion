@@ -1,0 +1,39 @@
+/* Header background color */
+.bg-background-main {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+/* Make the text on yellow notifications more readable */
+.v--default-css .c-toast--warning {
+    color: #000000 !important;
+}
+
+
+/* Keep stuff in the middle of tables */
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+/* Turn off the "Current" span on pagination */
+.sr-only {
+    display:none;
+}
+
+/* Smaller font sizes */
+.fs-90 {
+    font-size: .9em;
+}
+.fs-80 {
+    font-size: .8em;
+}
+
+
+
+.card-title::first-letter {
+    text-transform:capitalize;
+}
