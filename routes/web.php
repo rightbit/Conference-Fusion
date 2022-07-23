@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [App\Http\Controllers\WelcomeController::class, 'welcome'])->name('welcome');
+Route::get('/terms-and-policies', function() {
+        return (view()->exists('custom.terms')) ? view('custom.terms') : view('terms');
+})->name('terms');
 
 Auth::routes();
 
