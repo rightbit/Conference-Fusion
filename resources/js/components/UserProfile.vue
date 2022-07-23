@@ -68,11 +68,58 @@
                                 <textarea id="notes" class="form-control" placeholder="General notes for the staff about you (staff view only)"  v-model="user.info.notes" ></textarea>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="row mb-2">
+                            <div class="col-sm-12 mb-2"><span class="h4">Sell on Consignment</span><br/>
+                                If you would like a book partner to carry your books on consignment or through traditional sale, please enter the information below.
+                            </div>
+                        </div>
+                        <div class="row mb-0">
+                            <label for="book1title">Book 1</label>
+                        </div>
+                        <div class="row g-2  mb-2">
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="book1title" placeholder="Title" />
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="book1title" placeholder="Author" />
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="book1title" placeholder="ISBN" />
+                            </div>
+                        </div>
+                        <div class="row mb-0">
+                            <label for="book1title">Book 2</label>
+                        </div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="book1title" placeholder="Title" />
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="book1title" placeholder="Author" />
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="book1title" placeholder="ISBN" />
+                            </div>
+                        </div>
+                        <div class="row mb-0">
+                            <label for="book1title">Book 3</label>
+                        </div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="book1title" placeholder="Title" />
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="book1title" placeholder="Author" />
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="book1title" placeholder="ISBN" />
+                            </div>
+                        </div>
+                        <div class="mt-4 form-group">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" v-model="user.info.agree_to_terms" id="terms" required>
                                 <label class="form-check-label" for="terms">
-                                    Agree to site terms and code of conduct
+                                    Agree to site <a href="/terms-and-policies" target="_blank">terms and policies</a>
                                 </label>
                                 <div class="invalid-feedback">
                                     You must agree before submitting
@@ -83,7 +130,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" v-model="user.info.recording_permission" id="recorded">
                                 <label class="form-check-label" for="recorded">
-                                    Give permission to be photographed and recorded
+                                    Give permission to be photographed and recorded (optional)
                                 </label>
                             </div>
                         </div>
@@ -91,7 +138,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" v-model="user.info.share_email_permission" id="shareEmail">
                                 <label class="form-check-label" for="shareEmail">
-                                    Give permission to share your email
+                                    Give permission to share your email with other panelists (optional)
                                 </label>
                             </div>
                         </div>
@@ -111,6 +158,7 @@
                         <div class="d-flex justify-content-between align-items-center experience"><span class="h4">Participant Info</span></div>
                         <partials-user-info-data v-if="this.finished_loading" :category="'participant'" :user-info="user.info.participant_data" @changeInfoData="updateInfoData" />
                     </div>
+
                 </div>
             </form>
             <partials-user-profile-image-modal :user-id="this.userId" @changeImage="reloadProfileImage" />

@@ -14,6 +14,8 @@ This is just placeholder readme until the app reaches a full beta. If you are in
 - Run `npm install` from the project directory
 - Install the DB migrations - Run `php artisan migrate`
 - Seed the DB - Run `php artisan db:seed`
+- Create a custom view views/custom/welcome.blade.php
+- Create a custom view views/custom/terms.blade.php
 
 ### To Run Locally
 - cd into the project directory
@@ -22,8 +24,9 @@ This is just placeholder readme until the app reaches a full beta. If you are in
 
 
 ## To Dos
-- Make Session types dynamic
+- Make Session/panel/presentaion type names dynamic
   - Create flag to include them in the call
+- Make Consignment Sales into an optional module 
 
 
 
