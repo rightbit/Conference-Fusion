@@ -22,6 +22,12 @@ This is just placeholder readme until the app reaches a full beta. If you are in
 - Run `php artisan serve`
 - Run `npm run dev`
 
+### Login
+Default User: admin@example.com
+
+Default Password: password
+
+THIS MUST BE CHANGED BEFORE USING THE SITE
 
 ## To Dos
 - Make Session/panel/presentaion type names dynamic
