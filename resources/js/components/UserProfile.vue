@@ -49,6 +49,11 @@
                         </div>
                         <div class="row g-2 mb-3">
                             <div class="col-md-12">
+                               <a href="/password/reset">Change my password</a>
+                            </div>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-12">
                                 <label for="firstName">Badge Name</label>
                                 <input type="text" class="form-control" id="firstName" placeholder="Badge name" v-model="user.info.badge_name" required>
                                 <div class="invalid-feedback">
@@ -194,7 +199,7 @@ export default {
     methods: {
         getUser: function() {
             // Don't try to load if a new user
-            if(this.userId == 0) {
+            if(this.userId === 0) {
                 this.finished_loading = true;
                 return;
             }
