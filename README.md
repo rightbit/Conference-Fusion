@@ -30,7 +30,7 @@ Default Password: password
 THIS MUST BE CHANGED BEFORE USING THE SITE
 
 ## Customizations and Personalizations
-- Database seeds and csv files labeled Custom_ will be ignored in git
+- Database seeds and csv files labeled CustomImport will be ignored in git
 - Custom images may be uploaded to public/images/design
 - Custom Views for terms and conditions and welcome can be added to
   - resources/views/custom/terms.blade.php
