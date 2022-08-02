@@ -60,7 +60,6 @@ class ConferenceSession extends Model
 
     public static function getUserPanelInterests($user_id, $conference_id, $request)
     {
-        Log::debug($request);
         $panels = self::where('conference_id', '=', $conference_id)
                 ->whereHas('status', function($query) {
                     $query->where('status', '=', 'Ready for Call');

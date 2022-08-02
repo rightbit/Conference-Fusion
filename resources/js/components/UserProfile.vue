@@ -9,6 +9,16 @@
                         <span class="font-weight-bold" v-if="user.info.badge_name">{{ user.info.badge_name }}</span>
                         <button v-if="user.id && user.id != 0 && user.info.id !== null" type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#profileModal">Edit <i class="bi bi-pencil-square"></i></button>
                         <div v-else class="btn btn-outline-secondary w-75 mt-2" >Update profile before uploading image</div>
+                        <div v-if="this.superAdmin">
+                            <hr />
+                            <h5>User Permissions</h5>
+                            <div v-for="(permission, key) in this.permissions" class="form-check text-start ms-3">
+                                <input class="form-check-input" :id="'perms_'+key" type="checkbox" v-model="userPermissions[key]">
+                                <label class="form-check-label" :for="'perms_'+key">
+                                    {{ permission }}
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-5 border-right">
@@ -178,7 +188,7 @@
 
 <script>
 export default {
-    props: ['userId'],
+    props: ['userId', 'superAdmin', 'permissions'],
     data: function() {
         return {
             user: {
@@ -191,10 +201,12 @@ export default {
             profileImage: '/images/app/blank-profile.png',
             allowForm: true,
             finished_loading: false,
+            userPermissions: {},
         }
     },
     mounted() {
         this.getUser()
+        console.log(this.isAdmin);
     },
     methods: {
         getUser: function() {
