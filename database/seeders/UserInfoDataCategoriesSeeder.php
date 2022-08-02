@@ -42,7 +42,7 @@ class UserInfoDataCategoriesSeeder extends Seeder
         ]);
 
         UserInfoDataCategory::create([
-            'type' => 'partcipant',
+            'type' => 'participant',
             'name' => 'book-signing',
             'label' => 'Participate in a book signing',
         ]);
