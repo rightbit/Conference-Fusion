@@ -14,6 +14,13 @@
                         </div>
                     @endif
 
+                    @if ($home_page_message)
+                        <div class="alert alert-info" role="alert">
+                            <i class="bi bi-exclamation-circle-fill"></i>
+                            {!! $home_page_message !!}
+                        </div>
+                    @endif
+
                     <h2>{{ __('Upcoming conference submissions') }}</h2>
                     <div class="row py-4 border-bottom">
                         @if(count($conferences) < 1)
@@ -45,10 +52,12 @@
                             @endforeach
                         @endif
                     </div>
+                    @if ($user_sessions)
                     <h2 class="mt-2">{{ __('My sessions') }}</h2>
                     <div class="row py-4 border-bottom">
                         <p class="text-center">{{ __('None found. Sessions you submit requests for will appear here.') }}</p>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

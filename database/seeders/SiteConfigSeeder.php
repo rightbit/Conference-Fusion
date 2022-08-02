@@ -52,9 +52,9 @@ class SiteConfigSeeder extends Seeder
         ]);
 
         SiteConfig::create([
-            'key' => 'dashboard_message',
+            'key' => 'home_page_message',
             'value' => 'Please make sure the personal info in your profile is up to date.',
-            'description' => 'Add a site-wide message to the dashboard page',
+            'description' => 'Add a message displayed on the home page (Leave 0 for no message)',
             'last_updated_user_id' => 1,
         ]);
     }

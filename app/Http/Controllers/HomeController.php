@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CallForPanelistResource;
 use App\Models\Conference;
+use App\Models\ConferenceSession;
+use App\Models\SiteConfig;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -27,6 +30,8 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $home_page_message = SiteConfig::where('key', 'home_page_message')->first();
+
         $conferences = Conference::where('end_date', '>=', NOW())
             ->whereNotNull('call_start_date')
             ->orderBy('start_date')
@@ -44,7 +49,12 @@ class HomeController extends Controller
             $conference->call_start_date_display = Carbon::parse($conference->call_start_date)->format('F j, Y');
         }
 
-        return view('home')->with('conferences', $conferences);
+        //TODO Add list of upcoming sessions, requested and approved.
+
+        return view('home')
+            ->with('conferences', $conferences)
+            ->with('home_page_message', $home_page_message->value)
+            ->with('user_sessions', null);
     }
 
     /**
