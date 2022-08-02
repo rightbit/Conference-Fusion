@@ -50,5 +50,12 @@ class SiteConfigSeeder extends Seeder
             'description' => 'Default length for sessions on the schedule',
             'last_updated_user_id' => 1,
         ]);
+
+        SiteConfig::create([
+            'key' => 'dashboard_message',
+            'value' => 'Please make sure the personal info in your profile is up to date.',
+            'description' => 'Add a site-wide message to the dashboard page',
+            'last_updated_user_id' => 1,
+        ]);
     }
 }
