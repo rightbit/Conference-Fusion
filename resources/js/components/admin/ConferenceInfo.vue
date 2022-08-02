@@ -26,7 +26,7 @@
                             </div>
                             <div class="row g-2 mb-3">
                                 <div class="col-md-12">
-                                    <label for="description">Description</label> <small>(optional)</small>
+                                    <label for="description">Description</label>
                                     <input type="text" class="form-control" id="description" placeholder="Brief Description" v-model="conference.description">
                                 </div>
                             </div>
