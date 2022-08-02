@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('type')->index();
             $table->string('name');
+            $table->string('label');
             $table->text('options')->nullable();
             $table->boolean('required')->nullable();
             $table->timestamps();

@@ -26,7 +26,7 @@ class UserInfoDataCategoryResource extends JsonResource
             'id' => $this->id,
             'type' => $this->type,
             'name' => $this->name,
-            'label_name' => ucfirst(preg_replace("/[-_]/", " ", $this->name)),
+            'label' => $this->label,
             'options' => $this->options,
             'options_array' => $options_array,
             'required' => $this->required,

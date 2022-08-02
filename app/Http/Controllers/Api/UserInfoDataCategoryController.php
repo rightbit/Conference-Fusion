@@ -87,6 +87,7 @@ class UserInfoDataCategoryController extends Controller
     {
         if($request->id == $user_info_datum->id) {
             $user_info_datum->name = $request->name;
+            $user_info_datum->label = $request->label;
             $user_info_datum->options = $request->options;
             $user_info_datum->required = (bool) $request->required;
             $user_info_datum->save();

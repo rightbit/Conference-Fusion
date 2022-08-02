@@ -41,6 +41,7 @@
                             <thead>
                             <tr>
                                 <th>Key Name</th>
+                                <th>Key Label</th>
                                 <th>Key Options (Optional, comma seperated list)</th>
                                 <th>Require an answer</th>
                                 <th></th>
@@ -49,6 +50,7 @@
                             <tbody>
                             <tr scope="row" v-for="cat_info in cat_infos">
                                 <td><input type="text" class="form-control form-control-sm" v-model="cat_info.name" :disabled="disabled" required /></td>
+                                <td><input type="text" class="form-control form-control-sm" v-model="cat_info.label" :disabled="disabled" /></td>
                                 <td><input type="text" class="form-control form-control-sm" v-model="cat_info.options" :disabled="disabled" /></td>
                                 <td><input class="form-check-input me-2" type="checkbox" v-model="cat_info.required" :id="'required-'+cat_info.id">
                                     <label class="form-check-label" :for="'required-'+cat_info.id">
@@ -78,8 +80,11 @@
                                     <option value="social">Social Info</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <input type="text" v-model="new_info.name" class="form-control" id="inputName" placeholder="Name (lower case, dashes ok)" required>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" v-model="new_info.label" class="form-control" id="inputOptions" placeholder="Profile form label">
                             </div>
                             <div class="col-md-4">
                                 <input type="text" v-model="new_info.options" class="form-control" id="inputOptions" placeholder="Options (optional, comma separated)">
@@ -116,6 +121,7 @@ export default {
             new_info: {
                 type: '',
                 name: '',
+                label: '',
                 options: '',
                 required: null,
             },
@@ -165,6 +171,7 @@ export default {
                     cat_info.id = r.id;
                     cat_info.type = r.type;
                     cat_info.name = r.name;
+                    cat_info.label = r.label;
                     cat_info.options = r.options;
                     cat_info.required = r.required;
                     this.$toast.warning(`The ${cat_info.name} info was successfully reset`);
@@ -188,6 +195,7 @@ export default {
                     this.$toast.success(`The ${this.new_info.name} info was successfully added`);
                     this.loadInfoData(this.new_info.type)
                     this.new_info.name = '';
+                    this.new_info.label = '';
                     this.new_info.options = '';
                     this.new_info.required = null;
                     this.new_info.type = '';

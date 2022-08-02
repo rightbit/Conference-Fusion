@@ -1,6 +1,6 @@
 <template>
     <div class="col-12" v-for="info in infoData">
-        <label class="labels">{{ info.label_name }}</label>
+        <label class="labels">{{ info.label }}</label>
         <select
             v-if="info.options"
             v-model="this.userInfo[info.name]"

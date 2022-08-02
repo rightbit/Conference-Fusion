@@ -19,27 +19,32 @@ class UserInfoDataCategoriesSeeder extends Seeder
         UserInfoDataCategory::create([
             'type' => 'social',
             'name' => 'facebook',
+            'label' => 'Facebook',
         ]);
 
         UserInfoDataCategory::create([
             'type' => 'social',
             'name' => 'twitter',
+            'label' => 'Twitter',
         ]);
 
         UserInfoDataCategory::create([
             'type' => 'social',
             'name' => 'instagram',
+            'label' => 'Instagram',
         ]);
 
         UserInfoDataCategory::create([
             'type' => 'personal',
             'name' => 'gender',
+            'label' => 'Gender',
             'options' => 'female,male,non-binary,prefer not to say',
         ]);
 
         UserInfoDataCategory::create([
             'type' => 'partcipant',
             'name' => 'book-signing',
+            'label' => 'Participate in a book signing',
         ]);
 
     }

@@ -12,6 +12,7 @@ class UserInfoDataCategory extends Model
     protected $fillable = [
         'type',
         'name',
+        'label',
         'options',
         'required'
     ];
