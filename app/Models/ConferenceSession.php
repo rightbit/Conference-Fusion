@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ConferenceSession extends Model
 {
@@ -59,9 +60,10 @@ class ConferenceSession extends Model
 
     public static function getUserPanelInterests($user_id, $conference_id, $request)
     {
+        Log::debug($request);
         $panels = self::where('conference_id', '=', $conference_id)
                 ->whereHas('status', function($query) {
-                    $query->where('status', '=', 'Include in Call');
+                    $query->where('status', '=', 'Ready for Call');
                 })
                 ->whereHas('session_type', function($query) {
                     $query->where('name', '=', 'Panel');
