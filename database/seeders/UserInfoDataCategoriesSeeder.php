@@ -45,6 +45,7 @@ class UserInfoDataCategoriesSeeder extends Seeder
             'type' => 'participant',
             'name' => 'book-signing',
             'label' => 'Participate in a book signing',
+            'options' => 'no,yes',
         ]);
 
     }
