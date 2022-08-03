@@ -145,7 +145,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" v-model="user.info.recording_permission" id="recorded">
                                 <label class="form-check-label" for="recorded">
-                                    Give permission to be photographed and recorded (optional)
+                                    Give permission to be photographed and recorded
                                 </label>
                             </div>
                         </div>
@@ -153,7 +153,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" v-model="user.info.share_email_permission" id="shareEmail">
                                 <label class="form-check-label" for="shareEmail">
-                                    Give permission to share your email with other panelists (optional)
+                                    Give permission to share your email with other panelists
                                 </label>
                             </div>
                         </div>
@@ -254,7 +254,7 @@ export default {
             } else {
                 axios.post('/api/profile/user', this.user)
                     .then((response) => {
-                        this.session = response.data.data;
+                        this.user = response.data.data;
                         this.$toast.success(`Created a new user successfully`);
                         window.history.replaceState(null, "", '/user-profile/'+this.user.id );
                     })
