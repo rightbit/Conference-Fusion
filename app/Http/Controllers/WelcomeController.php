@@ -27,8 +27,6 @@ class WelcomeController extends Controller
     {
         //Get the next date for an open call
         $conference = Conference::find(session('selected_conference'));
-        Log::debug("time".time());
-        Log::debug("start_time".strtotime($conference->call_start_date));
         $start_date =  Carbon::parse($conference->call_start_date)->format('F j, Y');
         $welcome_message = 'The date for the next CFP is still being decided.';
         if($conference->call_start_date) {
