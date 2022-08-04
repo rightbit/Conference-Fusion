@@ -184,7 +184,7 @@ export default {
             return date.format('MMM DD, <br /> h A');
         },
         loadTracks: function () {
-            axios.get('/api/track-list')
+            axios.get('/api/track-list', { params: {call_included: 1}})
                 .then((response) => {
                     this.tracks = response.data.data;
                 })

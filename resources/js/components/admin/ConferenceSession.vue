@@ -6,7 +6,7 @@
                 <div class="py-2">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h2 class="text-right">Session info</h2>
-                        <h5>Like this session idea? Vote: <i class="bi bi-hand-thumbs-up-fill text-primary"></i><i class="bi bi-hand-thumbs-down text-secondary"></i> +0(0)</h5>
+                        <h5 v-if="false">Like this session idea? Vote: <i class="bi bi-hand-thumbs-up-fill text-primary"></i><i class="bi bi-hand-thumbs-down text-secondary"></i> +0(0)</h5>
                     </div>
                     <div class="row g-2 mb-3">
                         <div class="col-md-6">

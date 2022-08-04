@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TrackRequest;
 use App\Http\Resources\TrackResource;
 use App\Models\Track;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class TrackController extends Controller
 {
@@ -15,10 +17,16 @@ class TrackController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->call_included) {
+            $tracks = Track::where('show_on_call', 1)->orderBy('name')->get();
+            return TrackResource::collection($tracks);
+        }
+
         return TrackResource::collection(Track::orderBy('name')->get());
     }
 
