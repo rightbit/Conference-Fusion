@@ -33,6 +33,9 @@ class UserController extends Controller
               User::where('first_name', 'LIKE',"%$request->keyword%")
                   ->orWhere('last_name', 'LIKE',"%$request->keyword%")
                   ->orWhere('email', 'LIKE', "%$request->keyword%")
+                  ->orWhereHas('info', function($query) use($request) {
+                      $query->where('badge_name', 'LIKE',"%$request->keyword%");
+                  })
                   ->orderby('last_name')->paginate(25)
             );
         }
