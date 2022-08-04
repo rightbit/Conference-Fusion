@@ -193,7 +193,7 @@ export default {
                 });
         },
         loadSessions: function (page = 1) {
-            axios.get(`/api/user-panel-list/${this.conferenceId}`, { params: { page: page, filter: this.filter }})
+            axios.get(`/api/user-panel-list/${this.conferenceId}`, { params: { page: page, filter: this.filter, call_included: 1 }})
                 .then((response) => {
                     this.conferenceSessions = response.data.data;
                     this.totalSessions = response.data.meta.total;

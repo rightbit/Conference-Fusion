@@ -71,6 +71,12 @@ class ConferenceSession extends Model
                     $query->where('user_id', $user_id);
                 }]);
 
+        if($request->call_included) {
+            $panels->whereHas('track', function($query) {
+                $query->where('show_on_call', 1);
+            });
+        }
+
         if($request->filter == 'own') {
             $panels->whereHas('session_interest', function($query) use($user_id) {
                 $query->where('user_id', '=', $user_id);
