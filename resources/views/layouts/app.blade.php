@@ -53,11 +53,11 @@
                                     <li class="ps-2"><b>Site Admin</b></li>
                                     <li><a class="dropdown-item" href="{{ route('admin_user_list') }}">{{ __('User Management') }}</a></li>
                                     <li><a class="dropdown-item" href="{{ route('admin_conference_session_list') }}">{{ __('Session Management') }}</a></li>
-                                    <li><a class="dropdown-item" href="#">{{ __('Schedule Management') }}</a></li>
+                                    <li><a class="dropdown-item disabled" href="#">{{ __('Schedule Management') }}</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li class="ps-2"><b>Call Admin</b></li>
-                                    <li><a class="dropdown-item" href="">{{ __('Panel Interest Management') }}</a></li>
-                                    <li><a class="dropdown-item" href="">{{ __('Presentation Management') }}</a></li>
+                                    <li><a class="dropdown-item disabled" href="" >{{ __('Panel Interest Management') }}</a></li>
+                                    <li><a class="dropdown-item disabled" href="">{{ __('Presentation Management') }}</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li class="ps-2"><b>Settings</b></li>
                                     <li><a class="dropdown-item" href="{{ route('admin_conference_list') }}">{{ __('Conference Management') }}</a></li>
