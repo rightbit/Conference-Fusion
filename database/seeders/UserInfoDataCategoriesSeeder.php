@@ -38,7 +38,7 @@ class UserInfoDataCategoriesSeeder extends Seeder
             'type' => 'personal',
             'name' => 'gender',
             'label' => 'Gender',
-            'options' => 'female,male,non-binary,prefer not to say',
+            'options' => 'female,male,non-binary,prefer to not say',
         ]);
 
         UserInfoDataCategory::create([
