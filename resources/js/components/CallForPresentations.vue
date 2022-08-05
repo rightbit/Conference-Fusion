@@ -49,7 +49,7 @@
                             <tr scope="row" v-for="presentation in conferenceSessions">
                                 <td class="ps-2">{{ presentation.conference_session.name }}</td>
                                 <td>{{ presentation.conference_session.description }}</td>
-                                <td class="m-0 px-0"></td>
+                                <td class="m-0 px-0"><button class="btn btn-danger btn-sm" @click="deleteSession(presentation)"><i class="bi bi-trash-fill"></i></button></td>
                             </tr>
                             </tbody>
                         </table>
@@ -118,6 +118,18 @@ export default {
                     this.$toast.error(`Could not save the session`);
                 });
         },
+        deleteSession: function(presentation) {
+            if(confirm("Do you really want to delete this presentation?")) {
+                axios.delete(`/api/presentations/${presentation.conference_session.id}`)
+                    .then((response) => {
+                        this.$toast.success(`Presentation succesfully deleted`);
+                        this.loadSessions();
+                    })
+                    .catch((error) => {
+                        this.$toast.error(`Could not delete presentation`);
+                    });
+            }
+        }
     }
 }
 </script>

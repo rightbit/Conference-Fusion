@@ -130,7 +130,7 @@
                                 <input type="text" class="form-control" id="book1title" placeholder="ISBN" />
                             </div>
                         </div>
-                        <div class="mt-4 form-group">
+                        <div class="mt-4 form-group" v-if="!user.info.agree_to_terms">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" v-model="user.info.agree_to_terms" id="terms" required>
                                 <label class="form-check-label" for="terms">

@@ -215,7 +215,7 @@ export default {
         },
         deleteInfoData: function(cat_info) {
             if(confirm("Do you really want to delete?")) {
-                axios.delete(`/api/profiole/user-info-data/${cat_info.id}`)
+                axios.delete(`/api/profile/user-info-data/${cat_info.id}`)
                     .then((response) => {
                         this.$toast.success(`${cat_info.name} succesfully deleted`);
                         this.loadInfoData(cat_info.type);

@@ -35,8 +35,15 @@ Route::middleware(['auth:sanctum'])->group( function() {
 
     Route::post('profile-image/{user}', [UserController::class, 'uploadProfileImage']);
     Route::post('presentations/submit', [ConferenceSessionController::class, 'storePresentation']);
+    Route::delete('presentations/{id}', [ConferenceSessionController::class, 'destroyPresentation']);
     Route::post('panels/interest/submit', [ConferenceSessionController::class, 'storePanelInterest']);
     Route::post('panels/interest/update/{session_interest}', [ConferenceSessionController::class, 'updatePanelInterest']);
+
+    Route::group(['prefix' => 'profile'], function () {
+        Route::apiResource('user', UserController::class);
+        Route::apiResource('user-info-data', UserInfoDataCategoryController::class);
+    });
+
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function () {
@@ -49,9 +56,5 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
 });
 
 
-Route::group(['prefix' => 'profile'], function () {
-    Route::apiResource('user', UserController::class);
-    Route::apiResource('user-info-data', UserInfoDataCategoryController::class);
-});
 
 

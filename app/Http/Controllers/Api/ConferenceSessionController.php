@@ -12,8 +12,11 @@ use App\Http\Resources\SessionInterestResource;
 use App\Http\Resources\UserPresentationResource;
 use App\Models\ConferenceSession;
 use App\Models\SessionInterest;
+use App\Models\SessionStatus;
+use App\Models\SiteConfig;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use mysql_xdevapi\Exception;
 
@@ -126,8 +129,13 @@ class ConferenceSessionController extends Controller
      */
     public function storePresentation(PresentationSessionRequest $request)
     {
+        $duration = SiteConfig::where('key', 'default_session_duration')->first();
+        $status = SessionStatus::where('status', 'User Suggested')->first();
+
         $conference_session = new ConferenceSession($request->all());
         $conference_session->type_id = config('site.session_type_id.presentation');
+        $conference_session->session_status_id = $request->session_status_id ?? $status->id;
+        $conference_session->duration_minutes = $request->duration ?? $duration->value;
         $conference_session->save();
 
         $session_interest = new SessionInterest();
@@ -138,6 +146,36 @@ class ConferenceSessionController extends Controller
         return new ConferenceSessionResource($conference_session);
 
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyPresentation($id)
+    {
+        $user = Auth::user();
+        $session_interest = SessionInterest::where('conference_session_id', $id)
+                            ->where('user_id', $user->id)
+                            ->whereHas('conference_session', function($query) {
+                                $query->where('type_id', '=', config('site.session_type_id.presentation'));
+                            })
+                            ->first();
+        Log::debug($id);
+        Log::debug($session_interest);
+        if($session_interest) {
+            $conference_session = ConferenceSession::find($id)->delete();
+            if($conference_session) {
+                return response('success', 200);
+            }
+
+        }
+
+        abort(500, 'An error occurred deleting this presentation');
+
+    }
+
 
     /**
      * Store a newly created panel interest record.

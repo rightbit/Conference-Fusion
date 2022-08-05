@@ -99,6 +99,8 @@ class UserController extends Controller
      */
     public function update(User $user, UserRequest $request)
     {
+
+
         if($request->id == $user->id) {
             $user->first_name = $request->first_name;
             $user->last_name = $request->last_name;
