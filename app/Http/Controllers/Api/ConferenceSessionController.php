@@ -162,14 +162,12 @@ class ConferenceSessionController extends Controller
                                 $query->where('type_id', '=', config('site.session_type_id.presentation'));
                             })
                             ->first();
-        Log::debug($id);
-        Log::debug($session_interest);
+
         if($session_interest) {
             $conference_session = ConferenceSession::find($id)->delete();
             if($conference_session) {
                 return response('success', 200);
             }
-
         }
 
         abort(500, 'An error occurred deleting this presentation');
@@ -225,5 +223,33 @@ class ConferenceSessionController extends Controller
         abort(403, 'Permission to update session interest denied.');
 
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+//    public function destroyPanelInterest($id)
+//    {
+//        $user = Auth::user();
+//        $session_interest = SessionInterest::where('id', $id)
+//            ->where('user_id', $user->id)
+//            ->whereHas('conference_session', function($query) {
+//                $query->where('type_id', config('site.session_type_id.panel'));
+//                $query->where('session_status_id', 2);
+//            })
+//            ->first();
+//
+//        if($session_interest) {
+//            $deleted_session = SessionInterest::find($id)->delete();
+//            if($deleted_session) {
+//                return response('success', 200);
+//            }
+//        }
+//
+//        abort(500, 'An error occurred deleting this panel interest');
+//
+//    }
 
 }
