@@ -99,8 +99,6 @@ class UserController extends Controller
      */
     public function update(User $user, UserRequest $request)
     {
-
-
         if($request->id == $user->id) {
             $user->first_name = $request->first_name;
             $user->last_name = $request->last_name;
@@ -119,6 +117,17 @@ class UserController extends Controller
             $user->info->social_data = json_encode($request->info['social_data']);
             $user->info->participant_data = json_encode($request->info['participant_data']);
             $user->info->save();
+
+            $user->info_consignment->book1_title = $request->info_consignment['book1_title'];
+            $user->info_consignment->book1_author = $request->info_consignment['book1_author'];
+            $user->info_consignment->book1_isbn = $request->info_consignment['book1_isbn'];
+            $user->info_consignment->book2_title = $request->info_consignment['book2_title'];
+            $user->info_consignment->book2_author = $request->info_consignment['book2_author'];
+            $user->info_consignment->book2_isbn = $request->info_consignment['book2_isbn'];
+            $user->info_consignment->book3_title = $request->info_consignment['book3_title'];
+            $user->info_consignment->book3_author = $request->info_consignment['book3_author'];
+            $user->info_consignment->book3_isbn = $request->info_consignment['book3_isbn'];
+            $user->info_consignment->save();
         }
     }
 

@@ -17,15 +17,15 @@ return new class extends Migration
         Schema::create('user_info_consignments', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->string('book1_title');
-            $table->string('book1_author');
-            $table->string('book1_isbn');
-            $table->string('book2_title');
-            $table->string('book2_author');
-            $table->string('book2_isbn');
-            $table->string('book3_title');
-            $table->string('book3_author');
-            $table->string('book3_isbn');
+            $table->string('book1_title')->nullable();
+            $table->string('book1_author')->nullable();
+            $table->string('book1_isbn')->nullable();
+            $table->string('book2_title')->nullable();
+            $table->string('book2_author')->nullable();
+            $table->string('book2_isbn')->nullable();
+            $table->string('book3_title')->nullable();
+            $table->string('book3_author')->nullable();
+            $table->string('book3_isbn')->nullable();
             $table->timestamps();
         });
     }

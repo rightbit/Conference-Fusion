@@ -86,4 +86,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(SessionInterest::class);
     }
+
+    /**
+     * User Info Book Consignments
+     */
+    public function info_consignment()
+    {
+        return $this->hasOne(UserInfoConsignment::class, 'user_id', 'id')->withDefault([
+            'id' => null,
+        ]);
+    }
 }

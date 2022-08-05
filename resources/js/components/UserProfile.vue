@@ -85,7 +85,7 @@
                         </div>
                         <div class="row mb-2">
                             <div class="col-sm-12 mb-2"><span class="h4">Sell on Consignment</span><br/>
-                                If you would like a book partner to carry your books on consignment or through traditional sale, please enter the information below.
+                                If you would like to request a book partner to possibly carry your books on consignment or through traditional sale, please enter the information below.
                             </div>
                         </div>
                         <div class="row mb-0">
@@ -93,13 +93,13 @@
                         </div>
                         <div class="row g-2  mb-2">
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="book1title" placeholder="Title" />
+                                <input type="text" class="form-control" v-model="user.info_consignment.book1_title" placeholder="Title" />
                             </div>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="book1title" placeholder="Author" />
+                                <input type="text" class="form-control" v-model="user.info_consignment.book1_author" placeholder="Author" />
                             </div>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="book1title" placeholder="ISBN" />
+                                <input type="text" class="form-control" v-model="user.info_consignment.book1_isbn" placeholder="ISBN" />
                             </div>
                         </div>
                         <div class="row mb-0">
@@ -107,13 +107,13 @@
                         </div>
                         <div class="row g-2 mb-2">
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="book1title" placeholder="Title" />
+                                <input type="text" class="form-control" v-model="user.info_consignment.book2_title"  placeholder="Title" />
                             </div>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="book1title" placeholder="Author" />
+                                <input type="text" class="form-control" v-model="user.info_consignment.book2_author" placeholder="Author" />
                             </div>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="book1title" placeholder="ISBN" />
+                                <input type="text" class="form-control" v-model="user.info_consignment.book2_isbn" placeholder="ISBN" />
                             </div>
                         </div>
                         <div class="row mb-0">
@@ -121,13 +121,13 @@
                         </div>
                         <div class="row g-2 mb-2">
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="book1title" placeholder="Title" />
+                                <input type="text" class="form-control" v-model="user.info_consignment.book3_title"  placeholder="Title" />
                             </div>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="book1title" placeholder="Author" />
+                                <input type="text" class="form-control" v-model="user.info_consignment.book3_author" placeholder="Author" />
                             </div>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="book1title" placeholder="ISBN" />
+                                <input type="text" class="form-control" v-model="user.info_consignment.book3_isbn" placeholder="ISBN" />
                             </div>
                         </div>
                         <div class="mt-4 form-group" v-if="!user.info.agree_to_terms">
@@ -196,7 +196,8 @@ export default {
                     personal_data: {'':''},
                     social_data: {'':''},
                     participant_data: {'':''},
-                }
+                },
+                info_consignment: {}
             },
             profileImage: '/images/app/blank-profile.png',
             allowForm: true,
@@ -229,6 +230,9 @@ export default {
                     }
                     if(this.user.info.profile_image) {
                         this.profileImage = this.user.info.profile_image;
+                    }
+                    if(!this.user.info_consignment) {
+                        this.user.info_consignment = {};
                     }
                     this.allowForm = true;
                     this.finished_loading = true;
