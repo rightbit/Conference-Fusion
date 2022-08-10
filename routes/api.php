@@ -38,6 +38,7 @@ Route::middleware(['auth:sanctum'])->group( function() {
     Route::delete('presentations/{id}', [ConferenceSessionController::class, 'destroyPresentation']);
     Route::post('panels/interest/submit', [ConferenceSessionController::class, 'storePanelInterest']);
     Route::post('panels/interest/update/{session_interest}', [ConferenceSessionController::class, 'updatePanelInterest']);
+    Route::delete('panels/interest/{id}', [ConferenceSessionController::class, 'destroyPanelInterest']);
 
     Route::group(['prefix' => 'profile'], function () {
         Route::apiResource('user', UserController::class);

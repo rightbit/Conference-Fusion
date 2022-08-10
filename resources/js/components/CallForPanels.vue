@@ -147,8 +147,10 @@
 
                 </div>
                 <div class="modal-footer">
+                    <button type="button" v-if="interest.id" @click="deleteSession(interest)" class="btn btn-danger" style="margin-right:auto"><i class="bi bi-trash-fill"></i> Remove Interest</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Submit my interest</button>
+                    <button v-if="interest.id" type="submit" class="btn btn-primary">Update my interest</button>
+                    <button v-else type="submit" class="btn btn-primary">Submit my interest</button>
                 </div>
             </div>
         </div>
@@ -222,7 +224,6 @@ export default {
             if(this.interest.id) {
                 axios.post(`/api/panels/interest/update/${this.interest.id}`, this.interest)
                     .then((response) => {
-                        console.log(response.data.data);
                         this.conferenceSessions[this.panelInfo.array_key].user_session_interest = this.interest;
                         this.$toast.success(`Updated your panel interest`);
                         this.interest = {};
@@ -230,13 +231,12 @@ export default {
 
                     })
                     .catch((error) => {
-                        console.log(error.data);
                         this.$toast.error(`Could not update your panel request`);
                     });
             } else {
                 axios.post('/api/panels/interest/submit', this.interest)
                     .then((response) => {
-                        console.log(response.data.data);
+                        this.interest.id = response.data.data.id;
                         this.conferenceSessions[this.panelInfo.array_key].user_session_interest = this.interest;
                         this.$toast.success(`Saved a new panel interest`);
                         this.interest = {};
@@ -249,6 +249,20 @@ export default {
             }
 
         },
+        deleteSession: function(interest) {
+            if(confirm("Do you really want to remove your interest in this panel?")) {
+                axios.delete(`/api/panels/interest/${interest.id}`)
+                    .then((response) => {
+                        this.$toast.success(`Panel interest deleted`);
+                        this.interest = {};
+                        this.conferenceSessions[this.panelInfo.array_key].user_session_interest = null;
+                        this.$refs.Close.click();
+                    })
+                    .catch((error) => {
+                        this.$toast.error(`Could not delete panel interest`);
+                    });
+            }
+        }
     }
 }
 </script>

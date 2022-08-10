@@ -207,7 +207,6 @@ export default {
     },
     mounted() {
         this.getUser()
-        console.log(this.isAdmin);
     },
     methods: {
         getUser: function() {
