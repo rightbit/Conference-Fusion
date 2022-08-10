@@ -242,7 +242,7 @@ class ConferenceSessionController extends Controller
             ->first();
 
         if($session_interest) {
-            $deleted_session = SessionInterest::find($id)->delete();
+            $deleted_session = $session_interest->delete();
             if($deleted_session) {
                 return response('success', 200);
             }
