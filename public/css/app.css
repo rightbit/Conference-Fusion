@@ -13025,6 +13025,19 @@ textarea.form-control-lg {
   font-size: 0.8em;
 }
 
+/* Extra width sizes */
+.w-30 {
+  width: 30% !important;
+}
+
+.w-33 {
+  width: 33% !important;
+}
+
+.w-66 {
+  width: 66% !important;
+}
+
 .card-title::first-letter {
   text-transform: capitalize;
 }

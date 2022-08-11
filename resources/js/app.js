@@ -57,4 +57,3 @@ app.component('partials-user-profile-image-modal', PartialsUserProfileImageModal
 // Mounts
 app.mount('#app')
 
-

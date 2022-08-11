@@ -25,18 +25,20 @@
                         <table class="table table-striped table-sm fs-90">
                             <thead>
                             <tr>
-                                <th class="ps-2">Name</th>
-                                <th>Description</th>
+                                <th class="ps-2 w-30">Name</th>
+                                <th  class="w-30">Description</th>
                                 <th>Track</th>
-                                <th class="m-0 p-0"></th>
+                                <th>Type</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr scope="row" v-for="session in conferenceSessions">
                                 <td class="ps-2">{{ session.name }}</td>
-                                <td>{{ session.description }}</td>
+                                <td>{{ truncate(session.description , 50, '...') }}</td>
                                 <td>{{ session.track }}</td>
-                                <td class="m-0 px-0"><a class="btn btn-sm btn-outline-secondary" v-bind:href="this.sessionLink +'/'+ session.id"><i class="bi bi-pencil-square"></i></a></td>
+                                <td>{{ session.session_type.name }}</td>
+                                <td><a class="btn btn-sm btn-outline-secondary" v-bind:href="this.sessionLink +'/'+ session.id"><i class="bi bi-pencil-square"></i></a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -115,6 +117,7 @@ export default {
                     }
                 })
                 .then((response) => {
+                    console.log(response.data.data);
                     this.totalSessions = response.data.meta.total;
                     this.conferenceSessions = response.data.data;
                     this.laravelData = response.data;
@@ -138,6 +141,13 @@ export default {
                     this.$toast.error(`Could not save the session`);
                 });
         },
-    }
+        truncate: function (text, length, suffix) {
+            if (text.length > length) {
+                return text.substring(0, length) + suffix;
+            } else {
+                return text;
+            }
+        },
+    },
 }
 </script>
