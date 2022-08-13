@@ -202,7 +202,7 @@ export default {
             profileImage: '/images/app/blank-profile.png',
             allowForm: true,
             finished_loading: false,
-            permissionsDisabled: false,
+            permissionsDisabled: true,
             userPermissions: {},
             userPermissionsValue: {},
         }
@@ -308,7 +308,7 @@ export default {
             if(this.userPermissionsValue[permission]) {
                 axios.post(`/api/admin/permissions`,  {user_id: this.userId, permission: permission})
                     .then((response) => {
-                        this.userPermissions[permission] = response.data.data[0];
+                        this.userPermissions[permission] = response.data.data;
                         this.$toast.success(`Added the ${name} permission`);
                     })
                     .catch((error) => {
