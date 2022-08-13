@@ -12,10 +12,10 @@
                         <div v-if="this.superAdmin">
                             <hr />
                             <h5>User Permissions</h5>
-                            <div v-for="(permission, key) in this.permissions" class="form-check text-start ms-3">
-                                <input class="form-check-input" :id="'perms_'+key" type="checkbox" v-model="userPermissions[key]">
-                                <label class="form-check-label" :for="'perms_'+key">
-                                    {{ permission }}
+                            <div v-for="(permission_name, permission) in this.permissions" class="form-check text-start ms-3">
+                                <input class="form-check-input" :id="'perm_'+permission" type="checkbox" v-model="this.userPermissionsValue[permission]" @change="updateUserPermission(permission, permission_name)" :disabled="permissionsDisabled">
+                                <label class="form-check-label" :for="'perm_'+permission">
+                                    {{ permission_name }}
                                 </label>
                             </div>
                         </div>
@@ -188,7 +188,7 @@
 
 <script>
 export default {
-    props: ['userId', 'superAdmin', 'permissions'],
+    props: ['userId', 'currentUser', 'superAdmin', 'viewAdmin', 'permissions'],
     data: function() {
         return {
             user: {
@@ -202,11 +202,13 @@ export default {
             profileImage: '/images/app/blank-profile.png',
             allowForm: true,
             finished_loading: false,
+            permissionsDisabled: false,
             userPermissions: {},
+            userPermissionsValue: {},
         }
     },
     mounted() {
-        this.getUser()
+        this.getUser();
     },
     methods: {
         getUser: function() {
@@ -234,7 +236,11 @@ export default {
                         this.user.info_consignment = {};
                     }
                     this.allowForm = true;
+                    if(this.superAdmin) {
+                        this.getUserPermissions();
+                    }
                     this.finished_loading = true;
+
                 })
                 .catch((error) => {
                     this.$toast.show(`Could not find the user. Click the back button to try again.`, {
@@ -244,6 +250,32 @@ export default {
                     });
                     this.allowForm = false;
                 });
+        },
+        getUserPermissions: function() {
+            if(!this.user.id) {
+               this.$toast.error(`Please create the user before setting permissions`);
+            }
+
+            axios.get(`/api/admin/permissions`, { params: {user_id: this.user.id}})
+                .then((response) => {
+                    var listByNames = {};
+                    var permissionValues = {};
+                    response.data.data.forEach(function(item) {
+                        permissionValues[item.permission] = true;
+                        listByNames[item.permission] = item;
+                    });
+                    this.userPermissionsValue = permissionValues;
+                    this.userPermissions = listByNames;
+
+                    if(this.superAdmin && this.currentUser !== this.userId) {
+                        this.permissionsDisabled = false;
+                    }
+
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not load the user permissions`);
+                });
+
         },
         addUpdateUser: function() {
             if(this.user.id) {
@@ -271,6 +303,28 @@ export default {
         },
         updateInfoData: function(event){
            this.user.info[event.category][event.name] = event.value;
+        },
+        updateUserPermission: function(permission, name) {
+            if(this.userPermissionsValue[permission]) {
+                axios.post(`/api/admin/permissions`,  {user_id: this.userId, permission: permission})
+                    .then((response) => {
+                        this.userPermissions[permission] = response.data.data[0];
+                        this.$toast.success(`Added the ${name} permission`);
+                    })
+                    .catch((error) => {
+                        this.$toast.error(`Could not add the ${name} permission`);
+                    })
+            } else {
+                axios.delete(`/api/admin/permissions/${this.userPermissions[permission].id}`)
+                    .then((response) => {
+                        this.userPermissions[permission] = {};
+                        this.$toast.success(`Removed the ${name} permission`);
+                    })
+                    .catch((error) => {
+                        this.$toast.error(`Could not delete the ${name} permission`);
+                    })
+            }
+
         }
     }
 

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\SiteConfigController;
 use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UserInfoDataCategoryController;
+use App\Http\Controllers\Api\UserPermissionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,6 +33,7 @@ Route::middleware(['auth:sanctum'])->group( function() {
     Route::get('type-list', [SessionTypeController::class, 'index']);
     Route::get('user-presentation-list/{conference_id}', [ConferenceSessionController::class, 'userPresentationIndex']);
     Route::get('user-panel-list/{conference_id}', [ConferenceSessionController::class, 'userPanelIndex']);
+    Route::get('user-panel-list/{conference_id}', [ConferenceSessionController::class, 'userPanelIndex']);
 
     Route::post('profile-image/{user}', [UserController::class, 'uploadProfileImage']);
     Route::post('presentations/submit', [ConferenceSessionController::class, 'storePresentation']);
@@ -54,6 +56,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
     Route::apiResource('session-status', SessionStatusController::class);
     Route::apiResource('session-type', SessionTypeController::class);
     Route::apiResource('track', TrackController::class);
+    Route::apiResource('permissions', UserPermissionController::class)->middleware('can:admin');
 });
 
 
