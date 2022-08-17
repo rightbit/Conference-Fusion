@@ -1,6 +1,7 @@
 # Conference-Fusion: A Conference Schedule Builder
 
 ## Placeholder Readme
+Conference-Fusion is a session/schedule planner for conferences. This online tool allows you to submit and brainstorm session ideas, create a call for panelists/papers, and arrange the schedule and rooms for the conference. You can also manage presenter information, like bios and contact info, with flexible database fields you can customize to your specific conference.
 
 This is just placeholder readme until the app reaches a full beta. If you are interested in installing or contributing, contact the creator here. Standard install and best-practices for a Laravel App apply here. 
 
