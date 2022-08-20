@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    @php $superAdmin = false; @endphp
+    @php $superAdmin = 0; @endphp
     @can('admin', 'user')
-        @php $superAdmin = true; @endphp
+        @php $superAdmin = 1; @endphp
     @endcan
-    @php $viewAdmin = false; @endphp
+    @php $viewAdmin = 0; @endphp
     @can('view_admin', 'user')
-        @php $viewAdmin = true; @endphp
+        @php $viewAdmin = 1; @endphp
     @endcan
     @php  /* @var $id */  @endphp
     <user-profile

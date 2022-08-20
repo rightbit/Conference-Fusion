@@ -113,9 +113,9 @@ class UserController extends Controller
             $user->info->recording_permission = $request->info['recording_permission'] ?? 0;
             $user->info->share_email_permission = $request->info['share_email_permission'] ?? 0;
             $user->info->agree_to_terms = $request->info['agree_to_terms'] ?? 0;
-            $user->info->personal_data = json_encode($request->info['personal_data']);
-            $user->info->social_data = json_encode($request->info['social_data']);
-            $user->info->participant_data = json_encode($request->info['participant_data']);
+            $user->info->personal_data = !empty($request->info['personal_data']) ? json_encode($request->info['personal_data']) : NULL;
+            $user->info->social_data = !empty($request->info['social_data']) ? json_encode($request->info['social_data']) : NULL;
+            $user->info->participant_data = !empty($request->info['participant_data']) ? json_encode($request->info['participant_data']) : NULL;
             $user->info->save();
 
             $user->info_consignment->book1_title = $request->info_consignment['book1_title'];
