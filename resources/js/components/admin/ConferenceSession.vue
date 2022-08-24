@@ -1,7 +1,7 @@
 <template>
-    <div class="container rounded bg-white mt-5 mb-5">
-        <div class="row" v-if="allowForm">
-            <form class="needs-validation" novalidate  @submit.prevent="addUpdateSession">
+    <div class="container rounded bg-white mt-5 mb-5 py-3">
+        <div class="row" v-if="foundSession">
+            <form class="needs-validation mb-5" novalidate  @submit.prevent="addUpdateSession">
             <div class="col-12">
                 <div class="py-2">
                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -82,13 +82,15 @@
                             <input type="text" class="form-control" id="attendance"  v-model="session.attendance" required>
                         </div>
                     </div>
-                    <div class="mt-5 text-center">
+                    <div class="mt-3 text-center">
                         <button class="btn btn-outline-secondary profile-button me-2" type="button" @click="loadSession">Reset</button>
                         <button class="btn btn-primary profile-button" type="submit">Save Session</button>
                     </div>
                 </div>
             </div>
             </form>
+            <partials-session-participants-list :session-id="this.sessionId" class="mb-2" />
+            <partials-session-interest-list :session-id="this.sessionId" />
         </div>
         <div v-else class="p-5 text-center">
             <h1>Error 404</h1>
@@ -110,7 +112,7 @@
                 },
                 types: [],
                 statuses: [],
-                allowForm: true
+                foundSession: true
             }
         },
         mounted() {
@@ -133,7 +135,7 @@
                             duration: false,
                             onClick: ''
                         });
-                        this.allowForm = false
+                        this.foundSession = false
                     });
             },
             addUpdateSession: function() {

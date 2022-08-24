@@ -25,6 +25,10 @@ class SessionInterestResource extends JsonResource
                 'id' => $this->user->id,
                 'first_name' => $this->user->first_name,
                 'last_name' => $this->user->last_name,
+                'email' => $this->user->email,
+            ],
+            'user_info' => [
+                'badge_name' => $this->user_info->badge_name,
             ],
             'conference_session' => [
                 'id' => $this->conference_session->id,

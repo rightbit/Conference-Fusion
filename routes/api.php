@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ConferenceController;
 use App\Http\Controllers\Api\ConferenceSessionController;
 use App\Http\Controllers\Api\SessionAlternateNameController;
+use App\Http\Controllers\Api\SessionInterestController;
 use App\Http\Controllers\Api\SessionStatusController;
 use App\Http\Controllers\Api\SessionTypeController;
 use App\Http\Controllers\Api\SiteConfigController;
@@ -53,6 +54,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
     Route::apiResource('conference', ConferenceController::class);
     Route::apiResource('conference-session', ConferenceSessionController::class);
     Route::apiResource('configuration', SiteConfigController::class);
+    Route::apiResource('session-interest', SessionInterestController::class);
     Route::apiResource('session-status', SessionStatusController::class);
     Route::apiResource('session-type', SessionTypeController::class);
     Route::apiResource('track', TrackController::class);
