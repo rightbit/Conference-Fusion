@@ -15,6 +15,11 @@
                             </div>
                             <div class="w-50">
                                 <div class="d-flex align-items-end">
+                                    <select id="inputCategory" v-model="searchTrackId" class="form-select form-select-sm me-2 w-33" aria-label="select category">
+                                        <option value="" disabled hidden selected>Track</option>
+                                        <option value="">All Tracks</option>
+                                        <option v-for="track in tracks" v-bind:value="track.id">{{ track.name }}</option>
+                                    </select>
                                     <input type="text" class="form-control form-control-sm align-self-center me-2" placeholder="Search session name" v-model="keyword" v-on:keyup.enter="loadSessions">
                                     <button class="btn btn-outline-secondary btn-sm"  @click="loadSessions">
                                         <i class="bi bi-search"></i>
@@ -83,6 +88,7 @@ export default {
         return {
             conferenceSessions: [],
             totalSessions: '0',
+            searchTrackId: '',
             keyword: '',
             laravelData: {},
             new_session: {
@@ -112,6 +118,7 @@ export default {
             axios.get('/api/admin/conference-session', {
                     params: {
                         conference_id: this.conferenceId,
+                        track_id: this.searchTrackId,
                         keyword: this.keyword,
                         page: page
                     }
