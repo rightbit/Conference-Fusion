@@ -43,7 +43,7 @@ Route::middleware(['auth'])->group( function() {
 
 
 //Admin Group
-Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth','can:view_admin']], function () {
     //Vue Only
     Route::view('conference-session-list', 'admin.conference_session_list')->name('admin_conference_session_list');
     Route::get('conference-session/{id}', function($id) {
