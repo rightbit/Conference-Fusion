@@ -37,7 +37,7 @@
                                 <td class="ps-2">{{ interest.user.last_name }}, {{ interest.user.first_name }}</td>
                                 <td>{{ interest.user_info.badge_name}}</td>
                                 <td>{{ interest.user.email }}</td>
-                                <td class="m-0 px-0">{{ interest.interest_level }}</td>
+                                <td class="m-0 px-0"><star-rating v-model:rating="interest.interest_level" :read-only="true" :show-rating="false" :star-size="20" /></td>
                                 <td class="m-0 px-0">{{ interest.will_moderate ? 'Yes' : 'No' }}</td>
                             </tr>
                             </tbody>
@@ -54,7 +54,12 @@
 </template>
 
 <script>
+import StarRating from 'vue-star-rating'
+
 export default {
+    components: {
+        StarRating
+    },
     props: ['sessionId'],
     data: function() {
         return {
