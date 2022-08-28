@@ -28,7 +28,7 @@
                                 <th class="ps-2">Name</th>
                                 <th>Badge Name</th>
                                 <th>Email</th>
-                                <th class="m-0 p-0">Interest Level</th>
+                                <th class="">Interest Level</th>
                                 <th class="m-0 p-0">Will Moderate</th>
                             </tr>
                             </thead>
@@ -37,7 +37,13 @@
                                 <td class="ps-2">{{ interest.user.last_name }}, {{ interest.user.first_name }}</td>
                                 <td>{{ interest.user_info.badge_name}}</td>
                                 <td>{{ interest.user.email }}</td>
-                                <td class="m-0 px-0"><star-rating v-model:rating="interest.interest_level" :read-only="true" :show-rating="false" :star-size="20" /></td>
+                                <td class="pe-3">
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" :style="getProgressPercent(interest.interest_level, 5)" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                            {{ interest.interest_level }}
+                                        </div>
+                                    </div>
+                                </td>
                                 <td class="m-0 px-0">{{ interest.will_moderate ? 'Yes' : 'No' }}</td>
                             </tr>
                             </tbody>
@@ -86,6 +92,10 @@ export default {
         },
         addUpdateSessionInterest: function() {
 
+        },
+        getProgressPercent: function(level, max) {
+            let percent = (100 / max) * level;
+            return "width: " + percent + "%;";
         },
     }
 
