@@ -38,7 +38,7 @@ class SessionInterestController extends Controller
                     $query->where('badge_name', 'LIKE',"%$request->keyword%");
                 });
             })
-            ->orderBy('id');
+            ->orderBy('interest_level', 'desc');
 
         return SessionInterestResource::collection($session_interest_users->paginate(50));
 
