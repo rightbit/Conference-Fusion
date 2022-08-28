@@ -28,7 +28,8 @@
                                 <th class="ps-2">Name</th>
                                 <th>Badge Name</th>
                                 <th>Email</th>
-                                <th class="m-0 p-0"></th>
+                                <th class="m-0 p-0">Interest Level</th>
+                                <th class="m-0 p-0">Will Moderate</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -36,7 +37,8 @@
                                 <td class="ps-2">{{ interest.user.last_name }}, {{ interest.user.first_name }}</td>
                                 <td>{{ interest.user_info.badge_name}}</td>
                                 <td>{{ interest.user.email }}</td>
-                                <td class="m-0 px-0"></td>
+                                <td class="m-0 px-0">{{ interest.interest_level }}</td>
+                                <td class="m-0 px-0">{{ interest.will_moderate ? 'Yes' : 'No' }}</td>
                             </tr>
                             </tbody>
                         </table>

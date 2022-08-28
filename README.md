@@ -8,7 +8,7 @@ This is just placeholder readme until the app reaches a full beta. If you are in
 ## Installation
 - Clone the repo and cd into the project directory
 - Create a MySQL DB and grant access to a user for the app
-- Requires php-gd, ensure it's install on server
+- Requires php-gd, ensure it's installed on server
 - Create .env file from .env.example and edit it to include:
   - DB connection info
   - App encryption key (or run `php artisan key:generate`)
