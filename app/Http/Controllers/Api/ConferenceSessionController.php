@@ -75,14 +75,13 @@ class ConferenceSessionController extends Controller
      */
     public function update(ConferenceSessionRequest $request, ConferenceSession $conference_session)
     {
-
         $conference_session->name = $request->name;
         $conference_session->track_id = $request->track_id;
         $conference_session->type_id = $request->type_id;
         $conference_session->session_status_id = $request->session_status_id;
         $conference_session->description = $request->description;
         $conference_session->seed_questions = $request->seed_questions;
-        $conference_session->other_notes = $request->other_notes;
+        $conference_session->staff_notes = $request->staff_notes;
         $conference_session->duration_minutes = $request->duration_minutes;
         $conference_session->registration_required = $request->registration_required;
         $conference_session->max_registration = $request->max_registration;
