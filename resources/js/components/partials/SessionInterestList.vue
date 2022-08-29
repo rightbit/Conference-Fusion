@@ -38,7 +38,7 @@
                                         <button class="btn btn-sm btn-secondary py-0 me-2" @click="this.interestToggle[interest.id] = !this.interestToggle[interest.id]">
                                             <i class="bi bi-person-lines-fill"></i>
                                         </button>
-                                        <a :href="'admin/user-profile/' + interest.user.id" target="_blank">{{ interest.user_info.badge_name}}</a></td>
+                                        <a :href="'/admin/user-profile/' + interest.user.id" target="_blank">{{ interest.user_info.badge_name}}</a></td>
                                     <td class="ps-2">{{ interest.user.first_name }} {{ interest.user.last_name }}</td>
                                     <td>
                                         <star-rating
