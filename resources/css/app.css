@@ -8,6 +8,10 @@
     background-color: rgba(0,0,0,0.06);
 }
 
+.bg-gray-300 {
+    background-color: rgba(0,0,0,0.03);
+}
+
 .navbar-dark .navbar-nav .nav-link {
     color: rgba(255, 255, 255, 0.75);
 }

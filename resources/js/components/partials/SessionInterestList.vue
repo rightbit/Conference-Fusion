@@ -32,7 +32,7 @@
                                     <th class="m-0 p-0">Will Moderate</th>
                                 </tr>
                             </thead>
-                            <tbody v-for="interest in interestedUsers" class="border-top">
+                            <tbody v-for="interest in interestedUsers" class="border-bottom">
                                 <tr>
                                     <td>
                                         <button class="btn btn-sm btn-secondary py-0 me-2" @click="this.interestToggle[interest.id] = !this.interestToggle[interest.id]">
@@ -63,12 +63,12 @@
                                     <td class="m-0 px-0">{{ interest.will_moderate ? 'Yes' : 'No' }}</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="5" class="m-0 p-0">
-                                        <div class="d-flex flex-row d-flex justify-content-between ms-4" v-if="this.interestToggle[interest.id]">
-                                            <div class="p-2"><strong>Session role:</strong><br />{{ this.role[interest.panel_role] }}</div>
-                                            <div class="p-2"><strong>Session notes:</strong><br />{{ interest.notes }}</div>
-                                            <div class="p-2"><strong>Participant bio:</strong><br />{{ interest.user_info.biography }}</div>
-                                            <div class="p-2"><strong>Participant info:</strong><br />{{ interest.user_info.notes }}</div>
+                                    <td colspan="5" class="m-0 p-0 border border-top-0">
+                                        <div class="d-flex flex-row d-flex justify-content-between ps-2" v-if="this.interestToggle[interest.id]">
+                                            <div class="p-2"><strong>Role:</strong><br />{{ this.role[interest.panel_role] }}</div>
+                                            <div class="p-2 w-30"><strong>Session notes:</strong><br />{{ interest.notes }}</div>
+                                            <div class="p-2 w-30"><strong>Participant bio:</strong><br />{{ interest.user_info.biography }}</div>
+                                            <div class="p-2 w-30"><strong>Participant info:</strong><br />{{ interest.user_info.notes }}</div>
                                         </div>
                                     </td>
                                 </tr>
