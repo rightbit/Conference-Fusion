@@ -22,31 +22,56 @@
                                 </div>
                             </div>
                         </div>
-                        <table class="table table-striped table-sm fs-90">
-                            <thead>
-                            <tr>
-                                <th class="ps-2">Name</th>
-                                <th>Badge Name</th>
-                                <th>Email</th>
-                                <th class="m-0 p-0">Interest Level</th>
-                                <th class="m-0 p-0">Will Moderate</th>
-                            </tr>
+                        <table class="table table-sm table-borderless table-responsive fs-90">
+                            <thead class="border-bottom border-dark">
+                                <tr>
+                                    <th>Badge Name</th>
+                                    <th class="ps-2">Name</th>
+                                    <th class="m-0 p-0">Interest Level</th>
+                                    <th class="m-0 p-0">Experience Level</th>
+                                    <th class="m-0 p-0">Will Moderate</th>
+                                </tr>
                             </thead>
-                            <tbody>
-                            <tr scope="row" v-for="interest in interestedUsers">
-                                <td class="ps-2">{{ interest.user.last_name }}, {{ interest.user.first_name }}</td>
-                                <td>{{ interest.user_info.badge_name}}</td>
-                                <td>{{ interest.user.email }}</td>
-                                <td><star-rating v-model:rating="interest.interest_level"
-                                                                  :read-only="true"
-                                                                  :show-rating="false"
-                                                                  :star-size="18"
-                                                                  :border-color="'#000'"
-                                                                  :border-width="1"
-                                                        />
-                                </td>
-                                <td class="m-0 px-0">{{ interest.will_moderate ? 'Yes' : 'No' }}</td>
-                            </tr>
+                            <tbody v-for="interest in interestedUsers" class="border-top">
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary py-0 me-2" @click="this.interestToggle[interest.id] = !this.interestToggle[interest.id]">
+                                            <i class="bi bi-person-lines-fill"></i>
+                                        </button>
+                                        <a :href="'admin/user-profile/' + interest.user.id" target="_blank">{{ interest.user_info.badge_name}}</a></td>
+                                    <td class="ps-2">{{ interest.user.first_name }} {{ interest.user.last_name }}</td>
+                                    <td>
+                                        <star-rating
+                                            v-model:rating="interest.interest_level"
+                                            :read-only="true"
+                                            :show-rating="false"
+                                            :star-size="18"
+                                            :border-color="'#000'"
+                                            :border-width="1"
+                                        />
+                                    </td>
+                                    <td>
+                                        <star-rating
+                                            v-model:rating="interest.experience_level"
+                                            :read-only="true"
+                                            :show-rating="false"
+                                            :star-size="18"
+                                            :border-color="'#000'"
+                                            :border-width="1"
+                                        />
+                                    </td>
+                                    <td class="m-0 px-0">{{ interest.will_moderate ? 'Yes' : 'No' }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="m-0 p-0">
+                                        <div class="d-flex flex-row d-flex justify-content-between ms-4" v-if="this.interestToggle[interest.id]">
+                                            <div class="p-2"><strong>Session role:</strong><br />{{ this.role[interest.panel_role] }}</div>
+                                            <div class="p-2"><strong>Session notes:</strong><br />{{ interest.notes }}</div>
+                                            <div class="p-2"><strong>Participant bio:</strong><br />{{ interest.user_info.biography }}</div>
+                                            <div class="p-2"><strong>Participant info:</strong><br />{{ interest.user_info.notes }}</div>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -74,6 +99,15 @@ export default {
             totalInterestedUsers: '0',
             keyword: '',
             laravelData: {},
+            interestToggle: {},
+            bgColor: false,
+            role: {
+                '1': 'Creator',
+                '2': 'Critic',
+                '3': 'Educator',
+                '4': 'Expert',
+                '5': 'Fan',
+            }
         }
     },
     mounted() {
@@ -90,6 +124,10 @@ export default {
                 .catch((error) => {
                     this.$toast.error(`Could not load the users interested in the session`);
                 });
+        },
+        altBackground: function() {
+          this.bgColor = !this.bgColor;
+          return this.bgColor ? "bg-gray-600" : '';
         },
         addUpdateSessionInterest: function() {
 

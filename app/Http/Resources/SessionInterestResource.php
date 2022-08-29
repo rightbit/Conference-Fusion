@@ -19,6 +19,8 @@ class SessionInterestResource extends JsonResource
             'conference_session_id' => $this->conference_session_id,
             'user_id' => $this->user_id,
             'interest_level' => $this->interest_level,
+            'experience_level' => $this->experience_level,
+            'panel_role' => $this->panel_role,
             'notes' => $this->notes,
             'will_moderate' => $this->will_moderate,
             'user' => [

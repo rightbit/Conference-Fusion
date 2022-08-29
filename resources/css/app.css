@@ -4,6 +4,10 @@
     background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
 }
 
+.bg-gray-600 {
+    background-color: rgba(0,0,0,0.06);
+}
+
 .navbar-dark .navbar-nav .nav-link {
     color: rgba(255, 255, 255, 0.75);
 }
