@@ -13,9 +13,14 @@
                             <div>
                                 Found {{ totalSessions }} Sessions
                             </div>
-                            <div class="w-50">
+                            <div class="w-75">
                                 <div class="d-flex align-items-end">
-                                    <select id="inputCategory" v-model="searchTrackId" class="form-select form-select-sm me-2 w-33" aria-label="select category">
+                                    <select id="inputCategory" v-model="searchTypeId" class="form-select form-select-sm me-2 w-33" aria-label="select category" @change="loadSessions">
+                                        <option value="" disabled hidden selected>Type</option>
+                                        <option value="">All Types</option>
+                                        <option v-for="type in types" v-bind:value="type.id">{{ type.name }}</option>
+                                    </select>
+                                    <select id="inputCategory" v-model="searchTrackId" class="form-select form-select-sm me-2 w-33" aria-label="select category" @change="loadSessions">
                                         <option value="" disabled hidden selected>Track</option>
                                         <option value="">All Tracks</option>
                                         <option v-for="track in tracks" v-bind:value="track.id">{{ track.name }}</option>
@@ -89,6 +94,7 @@ export default {
             conferenceSessions: [],
             totalSessions: '0',
             searchTrackId: '',
+            searchTypeId: '',
             keyword: '',
             laravelData: {},
             new_session: {
@@ -98,11 +104,13 @@ export default {
                 description: '',
             },
             tracks: [],
+            types: [],
         }
     },
     mounted() {
         this.loadSessions();
         this.loadTracks();
+        this.loadTypes();
     },
     methods: {
         loadTracks: function () {
@@ -114,11 +122,21 @@ export default {
                     this.$toast.error(`Could not load the tracks`);
                 });
         },
+        loadTypes: function () {
+            axios.get('/api/admin/session-type')
+                .then((response) => {
+                    this.types = response.data.data;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not load the session types`);
+                });
+        },
         loadSessions: function (page = 1) {
             axios.get('/api/admin/conference-session', {
                     params: {
                         conference_id: this.conferenceId,
                         track_id: this.searchTrackId,
+                        type_id: this.searchTypeId,
                         keyword: this.keyword,
                         page: page
                     }

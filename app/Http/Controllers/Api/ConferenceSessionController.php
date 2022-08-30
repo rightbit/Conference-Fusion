@@ -37,6 +37,9 @@ class ConferenceSessionController extends Controller
             })
             ->when($request->filled('track_id'), function ($query) use ($request) {
                 $query->where('track_id', $request->track_id);
+            })
+            ->when($request->filled('type_id'), function ($query) use ($request) {
+                $query->where('type_id', $request->type_id);
             });
 
         return ConferenceSessionResource::collection($conference_sessions->paginate(25));
