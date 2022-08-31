@@ -143,6 +143,7 @@ class ConferenceSessionController extends Controller
         $session_interest = new SessionInterest();
         $session_interest->conference_session_id = $conference_session->id;
         $session_interest->user_id = Auth::user()->id;
+        $session_interest->is_participant = '1'; //Presentation submitters are participants by default
         $session_interest->save();
 
         return new ConferenceSessionResource($conference_session);
