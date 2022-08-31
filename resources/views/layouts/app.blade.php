@@ -24,6 +24,10 @@
 
     @yield('styles')
 
+    <script>
+        /*to prevent Firefox FOUC, this must be here*/
+        let FF_FOUC_FIX;
+    </script>
 </head>
 <body>
     <div id="app">
