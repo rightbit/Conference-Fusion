@@ -25,7 +25,7 @@
                             </div>
                         </div>
                         <table className="table table-borderless table-responsive table-sm fs-90">
-                            <thead>
+                            <thead class="border-bottom border-dark">
                             <tr>
                                 <th>Badge Name</th>
                                 <th className="ps-2">Name</th>
