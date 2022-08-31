@@ -18,6 +18,8 @@ class SessionInterest extends Model
         'panel_role',
         'notes',
         'will_moderate',
+        'is_participant',
+        'is_moderator',
     ];
 
     public function user()

@@ -23,6 +23,8 @@ class SessionInterestResource extends JsonResource
             'panel_role' => $this->panel_role,
             'notes' => $this->notes,
             'will_moderate' => $this->will_moderate,
+            'is_participant' => $this->is_participant,
+            'is_moderator' => $this->is_moderator,
             'user' => [
                 'id' => $this->user->id,
                 'first_name' => $this->user->first_name,
