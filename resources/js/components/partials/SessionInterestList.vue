@@ -100,7 +100,6 @@ export default {
             keyword: '',
             laravelData: {},
             interestToggle: {},
-            bgColor: false,
             role: {
                 '1': 'Creator',
                 '2': 'Critic',
@@ -115,7 +114,7 @@ export default {
     },
     methods: {
         loadSessionInterest: function(page = 1) {
-            axios.get('/api/admin/session-interest', { params: { session_id: this.sessionId, keyword: this.keyword, page: page }})
+            axios.get('/api/admin/session-interest', { params: { session_id: this.sessionId, non_partipants: 1, keyword: this.keyword, page: page }})
                 .then((response) => {
                     this.totalInterestedUsers = response.data.meta.total;
                     this.interestedUsers = response.data.data;
@@ -124,10 +123,6 @@ export default {
                 .catch((error) => {
                     this.$toast.error(`Could not load the users interested in the session`);
                 });
-        },
-        altBackground: function() {
-          this.bgColor = !this.bgColor;
-          return this.bgColor ? "bg-gray-600" : '';
         },
         addUpdateSessionInterest: function() {
 

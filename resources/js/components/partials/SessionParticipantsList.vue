@@ -27,17 +27,17 @@
                         <table className="table table-striped table-sm fs-90">
                             <thead>
                             <tr>
-                                <th className="ps-2">Name</th>
                                 <th>Badge Name</th>
+                                <th className="ps-2">Name</th>
                                 <th>Email</th>
                                 <th className="m-0 p-0"></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr scope="row" v-for="user in participatingUsers">
-                                <td className="ps-2">{{ user.last_name }}, {{ user.first_name }}</td>
-                                <td>{{ user.info.badge_name}}</td>
-                                <td>{{ user.email }}</td>
+                            <tr scope="row" v-for="participant in participatingUsers">
+                                <td>{{ participant.user_info.badge_name}}</td>
+                                <td className="ps-2">{{ participant.user.first_name }} {{ participant.user.last_name }}</td>
+                                <td>{{ participant.user.email }}</td>
                                 <td className="m-0 px-0"></td>
                             </tr>
                             </tbody>
@@ -66,13 +66,23 @@ export default {
         }
     },
     mounted() {
-        this.loadSessionInterest();
+        this.loadSessionParticipants();
     },
     methods: {
-        loadSessionInterest: function () {
+        loadSessionParticipants: function (page = 1) {
+            axios.get('/api/admin/session-interest', { params: { session_id: this.sessionId, partipants_only: 1, keyword: this.keyword, page: page }})
+                .then((response) => {
 
+                    console.log(response);
+                    this.totalParticipatingUsers = response.data.meta.total;
+                    this.participatingUsers = response.data.data;
+                    this.laravelData = response.data;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not load the users participating in the session`);
+                });
         },
-        addUpdateSessionInterest: function () {
+        addUpdateSessionparticipants: function () {
 
         },
     }

@@ -8,6 +8,7 @@ use App\Models\SessionInterest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class SessionInterestController extends Controller
 {
@@ -22,10 +23,16 @@ class SessionInterestController extends Controller
         if(!Gate::allows('view_admin', Auth::user())){
             abort(403, 'Not authorized');
         }
-
+        Log::debug($request);
         $session_interest_users = SessionInterest::
             when($request->filled('session_id'), function ($query) use ($request) {
                 $query->where('conference_session_id', $request->session_id);
+            })
+            ->when($request->filled('partipants_only'), function ($query) use ($request) {
+                $query->where('is_participant', '1');
+            })
+            ->when($request->filled('non_partipants'), function ($query) use ($request) {
+                $query->where('is_participant', '0');
             })
             ->when($request->filled('keyword'), function ($query) use ($request) {
                 $query->whereHas('user', function($query) use($request) {
