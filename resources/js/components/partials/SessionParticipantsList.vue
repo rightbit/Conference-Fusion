@@ -4,7 +4,7 @@
             <div className="col-md-12">
                 <div className="card">
                     <div className="card-header d-flex justify-content-between">
-                        <div className="h4 align-self-center mb-lg-0">Session Participant List</div>
+                        <div className="h4 align-self-center mb-lg-0">Session participant list</div>
                         <a className="btn btn-primary" href="#"><i className="bi bi-plus-circle"></i> Add new</a>
                     </div>
 
