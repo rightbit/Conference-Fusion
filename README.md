@@ -12,6 +12,7 @@ This is just placeholder readme until the app reaches a full beta. If you are in
 - Create .env file from .env.example and edit it to include:
   - DB connection info
   - App encryption key (or run `php artisan key:generate`)
+  - Mail settings (required for forgot password emails)
 - Run `composer install` from the project directory
 - Run `npm install` from the project directory
 - Install the DB migrations - Run `php artisan migrate`

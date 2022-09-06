@@ -23,7 +23,7 @@ class SessionInterestController extends Controller
         if(!Gate::allows('view_admin', Auth::user())){
             abort(403, 'Not authorized');
         }
-        Log::debug($request);
+
         $session_interest_users = SessionInterest::
             when($request->filled('session_id'), function ($query) use ($request) {
                 $query->where('conference_session_id', $request->session_id);
