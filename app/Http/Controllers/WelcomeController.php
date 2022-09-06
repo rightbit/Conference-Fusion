@@ -28,13 +28,14 @@ class WelcomeController extends Controller
         //Get the next date for an open call
         $conference = Conference::find(session('selected_conference'));
         $start_date =  Carbon::parse($conference->call_start_date)->format('F j, Y');
+        $end_date =  Carbon::parse($conference->call_end_date)->format('F j, Y');
         $welcome_message = 'The date for the next CFP is still being decided.';
         if($conference->call_start_date) {
-            $welcome_message = "Submissions for our next conference ({$conference->name}) open on: <u>{$start_date}</u> <br />Register below for a reminder when submissions open.";
+            $welcome_message = "Submissions for our next conference ({$conference->name}) open on: <u>{$start_date}</u> <br />Please register for an account to receive a reminder when submissions open.";
             if (strtotime($conference->call_start_date) <= time() && strtotime($conference->call_end_date) >= time()) {
-                $welcome_message = "Submissions for our next conference ({$conference->name}) are now open!<br /> Register (or log in) below to participate.";
+                $welcome_message = "Submissions for <b>{$conference->name}</b> are now open! <br /> Please register for an account (or log in) below to participate.";
             } else if (strtotime($conference->call_end_date) < time()) {
-                $welcome_message = "The submission period for our next conference ({$conference->name}) has closed,<br /> but you may register below to be notified of our next open call.";
+                $welcome_message = "The submission period for ({$conference->name}) has closed,<br /> but you may register below to be notified of our next open call.";
             }
         }
 
