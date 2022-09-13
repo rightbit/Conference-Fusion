@@ -130,7 +130,8 @@ export default {
             axios.put(`/api/admin/session-interest/${sessionInterestId}`,  { action: 'make_participant', setting: 'is_participant', value: '1' } )
                 .then((response) => {
                     this.$toast.success(`Added to participant list`);
-                    this.loadSessionInterest;
+                    this.loadSessionInterest();
+                    this.$emit("reloadParticipants");
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not include the user as a participant`);

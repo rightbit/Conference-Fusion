@@ -89,8 +89,8 @@
                 </div>
             </div>
             </form>
-            <partials-session-participants-list :session-id="this.sessionId" class="mb-2" />
-            <partials-session-interest-list :session-id="this.sessionId" />
+            <partials-session-participants-list :session-id="this.sessionId" :key="participantListKey" @reloadInterests="reloadInterestList" class="mb-2" />
+            <partials-session-interest-list :session-id="this.sessionId" :key="interestListKey"  @reloadParticipants="reloadParticipantList" />
         </div>
         <div v-else class="p-5 text-center">
             <h1>Error 404</h1>
@@ -112,7 +112,9 @@
                 },
                 types: [],
                 statuses: [],
-                foundSession: true
+                foundSession: true,
+                participantListKey: 0,
+                interestListKey: 0,
             }
         },
         mounted() {
@@ -168,7 +170,13 @@
                 this.session.registration_required = 0;
                 this.session.duration_minutes = this.defaultSessionDuration;
                 this.session.session_status_id = 1;
-            }
+            },
+            reloadInterestList: function() {
+                this.interestListKey += 1;
+            },
+            reloadParticipantList: function() {
+                this.participantListKey += 1;
+            },
         }
 
     }

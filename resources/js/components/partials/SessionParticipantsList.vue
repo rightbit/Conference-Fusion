@@ -96,6 +96,7 @@ export default {
     mounted() {
         this.loadSessionParticipants();
     },
+    emits: ['reloadInterests'],
     methods: {
         loadSessionParticipants: function (page = 1) {
             axios.get('/api/admin/session-interest', { params: { session_id: this.sessionId, partipants_only: 1, keyword: this.keyword, page: page }})
@@ -112,7 +113,8 @@ export default {
             axios.put(`/api/admin/session-interest/${sessionInterestId}`,  { action: 'remove_participant', setting: 'is_participant', value: '0' } )
                 .then((response) => {
                     this.$toast.success(`Removed from participant list`);
-
+                    this.$emit("reloadInterests");
+                    this.loadSessionParticipants();
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not remove the user as a participant`);
@@ -123,7 +125,7 @@ export default {
             axios.put(`/api/admin/session-interest/${sessionInterestId}`,  { action: 'make_moderator', setting: 'is_moderator', value: '1' } )
                 .then((response) => {
                     this.$toast.success(`Saved participant as moderator`);
-                    this.loadSessionParticipants(1);
+                    this.loadSessionParticipants();
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not remove the user as a participant`);
