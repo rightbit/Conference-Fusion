@@ -24,6 +24,7 @@
                                         <option value="" disabled hidden selected>Track</option>
                                         <option value="">All Tracks</option>
                                         <option v-for="track in tracks" v-bind:value="track.id">{{ track.name }}</option>
+                                        <option value="empty">No Track</option>
                                     </select>
                                     <input type="text" class="form-control form-control-sm align-self-center me-2" placeholder="Search session name" v-model="keyword" v-on:keyup.enter="loadSessions">
                                     <button class="btn btn-outline-secondary btn-sm"  @click="loadSessions">

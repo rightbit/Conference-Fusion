@@ -36,7 +36,11 @@ class ConferenceSessionController extends Controller
                 $query->where('name', 'LIKE',"%$request->keyword%");
             })
             ->when($request->filled('track_id'), function ($query) use ($request) {
-                $query->where('track_id', $request->track_id);
+                if($request->track_id == 'empty'){
+                    $query->whereNull('track_id');
+                } else {
+                    $query->where('track_id', $request->track_id);
+                }
             })
             ->when($request->filled('type_id'), function ($query) use ($request) {
                 $query->where('type_id', $request->type_id);
