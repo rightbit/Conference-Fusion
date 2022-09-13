@@ -33,7 +33,7 @@
                             </tr>
                             </thead>
                             <tbody v-for="participant in participatingUsers">
-                            <tr>
+                            <tr :class="participant.is_moderator ? 'bg-light' : ''">
                                 <td><button class="btn btn-sm btn-secondary py-0 me-2" @click="this.participantToggle[participant.id] = !this.participantToggle[participant.id]">
                                     <i class="bi bi-person-lines-fill"></i>
                                 </button>
@@ -42,10 +42,15 @@
                                 <td className="ps-2">{{ participant.user.first_name }} {{ participant.user.last_name }}</td>
                                 <td>{{ participant.user.email }}</td>
                                 <td className="m-0 px-0 text-end">
-                                    <button v-if="!participant.is_moderator" class="btn btn-sm btn-outline-primary p-1 me-2" @click="makeModerator(participant.id)">
-                                        <i class="bi bi-square"></i> Moderator
-                                    </button>
-                                    <button v-else class="btn btn-sm btn-primary p-1 me-2 disabled"><i class="bi  bi-check-square"></i> Moderator</button>
+                                    <span v-if="participant.will_moderate">
+                                        <button v-if="!participant.is_moderator" class="btn btn-sm btn-outline-primary p-1 me-2" @click="makeModerator(participant.id)">
+                                            <i class="bi bi-square"></i> Moderator
+                                        </button>
+                                        <button v-else class="btn btn-sm btn-primary p-1 me-2 disabled"><i class="bi  bi-check-square"></i> Moderator</button>
+                                    </span>
+                                    <span v-else>
+                                        <button class="btn btn-sm btn-light p-1 me-2 disabled"><i class="bi  bi-x-circle"></i> Moderator</button>
+                                    </span>
                                     <button class="btn btn-sm btn-danger p-1" @click="removeFromSession(participant.id)"><i class="bi bi-person-x-fill"></i> Remove</button>
                                 </td>
                             </tr>
