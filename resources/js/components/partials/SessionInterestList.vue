@@ -5,7 +5,6 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
                         <div class="h4 align-self-center mb-lg-0">Session interest list</div>
-                        <a class="btn btn-primary" href="#"><i class="bi bi-plus-circle"></i> Add new</a>
                     </div>
 
                     <div class="card-body">

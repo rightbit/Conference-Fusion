@@ -5,7 +5,6 @@
                 <div className="card">
                     <div className="card-header d-flex justify-content-between">
                         <div className="h4 align-self-center mb-lg-0">Session participant list</div>
-                        <a className="btn btn-primary" href="#"><i className="bi bi-plus-circle"></i> Add new</a>
                     </div>
 
                     <div className="card-body">
@@ -44,9 +43,9 @@
                                 <td>{{ participant.user.email }}</td>
                                 <td className="m-0 px-0 text-end">
                                     <button v-if="!participant.is_moderator" class="btn btn-sm btn-outline-primary p-1 me-2" @click="makeModerator(participant.id)">
-                                        <i class="bi bi-person-circle"></i> Moderator
+                                        <i class="bi bi-square"></i> Moderator
                                     </button>
-                                    <button v-else class="btn btn-sm btn-primary p-1 me-2 disabled"><i class="bi bi-person-circle"></i> Moderator</button>
+                                    <button v-else class="btn btn-sm btn-primary p-1 me-2 disabled"><i class="bi  bi-check-square"></i> Moderator</button>
                                     <button class="btn btn-sm btn-danger p-1" @click="removeFromSession(participant.id)"><i class="bi bi-person-x-fill"></i> Remove</button>
                                 </td>
                             </tr>

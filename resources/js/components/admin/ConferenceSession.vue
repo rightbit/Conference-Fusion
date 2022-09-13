@@ -89,6 +89,19 @@
                 </div>
             </div>
             </form>
+            <div class="container mb-2">
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="h4 align-self-center mb-lg-0">Add user to this session</div>
+                                <button class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add new</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <partials-session-participants-list :session-id="this.sessionId" :key="participantListKey" @reloadInterests="reloadInterestList" class="mb-2" />
             <partials-session-interest-list :session-id="this.sessionId" :key="interestListKey"  @reloadParticipants="reloadParticipantList" />
         </div>
