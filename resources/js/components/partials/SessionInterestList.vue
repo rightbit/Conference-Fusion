@@ -30,6 +30,7 @@
                                     <th class="m-0 p-0">Interest Level</th>
                                     <th class="m-0 p-0">Experience Level</th>
                                     <th class="m-0 p-0">Will Moderate</th>
+                                    <th class="m-0 p-0"></th>
                                 </tr>
                             </thead>
                             <tbody v-for="interest in interestedUsers" class="border-bottom">
@@ -61,9 +62,10 @@
                                         />
                                     </td>
                                     <td class="m-0 px-0">{{ interest.will_moderate ? 'Yes' : 'No' }}</td>
+                                    <td class="m-0 px-0 text-end"><button class="btn btn-sm btn-secondary p-1" @click="addToPanel(interest.id)"><i class="bi bi-person-check-fill"></i> Include</button></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="5" class="m-0 p-0 border border-top-0">
+                                    <td colspan="6" class="m-0 p-0 border border-top-0">
                                         <div class="d-flex flex-row d-flex justify-content-between ps-2" v-if="this.interestToggle[interest.id]">
                                             <div class="p-2"><strong>Role:</strong><br />{{ this.role[interest.panel_role] }}</div>
                                             <div class="p-2 w-30"><strong>Session notes:</strong><br />{{ interest.notes }}</div>
@@ -124,7 +126,15 @@ export default {
                     this.$toast.error(`Could not load the users interested in the session`);
                 });
         },
-        addUpdateSessionInterest: function() {
+        addToPanel: function(sessionInterestId) {
+            axios.put(`/api/admin/session-interest/${sessionInterestId}`,  { action: 'make_participant', setting: 'is_participant', value: '1' } )
+                .then((response) => {
+                    this.$toast.success(`Added to participant list`);
+                    this.loadSessionInterest;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not include the user as a participant`);
+                })
 
         },
     }

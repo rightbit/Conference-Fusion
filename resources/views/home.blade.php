@@ -40,12 +40,16 @@
                                             <p class="card-text">{{ $conference->description }}</p>
                                         </div>
                                         <div class="card-footer">
-                                            <a href="{{ route('call_for_presentations', ['conference' => $conference->id] ) }}" class="btn align-self-end m-1 {{ $conference->call_active ? 'btn-warning':'btn-outline-secondary disabled' }}" >
-                                                {{ __('Call for presentations') }}
-                                            </a>
-                                            <a href="{{ route('call_for_panelists', ['conference' => $conference->id] ) }}" class="btn align-self-end m-1 {{ $conference->call_active ? ' btn-primary':'btn-outline-secondary disabled' }}">
-                                                {{ __('Call for panelists') }}
-                                            </a>
+                                            @if($conference->call_active)
+                                                <a href="{{ route('call_for_presentations', ['conference' => $conference->id] ) }}" class="btn align-self-end m-1 {{ $conference->call_active ? 'btn-warning':'btn-outline-secondary disabled' }}" >
+                                                    {{ __('Call for presentations') }}
+                                                </a>
+                                                <a href="{{ route('call_for_panelists', ['conference' => $conference->id] ) }}" class="btn align-self-end m-1 {{ $conference->call_active ? ' btn-primary':'btn-outline-secondary disabled' }}">
+                                                    {{ __('Call for panelists') }}
+                                                </a>
+                                            @else
+                                                The call is now closed, please check back soon.
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

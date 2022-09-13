@@ -40,9 +40,8 @@ class HomeController extends Controller
         $today = Carbon::today();
 
         foreach($conferences as &$conference) {
-            if($today->gte($conference->call_start_date)) {
+            if($today->gte($conference->call_start_date) && $today->lte($conference->call_end_date)) {
                 $conference->call_active = true;
-                ;
             }
             $conference->start_date_display = Carbon::parse($conference->start_date)->format('M j, Y');
             $conference->end_date_display = Carbon::parse($conference->end_date)->format('M j, Y');

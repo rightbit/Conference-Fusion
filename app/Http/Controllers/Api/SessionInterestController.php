@@ -103,7 +103,29 @@ class SessionInterestController extends Controller
      */
     public function update(Request $request, SessionInterest $sessionInterest)
     {
-        //
+        if($request->action == 'make_participant') {
+            if(!$sessionInterest->update(['is_participant' => 1])) {
+                abort(500, 'Error updating record');
+            }
+        }
+
+        if($request->action == 'remove_participant') {
+            if(!$sessionInterest->update(['is_participant' => 0, 'is_moderator' => 0])) {
+                abort(500, 'Error updating record');
+            }
+        }
+
+        if($request->action == 'make_moderator') {
+            SessionInterest::where('conference_session_id', $sessionInterest->conference_session_id)
+                            ->where('is_moderator', 1)
+                            ->update(['is_moderator' => 0]);
+
+            if(!$sessionInterest->update(['is_moderator' => 1])) {
+                abort(500, 'Error updating record');
+            }
+        }
+
+        return new SessionInterestResource($sessionInterest);
     }
 
     /**

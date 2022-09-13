@@ -42,10 +42,16 @@
                                 </td>
                                 <td className="ps-2">{{ participant.user.first_name }} {{ participant.user.last_name }}</td>
                                 <td>{{ participant.user.email }}</td>
-                                <td className="m-0 px-0"></td>
+                                <td className="m-0 px-0 text-end">
+                                    <button v-if="!participant.is_moderator" class="btn btn-sm btn-outline-primary p-1 me-2" @click="makeModerator(participant.id)">
+                                        <i class="bi bi-person-circle"></i> Moderator
+                                    </button>
+                                    <button v-else class="btn btn-sm btn-primary p-1 me-2 disabled"><i class="bi bi-person-circle"></i> Moderator</button>
+                                    <button class="btn btn-sm btn-danger p-1" @click="removeFromSession(participant.id)"><i class="bi bi-person-x-fill"></i> Remove</button>
+                                </td>
                             </tr>
                             <tr>
-                                <td colspan="3" class="m-0 p-0 border border-top-0">
+                                <td colspan="4" class="m-0 p-0 border border-top-0">
                                     <div class="d-flex flex-row d-flex justify-content-between ps-2" v-if="this.participantToggle[participant.id]">
                                         <div class="p-2" v-if="participant.panel_role"><strong>Role:</strong><br />{{ this.role[participant.panel_role] }}</div>
                                         <div class="p-2 w-30"><strong>Session notes:</strong><br />{{ participant.notes }}</div>
@@ -102,7 +108,26 @@ export default {
                     this.$toast.error(`Could not load the users participating in the session`);
                 });
         },
-        addUpdateSessionparticipants: function () {
+        removeFromSession: function(sessionInterestId) {
+            axios.put(`/api/admin/session-interest/${sessionInterestId}`,  { action: 'remove_participant', setting: 'is_participant', value: '0' } )
+                .then((response) => {
+                    this.$toast.success(`Removed from participant list`);
+                    this.loadSessionParticipants;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not remove the user as a participant`);
+                })
+
+        },
+        makeModerator: function(sessionInterestId) {
+            axios.put(`/api/admin/session-interest/${sessionInterestId}`,  { action: 'make_moderator', setting: 'is_moderator', value: '1' } )
+                .then((response) => {
+                    this.$toast.success(`Saved participant as moderator`);
+                    this.loadSessionParticipants;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not remove the user as a participant`);
+                })
 
         },
     }
