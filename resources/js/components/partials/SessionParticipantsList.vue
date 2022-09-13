@@ -33,7 +33,7 @@
                                 <th className="m-0 p-0"></th>
                             </tr>
                             </thead>
-                            <tbody  v-for="participant in participatingUsers">
+                            <tbody v-for="participant in participatingUsers">
                             <tr>
                                 <td><button class="btn btn-sm btn-secondary py-0 me-2" @click="this.participantToggle[participant.id] = !this.participantToggle[participant.id]">
                                     <i class="bi bi-person-lines-fill"></i>
@@ -112,7 +112,7 @@ export default {
             axios.put(`/api/admin/session-interest/${sessionInterestId}`,  { action: 'remove_participant', setting: 'is_participant', value: '0' } )
                 .then((response) => {
                     this.$toast.success(`Removed from participant list`);
-                    this.loadSessionParticipants;
+
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not remove the user as a participant`);
@@ -123,7 +123,7 @@ export default {
             axios.put(`/api/admin/session-interest/${sessionInterestId}`,  { action: 'make_moderator', setting: 'is_moderator', value: '1' } )
                 .then((response) => {
                     this.$toast.success(`Saved participant as moderator`);
-                    this.loadSessionParticipants;
+                    this.loadSessionParticipants(1);
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not remove the user as a participant`);
