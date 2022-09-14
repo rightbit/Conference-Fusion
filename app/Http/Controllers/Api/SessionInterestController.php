@@ -69,7 +69,20 @@ class SessionInterestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $session_interest_exists = SessionInterest::where('user_id', $request->user_id)
+                                                    ->where('conference_session_id', $request->conference_session_id)
+                                                    ->first();
+
+        if($session_interest_exists) {
+            abort(409, "Participant interest record already exists");
+        }
+
+        $session_interest = new SessionInterest($request->all());
+        if(!$session_interest->notes) {
+            $session_interest->notes = 'Added by: ' . Auth::user()->first_name . ' ' . Auth::user()->last_name;
+        }
+        $session_interest->save();
+        return new SessionInterestResource($session_interest);
     }
 
     /**

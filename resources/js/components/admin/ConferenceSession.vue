@@ -95,7 +95,7 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
                                 <div class="h4 align-self-center mb-lg-0">Add user to this session</div>
-                                <button class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add new</button>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sessionInterestModal"><i class="bi bi-plus-circle"></i> Add new</button>
                             </div>
                         </div>
                     </div>
@@ -109,6 +109,111 @@
             <h1>Error 404</h1>
             Session not found
         </div>
+    </div>
+    <div class="modal" id="sessionInterestModal" >
+        <form id="interestForm" class="needs-validation row" novalidate @submit.prevent="">
+            <div class="modal-dialog modal-lg" style="min-width: 25%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Panel Interest Form</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ref="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div v-if="!interest.user_id" class="container">
+                            <div class="input-group flex-nowrap mb-3">
+                                <input type="text" class="form-control align-self-center" placeholder="Search name or email" v-model="keyword" v-on:keyup.enter="loadUsers">
+                                <button type="button" class="input-group-text" @click="loadUsers"><i class="bi bi-search"></i></button>
+                            </div>
+                            <div v-for="user in searchUsers" class="mb-2">
+                                <button type="button" class="btn btn-sm btn-outline-primary me-2" @click="selectUser(user)"><i class="bi bi-person-plus-fill"></i></button>
+                                <a :href="'/admin/user-profile/'+user.id" target="_blank">#{{ user.id }}</a> {{ user.first_name }} {{ user.last_name }} ({{ user.info.badge_name }})
+                            </div>
+                        </div>
+                        <div v-else class="container">
+                            <div class="mb-3">
+                                <div class="mb-3">
+                                    <button type="button" class="btn btn-sm btn-secondary me-2" @click="clearUser()"><i class="bi bi-person-x-fill"></i></button>
+                                    {{ interest.user.first_name }} {{ interest.user.last_name }} ({{ interest.user.info.badge_name }})
+                                </div>
+
+                                <label for="interest_level">Level of interest</label>
+                                <select class="form-select" v-model="interest.interest_level" id="interest_level" required>
+                                    <option value="" disabled hidden></option>
+                                    <option value="5">Extremely Interested</option>
+                                    <option value="4">Very Interested</option>
+                                    <option value="3">Interested</option>
+                                    <option value="2">Somewhat Interested</option>
+                                    <option value="1">Mildly Interested</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please choose an interest level.
+                                </div>
+                                <small class="text-muted">How interested are they in being on this panel?</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="experience_level">Level of experience</label>
+                                <select class="form-select" v-model="interest.experience_level" id="experience_level" required>
+                                    <option value="" disabled hidden></option>
+                                    <option value="5">Expert Knowledge</option>
+                                    <option value="4">Extremely Knowledgeable</option>
+                                    <option value="3">Very Knowledgeable</option>
+                                    <option value="2">Somewhat Knowledgeable</option>
+                                    <option value="1">Mildly Knowledgeable</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please choose an experience level.
+                                </div>
+                                <small class="text-muted">How familiar are they with this topic?</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="panel_role">Role on this panel</label>
+                                <select class="form-select" v-model="interest.panel_role" id="panel_role" required>
+                                    <option value="" disabled hidden></option>
+                                    <option value="5">Creator</option>
+                                    <option value="4">Critic</option>
+                                    <option value="3">Educator</option>
+                                    <option value="2">Expert</option>
+                                    <option value="1">Fan</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please indicate the potential role.
+                                </div>
+                                <small class="text-muted">In what type of role would they contribute?</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="will_moderate">Interest in moderating</label>
+                                <select class="form-select" v-model="interest.will_moderate" id="will_moderate" required>
+                                    <option value="" disabled hidden></option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please indicate their interest in moderating.
+                                </div>
+                                <small class="text-muted">Are they willing to moderate this panel?</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="will_moderate">Add as a participant?</label>
+                                <select class="form-select" v-model="interest.is_participant" id="is_participant" required>
+                                    <option value="" disabled hidden></option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please indicate their status.
+                                </div>
+                                <small class="text-muted">Are they being added directly to the panel?</small>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button v-if="interest.user_id" type="submit" class="btn btn-primary" @click="addInterest">Add User</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </template>
 
@@ -128,6 +233,10 @@
                 foundSession: true,
                 participantListKey: 0,
                 interestListKey: 0,
+                interest: {},
+                searchUsers: {},
+                totalUsers: 0,
+                keyword: '',
             }
         },
         mounted() {
@@ -175,6 +284,53 @@
                             this.$toast.error(`Could not create a new session`);
                         });
                 }
+            },
+            loadUsers: function (page = 1) {
+                axios.get('/api/profile/user', { params: { keyword: this.keyword, page: page }})
+                    .then((response) => {
+                        this.totalUsers = response.data.meta.total;
+                        this.searchUsers = response.data.data;
+                    })
+                    .catch((error) => {
+                        this.$toast.error(`Could not load the users`);
+                    });
+            },
+            selectUser: function(user) {
+                this.interest.user_id = user.id;
+                this.interest.user = user;
+            },
+            clearUser: function() {
+                this.interest.user_id = null;
+                this.interest.user = null;
+            },
+            addInterest: function() {
+                let form = document.querySelector("#interestForm");
+                if (!form.checkValidity()) {
+                    form.classList.add('was-validated')
+                    return;
+                }
+                this.interest.conference_session_id = this.sessionId;
+
+                axios.post('/api/admin/session-interest', this.interest)
+                    .then((response) => {
+                        if(this.interest.is_participant == 1) {
+                            this.reloadParticipantList();
+                        } else {
+                            this.reloadInterestList();
+                        }
+
+                        this.$toast.success(`Saved a new panel interest`);
+                        this.interest = {};
+                        this.$refs.Close.click();
+
+                    })
+                    .catch((error) => {
+                        if(error.response.data.message) {
+                            this.$toast.error(error.response.data.message);
+                        } else {
+                            this.$toast.error(`Could not save your participant`);
+                        }
+                    });
             },
             resetDefaults: function() {
                 for (var key in this.session ) {
