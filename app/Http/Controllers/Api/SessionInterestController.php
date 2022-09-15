@@ -151,4 +151,56 @@ class SessionInterestController extends Controller
     {
         //
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  int  $user_id
+     * @return \Illuminate\Http\Response
+     */
+    public function userSessionTotals(int $user_id)
+    {
+        $session_totals['interest'] = SessionInterest::where('user_id', $user_id)
+            ->where('is_participant', 0)
+            ->whereHas('conference_session', function ($query) {
+                $conference_id = session('selected_conference');
+                $query->where('conference_id', $conference_id);
+                $query->whereNotIn('session_status_id', [6,7]);
+            })
+            ->count();
+
+        $session_totals['interest'] += SessionInterest::where('user_id', $user_id)
+            ->where('is_participant', 1)
+            ->whereHas('conference_session', function ($query) {
+                $conference_id = session('selected_conference');
+                $query->where('conference_id', $conference_id);
+                $query->where('type_id', 2);
+                $query->whereNotIn('session_status_id', [4,5,6,7]);
+            })
+            ->count();
+
+        $session_totals['participant'] = SessionInterest::where('user_id', $user_id)
+            ->where('is_participant', 1)
+            ->whereHas('conference_session', function ($query) {
+                $conference_id = session('selected_conference');
+                $query->where('conference_id', $conference_id);
+                $query->where('type_id', 1);
+                $query->whereNotIn('session_status_id', [6,7]);
+                })
+            ->count();
+
+        $session_totals['presenter'] = SessionInterest::where('user_id', $user_id)
+            ->where('is_participant', 1)
+            ->whereHas('conference_session', function ($query) {
+                $conference_id = session('selected_conference');
+                $query->where('conference_id', $conference_id);
+                $query->where('type_id', 2);
+                $query->whereIn('session_status_id', [4,5]);
+            })
+            ->count();
+
+        return $session_totals;
+
+
+    }
 }

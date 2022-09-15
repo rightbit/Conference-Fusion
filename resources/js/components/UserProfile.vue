@@ -9,15 +9,22 @@
                         <span class="font-weight-bold" v-if="user.info.badge_name">{{ user.info.badge_name }}</span>
                         <button v-if="user.id && user.id != 0 && user.info.id !== null" type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#profileModal">Edit <i class="bi bi-pencil-square"></i></button>
                         <div v-else class="btn btn-outline-secondary w-75 mt-2" >Update profile before uploading image</div>
-                        <div v-if="this.superAdmin">
+                        <div v-if="this.superAdmin" class="w-100">
                             <hr />
-                            <h5>User Permissions</h5>
+                            <h5>User permissions</h5>
                             <div v-for="(permission_name, permission) in this.permissions" class="form-check text-start ms-3">
                                 <input class="form-check-input" :id="'perm_'+permission" type="checkbox" v-model="this.userPermissionsValue[permission]" @change="updateUserPermission(permission, permission_name)" :disabled="permissionsDisabled">
                                 <label class="form-check-label" :for="'perm_'+permission">
                                     {{ permission_name }}
                                 </label>
                             </div>
+                        </div>
+                        <div v-if="this.viewAdmin" class="w-100">
+                            <hr />
+                            <h5>Session participation info</h5>
+                            <button class="btn btn-outline-secondary w-100 mb-2 text-start"><i class="bi bi-eye-fill"></i> Interests: {{ this.sessionCounts.interest }}</button><br />
+                            <button class="btn btn-outline-secondary w-100 mb-2 text-start"><i class="bi bi-eye-fill"></i> Participant: {{ this.sessionCounts.participant }}</button><br />
+                            <button class="btn btn-outline-secondary w-100 text-start"><i class="bi bi-eye-fill"></i> Presenter: {{ this.sessionCounts.presenter }}</button>
                         </div>
                     </div>
                 </div>
@@ -205,10 +212,16 @@ export default {
             permissionsDisabled: true,
             userPermissions: {},
             userPermissionsValue: {},
+            sessionCounts: {
+                interest: 0,
+                participant: 0,
+                presenter: 0,
+            },
         }
     },
     mounted() {
         this.getUser();
+        this.getUserSessionTotals();
     },
     methods: {
         getUser: function() {
@@ -249,6 +262,18 @@ export default {
                         onClick: ''
                     });
                     this.allowForm = false;
+                });
+        },
+        getUserSessionTotals: function() {
+            if(this.userId === 0) {
+                return
+            }
+            axios.get(`/api/user-session-totals/${this.userId}`)
+                .then((response) => {
+                    this.sessionCounts = response.data;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Error loading the session counts`);
                 });
         },
         getUserPermissions: function() {
