@@ -71,8 +71,8 @@
                         </div>
                         <div class="row g-2 mb-3">
                             <div class="col-md-12">
-                                <label for="firstName">Badge Name</label>
-                                <input type="text" class="form-control" id="firstName" placeholder="Badge name" v-model="user.info.badge_name" required>
+                                <label for="badge_name">Badge Name</label>
+                                <input type="text" class="form-control" id="badge_name" placeholder="Badge name" v-model="user.info.badge_name" required>
                                 <div class="invalid-feedback">
                                     Please provide a badge name
                                 </div>
@@ -88,6 +88,12 @@
                             <div class="col-md-12">
                                 <label for="notes">Info and notes</label>
                                 <textarea id="notes" class="form-control" placeholder="General notes for the staff about you (staff view only)"  v-model="user.info.notes" ></textarea>
+                            </div>
+                        </div>
+                        <div class="row g-2 mb-4">
+                            <div class="col-md-12">
+                                <label for="website">Website</label>
+                                <input type="text" class="form-control" id="website" placeholder="Badge name" v-model="user.info.website">
                             </div>
                         </div>
                         <div class="row mb-2">
