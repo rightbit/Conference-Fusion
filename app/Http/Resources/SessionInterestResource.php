@@ -42,6 +42,8 @@ class SessionInterestResource extends JsonResource
                 'description' => $this->conference_session->description,
                 'participant_notes' => $this->conference_session->participant_notes,
                 'type_id' => $this->conference_session->type_id,
+                'track_id' => $this->conference_session->track_id,
+                'track_name' => $this->conference_session->track->name,
             ],
         ];
     }

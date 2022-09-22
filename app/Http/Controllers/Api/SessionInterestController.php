@@ -237,7 +237,7 @@ class SessionInterestController extends Controller
             })
             ->union($first);
 
-        return  SessionInterestResource::collection($session_interests->get());
+        return  SessionInterestResource::collection($session_interests->paginate(25));
 
 
     }
@@ -267,7 +267,6 @@ class SessionInterestController extends Controller
 
 
     }
-
 
     /**
      * Display a listing of the resource.

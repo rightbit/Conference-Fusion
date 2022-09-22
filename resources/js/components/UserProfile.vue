@@ -22,13 +22,13 @@
                         <div v-if="this.viewAdmin" class="w-100">
                             <hr />
                             <h5>Session participation info</h5>
-                            <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData('interests')">
+                            <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData(1, 'interests')">
                                 <i class="bi bi-eye-fill"></i> Interests: {{ this.sessionCounts.interest }}
                             </button>
-                            <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData('panelist')">
+                            <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData(1, 'panelist')">
                                 <i class="bi bi-eye-fill"></i> Panelist: {{ this.sessionCounts.panelist }}
                             </button>
-                            <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData('presenter')">
+                            <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData(1, 'presenter')">
                                 <i class="bi bi-eye-fill"></i> Presenter: {{ this.sessionCounts.presenter }}
                             </button>
                         </div>
@@ -215,9 +215,10 @@
                         <tbody>
                             <tr v-for="sessionData in modalSessionData">
                                 <td v-if="this.viewAdmin">
-                                    <a :href="'/admin/conference-session/' + sessionData.conference_session_id" class="btn btn-outline-primary"><i class="bi bi-eye-fill"></i></a>
+                                    <a :href="'/admin/conference-session/' + sessionData.conference_session_id" class="btn btn-sm btn-outline-primary"><i class="bi bi-arrow-up-right-circle"></i></a>
                                 </td>
                                 <td>{{ sessionData.conference_session.name }}</td>
+                                <td class="border-start">{{ sessionData.conference_session.track_name }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -225,6 +226,10 @@
                         <h5><i class="bi bi-exclamation-diamond"></i > No sessions found</h5>
 
                     </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <Pagination :data="modalSessionlaravelData" :limit="3" :align="center" :show-disabled="false" @pagination-change-page="getModalSessionData" />
+
                 </div>
             </div>
         </div>
@@ -258,6 +263,7 @@ export default {
             },
             modalSessionData: {},
             modalSessionTitle: '',
+            modalSessionlaravelData: {},
         }
     },
     mounted() {
@@ -343,13 +349,13 @@ export default {
                 });
 
         },
-        getModalSessionData: function(cat) {
-            this.modalSessionTitle = cat;
+        getModalSessionData: function(page = 1, cat = null) {
+            this.modalSessionTitle = cat ? cat : this.modalSessionTitle;
             this.modalSessionData = {};
-            axios.get(`/api/user/${this.user.id}/sessions/${cat}`)
+            axios.get(`/api/user/${this.user.id}/sessions/${this.modalSessionTitle}`, { params: { page: page }})
                 .then((response) => {
-                    console.log(response.data)
                    this.modalSessionData = response.data.data;
+                   this.modalSessionlaravelData = response.data;
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not load the user's session info`);
