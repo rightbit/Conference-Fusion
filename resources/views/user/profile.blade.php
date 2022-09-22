@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    @php  /* @var $session_conference */  @endphp
     @php $superAdmin = 0; @endphp
     @can('admin', 'user')
         @php $superAdmin = 1; @endphp
@@ -15,5 +16,7 @@
         :current-user="{{ auth()->user()->id }}"
         :super-admin="{{ $superAdmin }}"
         :view-admin="{{ $viewAdmin }}"
-        :permissions="{{ json_encode(config('site.permission_names')) }}" />
+        :permissions="{{ json_encode(config('site.permission_names')) }}"
+        :conference-id="'{{ $session_conference['id'] }}'"
+    />
 @endsection

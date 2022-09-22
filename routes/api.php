@@ -36,6 +36,10 @@ Route::middleware(['auth:sanctum'])->group( function() {
     Route::get('user-panel-list/{conference_id}', [ConferenceSessionController::class, 'userPanelIndex']);
     Route::get('user-session-totals/{user_id}', [SessionInterestController::class, 'userSessionTotals']);
 
+    Route::get('user/{user_id}/sessions/interests', [SessionInterestController::class, 'userSessionsInterests']);
+    Route::get('user/{user_id}/sessions/panelist', [SessionInterestController::class, 'userSessionsPanelist']);
+    Route::get('user/{user_id}/sessions/presenter', [SessionInterestController::class, 'userSessionsPresenter']);
+
     Route::post('profile-image/{user}', [UserController::class, 'uploadProfileImage']);
     Route::post('presentations/submit', [ConferenceSessionController::class, 'storePresentation']);
     Route::delete('presentations/{id}', [ConferenceSessionController::class, 'destroyPresentation']);

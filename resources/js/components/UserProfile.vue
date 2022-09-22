@@ -22,9 +22,15 @@
                         <div v-if="this.viewAdmin" class="w-100">
                             <hr />
                             <h5>Session participation info</h5>
-                            <button class="btn btn-outline-secondary w-100 mb-2 text-start"><i class="bi bi-eye-fill"></i> Interests: {{ this.sessionCounts.interest }}</button><br />
-                            <button class="btn btn-outline-secondary w-100 mb-2 text-start"><i class="bi bi-eye-fill"></i> Participant: {{ this.sessionCounts.participant }}</button><br />
-                            <button class="btn btn-outline-secondary w-100 text-start"><i class="bi bi-eye-fill"></i> Presenter: {{ this.sessionCounts.presenter }}</button>
+                            <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData('interests')">
+                                <i class="bi bi-eye-fill"></i> Interests: {{ this.sessionCounts.interest }}
+                            </button>
+                            <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData('panelist')">
+                                <i class="bi bi-eye-fill"></i> Panelist: {{ this.sessionCounts.panelist }}
+                            </button>
+                            <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData('presenter')">
+                                <i class="bi bi-eye-fill"></i> Presenter: {{ this.sessionCounts.presenter }}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -132,7 +138,7 @@
                         <div class="row mb-0">
                             <label for="book1title">Book 3</label>
                         </div>
-                        <div class="row g-2 mb-2">
+                        <div class="row g-2 mb-3">
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" v-model="user.info_consignment.book3_title"  placeholder="Title" />
                             </div>
@@ -195,13 +201,40 @@
             <h1>Error 404</h1>
             User not found
         </div>
+
+    </div>
+    <div  v-if="this.viewAdmin" class="modal fade" id="user-session-data" aria-hidden="true">
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Session {{ this.modalSessionTitle }} </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped" v-if="this.modalSessionData.length > 0">
+                        <tbody>
+                            <tr v-for="sessionData in modalSessionData">
+                                <td v-if="this.viewAdmin">
+                                    <a :href="'/admin/conference-session/' + sessionData.conference_session_id" class="btn btn-outline-primary"><i class="bi bi-eye-fill"></i></a>
+                                </td>
+                                <td>{{ sessionData.conference_session.name }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div v-else class="text-center">
+                        <h5><i class="bi bi-exclamation-diamond"></i > No sessions found</h5>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 
 <script>
 export default {
-    props: ['userId', 'currentUser', 'superAdmin', 'viewAdmin', 'permissions'],
+    props: ['userId', 'currentUser', 'superAdmin', 'viewAdmin', 'permissions', 'conferenceId'],
     data: function() {
         return {
             user: {
@@ -220,9 +253,11 @@ export default {
             userPermissionsValue: {},
             sessionCounts: {
                 interest: 0,
-                participant: 0,
+                panelist: 0,
                 presenter: 0,
             },
+            modalSessionData: {},
+            modalSessionTitle: '',
         }
     },
     mounted() {
@@ -307,6 +342,18 @@ export default {
                     this.$toast.error(`Could not load the user permissions`);
                 });
 
+        },
+        getModalSessionData: function(cat) {
+            this.modalSessionTitle = cat;
+            this.modalSessionData = {};
+            axios.get(`/api/user/${this.user.id}/sessions/${cat}`)
+                .then((response) => {
+                    console.log(response.data)
+                   this.modalSessionData = response.data.data;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not load the user's session info`);
+                });
         },
         addUpdateUser: function() {
             if(this.user.id) {

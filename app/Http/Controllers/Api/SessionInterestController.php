@@ -160,6 +160,9 @@ class SessionInterestController extends Controller
      */
     public function userSessionTotals(int $user_id)
     {
+
+        //TODO Add these queries and the ones in the endpoints below to the model as methods
+
         $session_totals['interest'] = SessionInterest::where('user_id', $user_id)
             ->where('is_participant', 0)
             ->whereHas('conference_session', function ($query) {
@@ -179,7 +182,7 @@ class SessionInterestController extends Controller
             })
             ->count();
 
-        $session_totals['participant'] = SessionInterest::where('user_id', $user_id)
+        $session_totals['panelist'] = SessionInterest::where('user_id', $user_id)
             ->where('is_participant', 1)
             ->whereHas('conference_session', function ($query) {
                 $conference_id = session('selected_conference');
@@ -200,6 +203,94 @@ class SessionInterestController extends Controller
             ->count();
 
         return $session_totals;
+
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  int  $user_id
+     * @return \Illuminate\Http\Response
+     */
+    public function userSessionsInterests(int $user_id)
+    {
+        if(!Gate::allows('view_admin', Auth::user()) && !Gate::allows('edit_users', $user_id)){
+            abort(403, 'Not authorized');
+        }
+
+        $first = SessionInterest::where('user_id', $user_id)
+            ->where('is_participant', 1)
+            ->whereHas('conference_session', function ($query) {
+                $conference_id = session('selected_conference');
+                $query->where('conference_id', $conference_id);
+                $query->where('type_id', 2);
+                $query->whereNotIn('session_status_id', [4,5,6,7]);
+            });
+
+        $session_interests = SessionInterest::where('user_id', $user_id)
+            ->where('is_participant', 0)
+            ->whereHas('conference_session', function ($query) {
+                $conference_id = session('selected_conference');
+                $query->where('conference_id', $conference_id);
+                $query->whereNotIn('session_status_id', [6,7]);
+            })
+            ->union($first);
+
+        return  SessionInterestResource::collection($session_interests->get());
+
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  int  $user_id
+     * @return \Illuminate\Http\Response
+     */
+    public function userSessionsPanelist(int $user_id)
+    {
+        if(!Gate::allows('view_admin', Auth::user()) && !Gate::allows('edit_users', $user_id)){
+            abort(403, 'Not authorized');
+        }
+
+        $session_interests = SessionInterest::where('user_id', $user_id)
+            ->where('is_participant', 1)
+            ->whereHas('conference_session', function ($query) {
+                $conference_id = session('selected_conference');
+                $query->where('conference_id', $conference_id);
+                $query->where('type_id', 1);
+                $query->whereNotIn('session_status_id', [6,7]);
+            });
+
+        return  SessionInterestResource::collection($session_interests->get());
+
+
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  int  $user_id
+     * @return \Illuminate\Http\Response
+     */
+    public function userSessionsPresenter(int $user_id)
+    {
+        if(!Gate::allows('view_admin', Auth::user()) && !Gate::allows('edit_users', $user_id)){
+            abort(403, 'Not authorized');
+        }
+
+        $session_interests = SessionInterest::where('user_id', $user_id)
+            ->where('is_participant', 1)
+            ->whereHas('conference_session', function ($query) {
+                $conference_id = session('selected_conference');
+                $query->where('conference_id', $conference_id);
+                $query->where('type_id', 2);
+                $query->whereIn('session_status_id', [4,5]);
+            });
+
+        return  SessionInterestResource::collection($session_interests->get());
 
 
     }
