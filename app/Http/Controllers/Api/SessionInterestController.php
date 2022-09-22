@@ -263,7 +263,7 @@ class SessionInterestController extends Controller
                 $query->whereNotIn('session_status_id', [6,7]);
             });
 
-        return  SessionInterestResource::collection($session_interests->get());
+        return  SessionInterestResource::collection($session_interests->paginate(25));
 
 
     }
@@ -289,7 +289,7 @@ class SessionInterestController extends Controller
                 $query->whereIn('session_status_id', [4,5]);
             });
 
-        return  SessionInterestResource::collection($session_interests->get());
+        return  SessionInterestResource::collection($session_interests->paginate(25));
 
 
     }
