@@ -26,13 +26,14 @@
                         <table className="table table-borderless table-responsive table-sm fs-90">
                             <thead class="border-bottom border-dark">
                             <tr>
-                                <th>Badge Name</th>
+                                <th>Badge name</th>
                                 <th className="ps-2">Name</th>
                                 <th>Email</th>
+                                <th  class="m-0 p-0 text-center">Staff notes</th>
                                 <th className="m-0 p-0"></th>
                             </tr>
                             </thead>
-                            <tbody v-for="participant in participatingUsers">
+                            <tbody v-for="(participant, index) in participatingUsers">
                             <tr :class="participant.is_moderator ? 'bg-light' : ''">
                                 <td><button class="btn btn-sm btn-secondary py-0 me-2" @click="this.participantToggle[participant.id] = !this.participantToggle[participant.id]">
                                     <i class="bi bi-person-lines-fill"></i>
@@ -41,6 +42,16 @@
                                 </td>
                                 <td className="ps-2">{{ participant.user.first_name }} {{ participant.user.last_name }}</td>
                                 <td>{{ participant.user.email }}</td>
+                                <td class="m-0 px-0 text-center">
+                                    <button class="btn btn-sm"
+                                            :class="{'btn-warning': participant.staff_notes, 'btn-secondary': participant.user_info.staff_notes && !participant.staff_notes, 'btn-outline-secondary': !participant.staff_notes && ! participant.user_info.staff_notes}"
+                                            type="button"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#participant-staff-notes"
+                                            @click="populateStaffNotes(index, participant)">
+                                        <i class="bi bi-journal-bookmark-fill"></i>
+                                    </button>
+                                </td>
                                 <td className="m-0 px-0 text-end">
                                     <span v-if="participant.will_moderate">
                                         <button v-if="!participant.is_moderator" class="btn btn-sm btn-outline-primary p-1 me-2" @click="makeModerator(participant.id)">
@@ -55,7 +66,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="4" class="m-0 p-0 border border-top-0">
+                                <td colspan="5" class="m-0 p-0 border border-top-0">
                                     <div class="d-flex flex-row d-flex justify-content-between ps-2" v-if="this.participantToggle[participant.id]">
                                         <div class="p-2" v-if="participant.panel_role"><strong>Role:</strong><br />{{ this.role[participant.panel_role] }}</div>
                                         <div class="p-2 w-30"><strong>Session notes:</strong><br />{{ participant.notes }}</div>
@@ -75,7 +86,31 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="participant-staff-notes" aria-hidden="true">
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Staff Notes </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ref="Close" @click="clearStaffNotes"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <h5>Session user staff notes</h5>
+                        <textarea v-model="this.userSessionStaffNotes" class="form-control"></textarea>
+                    </div>
+                    <div v-if="this.userInfoStaffNotes">
+                        <h5>Staff notes from profile</h5>
+                        {{ this.userInfoStaffNotes }}
+                    </div>
 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click="saveStaffNotes()">Save notes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -88,6 +123,10 @@ export default {
             keyword: '',
             laravelData: {},
             participantToggle: {},
+            staffNotesIndex: null,
+            staffNotesParticipantId: null,
+            userInfoStaffNotes: null,
+            userSessionStaffNotes: null,
             role: {
                 '1': 'Creator',
                 '2': 'Critic',
@@ -135,6 +174,31 @@ export default {
                     this.$toast.error(`Could not remove the user as a participant`);
                 })
 
+        },
+        populateStaffNotes: function(listIndex, participant) {
+            this.staffNotesIndex = listIndex;
+            this.staffNotesParticipantId = participant.id;
+            this.userInfoStaffNotes = participant.user_info.staff_notes;
+            this.userSessionStaffNotes =  participant.staff_notes;
+        },
+        saveStaffNotes: function() {
+            axios.put(`/api/admin/session-interest/${this.staffNotesParticipantId}`,  { action: 'save_staff_notes', staff_notes: this.userSessionStaffNotes })
+                .then((response) => {
+                    this.participatingUsers[this.staffNotesIndex].staff_notes = this.userSessionStaffNotes;
+                    this.$toast.success(`Staff notes saved`);
+                    this.$refs.Close.click();
+
+                    this.clearStaffNotes();
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not save the staff notes`);
+                })
+        },
+        clearStaffNotes: function() {
+            this.staffNotesIndex = null;
+            this.staffNotesInterestId = null;
+            this.userInfoStaffNotes = null;
+            this.userSessionStaffNotes = null;
         },
     }
 

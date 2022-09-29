@@ -178,15 +178,12 @@ export default {
 
         },
         populateStaffNotes: function(listIndex, interest) {
-            console.log(listIndex);
             this.staffNotesIndex = listIndex;
             this.staffNotesInterestId = interest.id;
             this.userInfoStaffNotes = interest.user_info.staff_notes;
             this.userSessionStaffNotes =  interest.staff_notes;
         },
         saveStaffNotes: function() {
-
-            console.log(this.staffNotesIndex);
             axios.put(`/api/admin/session-interest/${this.staffNotesInterestId}`,  { action: 'save_staff_notes', staff_notes: this.userSessionStaffNotes })
                 .then((response) => {
                     this.interestedUsers[this.staffNotesIndex].staff_notes = this.userSessionStaffNotes;
