@@ -31,6 +31,9 @@
                             <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData(1, 'presenter')">
                                 <i class="bi bi-eye-fill"></i> Presenter: {{ this.sessionCounts.presenter }}
                             </button>
+                            <hr />
+                            <h5>Staff notes <span class="text-secondary">(private)</span></h5>
+                            <textarea class="form-control" v-model="user.info.staff_notes" rows="4"></textarea>
                         </div>
                     </div>
                 </div>
@@ -93,7 +96,7 @@
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <label for="notes">Info and notes</label>
-                                <textarea id="notes" class="form-control" placeholder="General notes for the staff about you (staff view only)"  v-model="user.info.notes" ></textarea>
+                                <textarea id="notes" class="form-control" placeholder="General notes for the staff about you (not published)"  v-model="user.info.notes" ></textarea>
                             </div>
                         </div>
                         <div class="row g-2 mb-4">
@@ -228,7 +231,7 @@
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
-                    <Pagination :data="modalSessionlaravelData" :limit="3" :align="center" :show-disabled="false" @pagination-change-page="getModalSessionData" />
+                    <Pagination :data="modalSessionlaravelData" :limit="3" :show-disabled="false" @pagination-change-page="getModalSessionData" />
 
                 </div>
             </div>

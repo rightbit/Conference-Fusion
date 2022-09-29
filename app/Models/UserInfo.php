@@ -18,6 +18,8 @@ class UserInfo extends Model
         'user_id',
         'badge_name',
         'contact_email',
+        'notes',
+        'staff_notes',
         'recording_permission',
         'share_email_permission',
         'agree_to_terms',

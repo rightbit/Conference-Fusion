@@ -25,7 +25,7 @@ class ConferenceSession extends Model
         'attendance',
         'conference_id',
         'track_id',
-        'proposed_date'
+        'proposed_date',
     ];
 
     public function track() {

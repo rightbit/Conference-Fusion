@@ -138,6 +138,12 @@ class SessionInterestController extends Controller
             }
         }
 
+        if($request->action == 'save_staff_notes') {
+            if(!$sessionInterest->update(['staff_notes' => $request->staff_notes])) {
+                abort(500, 'Error updating record');
+            }
+        }
+
         return new SessionInterestResource($sessionInterest);
     }
 

@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class UserResource extends JsonResource
 {
@@ -14,6 +16,12 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        $staff_notes = null;
+        if(Gate::allows('view_admin', Auth::user())){
+            $staff_notes = $this->info->staff_notes;
+        }
+
         return [
             'id' => $this->id,
             'first_name' => $this->first_name,
@@ -26,6 +34,7 @@ class UserResource extends JsonResource
                 'contact_email' => $this->info->contact_email,
                 'biography' => $this->info->biography,
                 'notes' => $this->info->notes,
+                'staff_notes' => $staff_notes,
                 'website' => $this->info->website,
                 'personal_data' => json_decode($this->info->personal_data),
                 'social_data' => json_decode($this->info->social_data),

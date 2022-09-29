@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class SessionInterestResource extends JsonResource
 {
@@ -14,6 +16,13 @@ class SessionInterestResource extends JsonResource
      */
     public function toArray($request)
     {
+        $staff_notes = null;
+        $user_staff_notes = null;
+        if(Gate::allows('view_admin', Auth::user())){
+            $staff_notes = $this->staff_notes;
+            $user_staff_notes = $this->user_info->staff_notes;
+        }
+
         return [
             'id' => $this->id,
             'conference_session_id' => $this->conference_session_id,
@@ -22,6 +31,7 @@ class SessionInterestResource extends JsonResource
             'experience_level' => $this->experience_level,
             'panel_role' => $this->panel_role,
             'notes' => $this->notes,
+            'staff_notes' => $staff_notes, //Admin only
             'will_moderate' => $this->will_moderate,
             'is_participant' => $this->is_participant,
             'is_moderator' => $this->is_moderator,
@@ -35,6 +45,7 @@ class SessionInterestResource extends JsonResource
                 'badge_name' => $this->user_info->badge_name,
                 'biography' => $this->user_info->biography,
                 'notes' => $this->user_info->notes,
+                'staff_notes' => $user_staff_notes,
             ],
             'conference_session' => [
                 'id' => $this->conference_session->id,

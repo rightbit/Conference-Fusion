@@ -24,15 +24,16 @@
                         <table class="table table-sm table-borderless table-responsive fs-90">
                             <thead class="border-bottom border-dark">
                                 <tr>
-                                    <th>Badge Name</th>
+                                    <th>Badge name</th>
                                     <th class="ps-2">Name</th>
-                                    <th class="m-0 p-0">Interest Level</th>
-                                    <th class="m-0 p-0">Experience Level</th>
-                                    <th class="m-0 p-0">Will Moderate</th>
+                                    <th class="m-0 p-0 text-center fit">Interest level</th>
+                                    <th class="m-0 p-0 text-center fit">Experience level</th>
+                                    <th class="m-0 p-0 text-center">Staff notes</th>
+                                    <th class="m-0 p-0 text-center">Will moderate</th>
                                     <th class="m-0 p-0"></th>
                                 </tr>
                             </thead>
-                            <tbody v-for="interest in interestedUsers" class="border-bottom">
+                            <tbody v-for="(interest, index) in interestedUsers" class="border-bottom">
                                 <tr>
                                     <td>
                                         <button class="btn btn-sm btn-secondary py-0 me-2" @click="this.interestToggle[interest.id] = !this.interestToggle[interest.id]">
@@ -40,7 +41,7 @@
                                         </button>
                                         <a :href="'/admin/user-profile/' + interest.user.id" target="_blank">{{ interest.user_info.badge_name }}</a></td>
                                     <td class="ps-2">{{ interest.user.first_name }} {{ interest.user.last_name }}</td>
-                                    <td>
+                                    <td class="text-center fit px-2">
                                         <star-rating
                                             v-model:rating="interest.interest_level"
                                             :read-only="true"
@@ -50,7 +51,7 @@
                                             :border-width="1"
                                         />
                                     </td>
-                                    <td>
+                                    <td class="text-center fit px-2">
                                         <star-rating
                                             v-model:rating="interest.experience_level"
                                             :read-only="true"
@@ -60,11 +61,21 @@
                                             :border-width="1"
                                         />
                                     </td>
-                                    <td class="m-0 px-0">{{ interest.will_moderate ? 'Yes' : 'No' }}</td>
+                                    <td class="m-0 px-0 text-center">
+                                        <button class="btn btn-sm"
+                                                :class="{'btn-warning': interest.staff_notes, 'btn-secondary': interest.user_info.staff_notes && !interest.staff_notes, 'btn-outline-secondary': !interest.staff_notes && ! interest.user_info.staff_notes}"
+                                                type="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#interest-staff-notes"
+                                                @click="populateStaffNotes(index, interest)">
+                                            <i class="bi bi-journal-bookmark-fill"></i>
+                                        </button>
+                                    </td>
+                                    <td class="m-0 px-0 text-center">{{ interest.will_moderate ? 'Yes' : 'No' }}</td>
                                     <td class="m-0 px-0 text-end"><button class="btn btn-sm btn-secondary p-1" @click="addToPanel(interest.id)"><i class="bi bi-person-check-fill"></i> Include</button></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6" class="m-0 p-0 border border-top-0">
+                                    <td colspan="7" class="m-0 p-0 border border-top-0">
                                         <div class="d-flex flex-row d-flex justify-content-between ps-2" v-if="this.interestToggle[interest.id]">
                                             <div class="p-2"><strong>Role:</strong><br />{{ this.role[interest.panel_role] }}</div>
                                             <div class="p-2 w-30"><strong>Session notes:</strong><br />{{ interest.notes }}</div>
@@ -83,7 +94,31 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="interest-staff-notes" aria-hidden="true">
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Staff Notes </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ref="Close" @click="clearStaffNotes"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <h5>Session user staff notes</h5>
+                        <textarea v-model="this.userSessionStaffNotes" class="form-control"></textarea>
+                    </div>
+                    <div v-if="this.userInfoStaffNotes">
+                        <h5>Staff notes from profile</h5>
+                        {{ this.userInfoStaffNotes }}
+                    </div>
 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click="saveStaffNotes()">Save notes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -101,6 +136,10 @@ export default {
             keyword: '',
             laravelData: {},
             interestToggle: {},
+            staffNotesIndex: null,
+            staffNotesInterestId: null,
+            userInfoStaffNotes: null,
+            userSessionStaffNotes: null,
             role: {
                 '1': 'Creator',
                 '2': 'Critic',
@@ -113,6 +152,7 @@ export default {
     mounted() {
         this.loadSessionInterest();
     },
+    emits: ['reloadParticipants'],
     methods: {
         loadSessionInterest: function(page = 1) {
             axios.get('/api/admin/session-interest', { params: { session_id: this.sessionId, non_partipants: 1, keyword: this.keyword, page: page }})
@@ -136,6 +176,34 @@ export default {
                     this.$toast.error(`Could not include the user as a participant`);
                 })
 
+        },
+        populateStaffNotes: function(listIndex, interest) {
+            console.log(listIndex);
+            this.staffNotesIndex = listIndex;
+            this.staffNotesInterestId = interest.id;
+            this.userInfoStaffNotes = interest.user_info.staff_notes;
+            this.userSessionStaffNotes =  interest.staff_notes;
+        },
+        saveStaffNotes: function() {
+
+            console.log(this.staffNotesIndex);
+            axios.put(`/api/admin/session-interest/${this.staffNotesInterestId}`,  { action: 'save_staff_notes', staff_notes: this.userSessionStaffNotes })
+                .then((response) => {
+                    this.interestedUsers[this.staffNotesIndex].staff_notes = this.userSessionStaffNotes;
+                    this.$toast.success(`Staff notes saved`);
+                    this.$refs.Close.click();
+
+                    this.clearStaffNotes();
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not save the staff notes`);
+                })
+        },
+        clearStaffNotes: function() {
+            this.staffNotesIndex = null;
+            this.staffNotesInterestId = null;
+            this.userInfoStaffNotes = null;
+            this.userSessionStaffNotes = null;
         },
     }
 

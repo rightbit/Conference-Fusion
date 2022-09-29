@@ -57,13 +57,13 @@
                             <textarea id="seed_questions" class="form-control" placeholder="Seed questions for the moderator"  v-model="session.seed_questions" rows="4" ></textarea>
                         </div>
                         <div class="col-md-6">
-                            <label for="staff_notes">Staff notes</label>
+                            <label for="staff_notes">Staff notes <span class="text-secondary">(private)</span></label>
                             <textarea id="staff_notes" class="form-control" placeholder="General notes about the session (staff view only)"  v-model="session.staff_notes" rows="4" ></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-3">
-                            <label for="duration_minutes">Duration (minutes)</label>
+                            <label for="duration_minutes">Duration <span class="text-secondary">(minutes)</span></label>
                             <input type="text" class="form-control" id="duration_minutes"  v-model="session.duration_minutes" required>
                         </div>
                         <div class="col-md-3">

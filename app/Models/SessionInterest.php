@@ -17,6 +17,7 @@ class SessionInterest extends Model
         'experience_level',
         'panel_role',
         'notes',
+        'staff_notes',
         'will_moderate',
         'is_participant',
         'is_moderator',
