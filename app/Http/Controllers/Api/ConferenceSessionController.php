@@ -42,6 +42,9 @@ class ConferenceSessionController extends Controller
                     $query->where('track_id', $request->track_id);
                 }
             })
+            ->when($request->isNotFilled('all_statuses'), function ($query) {
+                $query->whereNotIn('session_status_id', [6,7]);
+            })
             ->when($request->filled('type_id'), function ($query) use ($request) {
                 $query->where('type_id', $request->type_id);
             });

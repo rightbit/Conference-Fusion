@@ -21,7 +21,7 @@ class SessionStatusSeeder extends Seeder
         SessionStatus::create(['status' => 'User Suggested', 'save_history' => 1]);
         SessionStatus::create(['status' => 'Participants Assigned', 'save_history' => 1]);
         SessionStatus::create(['status' => 'Scheduled', 'save_history' => 1]);
+        SessionStatus::create(['status' => 'Not Used']);
         SessionStatus::create(['status' => 'Canceled']);
-        SessionStatus::create(['status' => 'Deleted']);
     }
 }

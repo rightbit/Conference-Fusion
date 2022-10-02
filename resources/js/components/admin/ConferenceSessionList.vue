@@ -9,7 +9,7 @@
                     </div>
 
                     <div class="card-body">
-                        <div class="d-flex justify-content-between mb-3">
+                        <div class="d-flex justify-content-between mb-0">
                             <div>
                                 Found {{ totalSessions }} Sessions
                             </div>
@@ -32,6 +32,10 @@
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                        <div class="text-end mb-3">
+                            <input type="checkbox" v-model="searchAllStatuses" class="form-check-input" id="statuses">
+                            <label class="form-check-label ms-2" for="statuses">Include not used/canceled sessions </label>
                         </div>
                         <table class="table table-striped table-sm fs-90">
                             <thead>
@@ -96,6 +100,7 @@ export default {
             totalSessions: '0',
             searchTrackId: '',
             searchTypeId: '',
+            searchAllStatuses: false,
             keyword: '',
             laravelData: {},
             new_session: {
@@ -138,6 +143,7 @@ export default {
                         conference_id: this.conferenceId,
                         track_id: this.searchTrackId,
                         type_id: this.searchTypeId,
+                        all_statuses: this.searchAllStatuses ? '1' : '',
                         keyword: this.keyword,
                         page: page
                     }
