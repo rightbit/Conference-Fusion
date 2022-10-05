@@ -57,7 +57,7 @@
                                         Required
                                     </label></td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-secondary me-2" @click="getInfoData(cat_info)">Reset</button>
+                                    <button class="btn btn-sm btn-outline-secondary me-2 my-1" @click="getInfoData(cat_info)">Reset</button>
                                     <button class="btn btn-sm btn-dark" :disabled="disabled" @click="putInfoData(cat_info)">Save</button>
                                 </td>
                                 <td>

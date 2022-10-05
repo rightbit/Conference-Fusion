@@ -45,7 +45,7 @@
                                     </td>
                                     <td><input type="text" class="form-control form-control-sm" v-model="room.notes" /></td>
                                     <td v-if="this.canEdit">
-                                        <button @click="updateRoom(room)" class="btn btn-sm btn-primary me-1" ><i class="bi bi-pencil-square"></i></button>
+                                        <button @click="updateRoom(room)" class="btn btn-sm btn-primary me-1 my-1" ><i class="bi bi-pencil-square"></i></button>
                                         <button @click="deleteRoom(room)" class="btn btn-sm btn-danger" ><i class="bi bi-trash-fill"></i></button>
                                     </td>
                                 </tr>
