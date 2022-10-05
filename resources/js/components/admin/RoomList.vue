@@ -70,7 +70,7 @@
                                 <input type="text" v-model="new_room.capacity" class="form-control form-control-sm" id="inputName" placeholder="Capacity" required>
                             </div>
                             <div class="p-1">
-                                <select id="inputCategory" v-model="new_room.has_av" class="form-select form-select-sm" aria-label="select a/v">
+                                <select id="inputCategory" v-model="new_room.has_av" class="form-select form-select-sm" aria-label="select a/v" required>
                                     <option value="" disabled hidden selected>Has A/V?</option>
                                     <option value="1">Yes</option>
                                     <option value="0">No</option>
