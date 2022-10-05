@@ -54,19 +54,16 @@
                                     {{ __('Admin') }}
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li class="ps-2"><b>Site Admin</b></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin_user_list') }}">{{ __('User Management') }}</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin_conference_session_list') }}">{{ __('Session Management') }}</a></li>
-                                    <li><a class="dropdown-item disabled" href="#">{{ __('Schedule Management') }}</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li class="ps-2"><b>Call Admin</b></li>
-                                    <li><a class="dropdown-item disabled" href="" >{{ __('Panel Interest Management') }}</a></li>
-                                    <li><a class="dropdown-item disabled" href="">{{ __('Presentation Management') }}</a></li>
+                                    <li class="ps-2"><b>Conference Admin</b></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin_user_list') }}">{{ __('Users') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin_conference_session_list') }}">{{ __('Sessions') }}</a></li>
+                                    <li><a class="dropdown-item disabled" href="#">{{ __('Schedule') }}</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li class="ps-2"><b>Settings</b></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin_conference_list') }}">{{ __('Conference Management') }}</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin_track_list') }}">{{ __('Track Management') }}</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin_configuration') }}">{{ __('Configuration') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin_conference_list') }}">{{ __('Conferences') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin_track_list') }}">{{ __('Tracks') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin_room_list') }}">{{ __('Rooms') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin_configuration') }}">{{ __('Site Configuration') }}</a></li>
                                 </ul>
                             </li>
                                 @if($finish_setup)
