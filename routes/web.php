@@ -50,11 +50,19 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','can:view_admin']], f
                 $default_session_duration = SiteConfig::where('key', 'default_session_duration')->first()->value ?? 0;
                 return view('admin.conference_session', ['id' => $id, 'default_session_duration' => $default_session_duration]);
             })->name('admin_conference_session');
+
     Route::view('conference-list', 'admin.conference_list')->name('admin_conference_list');
     Route::get('conference-info/{id}', function($id) {
                 return view('admin.conference_info', ['id' => $id]);
             })->name('admin_conference_info');
+
     Route::view('configuration', 'admin.configuration')->name('admin_configuration');
+
+    Route::view('room-list', 'admin.room_list')->name('admin_room_list');
+    Route::get('room/{room}',  function($room) {
+        return view('admin.room', ['room' => $room]);
+    })->name('admin_room');
+
     Route::view('track-list', 'admin.track_list')->name('admin_track_list');
     Route::view('user-list', 'admin.user_list')->name('admin_user_list');
     Route::get('user-profile/{id}', function($id) {

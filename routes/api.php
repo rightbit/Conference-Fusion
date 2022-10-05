@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UserInfoDataCategoryController;
 use App\Http\Controllers\Api\UserPermissionController;
+use App\Http\Controllers\Api\RoomController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -61,6 +62,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
     Route::apiResource('session-interest', SessionInterestController::class);
     Route::apiResource('session-status', SessionStatusController::class);
     Route::apiResource('session-type', SessionTypeController::class);
+    Route::apiResource('room', RoomController::class);
     Route::apiResource('track', TrackController::class);
     Route::apiResource('permissions', UserPermissionController::class)->middleware('can:admin');
 });

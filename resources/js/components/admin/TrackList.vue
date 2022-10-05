@@ -62,7 +62,7 @@
                                 </select>
                             </div>
                             <div class="col-md-1 text-center">
-                                <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-arrow-up-circle me-2"></i>Save</button>
+                                <button type="submit" class="btn btn-primary btn-sm">Save</button>
                             </div>
                         </form>
                     </div>

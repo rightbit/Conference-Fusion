@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('capacity');
             $table->boolean('has_av');
             $table->text('notes')->nullable();
-            $table->unsignedInteger('display_order');
+            $table->unsignedInteger('display_order')->nullable();
             $table->timestamps();
             // Indexes
             $table->unique(['name', 'conference_id']);
