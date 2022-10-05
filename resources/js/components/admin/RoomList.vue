@@ -4,7 +4,7 @@
             <div class="col-md-10">
                 <div class="card mb-3">
                     <div class="card-header d-flex justify-content-between">
-                        <div class="h4 align-self-center mb-lg-0">Rooms list</div>
+                        <div class="h4 align-self-center mb-lg-0">Rooms list for {{ this.conferenceName }}</div>
                     </div>
 
                     <div class="card-body">
@@ -118,6 +118,7 @@ export default {
             axios.get('/api/admin/room', {
                     params: {
                         keyword: this.keyword,
+                        conference_id: this.conferenceId,
                         page: page
                     }
                 })
@@ -151,7 +152,7 @@ export default {
             if(confirm("Do you really want to update this room?")) {
                 axios.put(`/api/admin/room/${room.id}`, room)
                     .then((response) => {
-                        this.$toast.success(`The ${room.name} info was successfully updated`);
+                        this.$toast.success(`The ${room.name} room was successfully updated`);
                     })
                     .catch((error) => {
                         this.$toast.error(`Could not save ${room.name}<br />` + error.response.data.message);

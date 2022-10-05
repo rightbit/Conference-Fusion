@@ -21,9 +21,10 @@ class RoomController extends Controller
     public function index(Request $request)
     {
         $rooms = Room::orderBy('name')
-        ->when($request->filled('keyword'), function ($query) use ($request) {
-            $query->where('name', 'LIKE',"%$request->keyword%");
-        });
+                ->where('conference_id', $request->conference_id)
+                ->when($request->filled('keyword'), function ($query) use ($request) {
+                    $query->where('name', 'LIKE',"%$request->keyword%");
+                });
         return RoomResource::collection($rooms->paginate(25));
     }
 
