@@ -46,9 +46,7 @@ class RoomController extends Controller
      */
     public function store(RoomRequest $request)
     {
-        Log::debug($request);
         $room = new Room($request->all());
-        Log::debug($room);
         $room->save();
         return new RoomResource($room);
     }

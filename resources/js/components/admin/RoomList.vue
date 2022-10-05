@@ -133,7 +133,6 @@ export default {
         },
         addRoom: function() {
             this.new_room.conference_id = this.conferenceId;
-            console.log(this.new_room);
             axios.post('/api/admin/room', this.new_room)
                 .then((response) =>{
                     this.$toast.success(`New room added`);
