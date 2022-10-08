@@ -20,7 +20,8 @@ class RoomController extends Controller
      */
     public function index(Request $request)
     {
-        $rooms = Room::orderBy('name')
+        $rooms = Room::orderBy('display_order')
+                ->orderBy('name')
                 ->where('conference_id', $request->conference_id)
                 ->when($request->filled('keyword'), function ($query) use ($request) {
                     $query->where('name', 'LIKE',"%$request->keyword%");
@@ -86,6 +87,7 @@ class RoomController extends Controller
         $room->room_number = $request->room_number;
         $room->capacity = $request->capacity;
         $room->has_av = $request->has_av;
+        $room->display_order = $request->display_order;
         $room->notes = $request->notes;
         $room->save();
         $room->saveOrFail();

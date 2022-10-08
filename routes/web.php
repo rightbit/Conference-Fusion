@@ -59,10 +59,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','can:view_admin']], f
     Route::view('configuration', 'admin.configuration')->name('admin_configuration');
 
     Route::view('room-list', 'admin.room_list')->name('admin_room_list');
-    Route::get('room/{room}',  function($room) {
-        return view('admin.room', ['room' => $room]);
-    })->name('admin_room');
-
+    Route::view('schedule-board', 'admin.schedule_board')->name('admin_schedule_board');
     Route::view('track-list', 'admin.track_list')->name('admin_track_list');
     Route::view('user-list', 'admin.user_list')->name('admin_user_list');
     Route::get('user-profile/{id}', function($id) {

@@ -26,8 +26,9 @@
                                 <tr>
                                     <th class="ps-2 w-33">Name</th>
                                     <th>Room Number</th>
-                                    <th>Capacity</th>
+                                    <th style="width: 30px;">Capacity</th>
                                     <th>A/V</th>
+                                    <th style="width: 30px;">Display Order</th>
                                     <th>Notes</th>
                                     <th v-if="this.canEdit"></th>
                                 </tr>
@@ -43,6 +44,7 @@
                                             <option value="0">No</option>
                                         </select>
                                     </td>
+                                    <td><input type="text" class="form-control form-control-sm w-100" v-model="room.display_order" /></td>
                                     <td><input type="text" class="form-control form-control-sm" v-model="room.notes" /></td>
                                     <td v-if="this.canEdit">
                                         <button @click="updateRoom(room)" class="btn btn-sm btn-primary me-1 my-1" ><i class="bi bi-pencil-square"></i></button>
@@ -77,6 +79,9 @@
                                 </select>
                             </div>
                             <div class="p-1">
+                                <input type="text" v-model="new_room.display_order" class="form-control form-control-sm" id="inputName" placeholder="Display order">
+                            </div>
+                            <div class="p-1">
                                 <input type="text" v-model="new_room.notes" class="form-control form-control-sm" id="inputOptions" placeholder="Notes (optional)">
                             </div>
                             <div class="p-1 text-center">
@@ -106,6 +111,7 @@ export default {
                 room_number: '',
                 has_av: '',
                 capacity: '',
+                display_order: '',
                 notes: '',
             },
         }
@@ -134,7 +140,7 @@ export default {
         addRoom: function() {
             this.new_room.conference_id = this.conferenceId;
             axios.post('/api/admin/room', this.new_room)
-                .then((response) =>{
+                .then((response) => {
                     this.$toast.success(`New room added`);
                     this.loadRooms();
                     this.new_room.name = '';

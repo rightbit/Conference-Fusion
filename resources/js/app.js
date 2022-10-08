@@ -10,6 +10,7 @@ import AdminConferenceList from "./components/admin/ConferenceList";
 import AdminConferenceInfo from "./components/admin/ConferenceInfo";
 import AdminConfiguration from './components/admin/Configuration'
 import AdminRoomList from "./components/admin/RoomList";
+import AdminScheduleBoard from "./components/admin/ScheduleBoard";
 import AdminTrackList from "./components/admin/TrackList";
 import AdminUserList from "./components/admin/UserList";
 import AdminConferenceSessionList from "./components/admin/ConferenceSessionList";
@@ -43,6 +44,7 @@ app.component('admin-conference-info', AdminConferenceInfo)
 app.component('admin-conference-list', AdminConferenceList)
 app.component('admin-configuration', AdminConfiguration)
 app.component('admin-room-list', AdminRoomList)
+app.component('admin-schedule-board', AdminScheduleBoard)
 app.component('admin-track-list', AdminTrackList)
 app.component('admin-user-list', AdminUserList)
 

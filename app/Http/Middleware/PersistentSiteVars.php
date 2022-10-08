@@ -55,10 +55,21 @@ class PersistentSiteVars
                 $selected_conference_info = Conference::find($selected_conference);
             }
             session(['selected_conference' => $selected_conference_info->id]);
-            $session_conference = ['id' =>  $selected_conference_info->id, 'name' => $selected_conference_info->name, 'short_name' => $selected_conference_info->short_name];
+            $session_conference = [
+                'id' =>  $selected_conference_info->id,
+                'name' => $selected_conference_info->name,
+                'short_name' => $selected_conference_info->short_name,
+                'start_date' =>  $selected_conference_info->start_date,
+                'end_date' =>  $selected_conference_info->end_date
+            ];
             $conferences = Conference::orderBy('start_date')->take(10)->get();
             foreach($conferences as $conference){
-                $conference_list[] = ['id' =>  $conference->id, 'short_name' => $conference->short_name];
+                $conference_list[] = [
+                    'id' =>  $conference->id,
+                    'short_name' => $conference->short_name,
+                    'start_date' =>  $conference->start_date,
+                    'end_date' =>  $conference->end_date
+                ];
             }
         }
         View::share('session_conference', $session_conference);

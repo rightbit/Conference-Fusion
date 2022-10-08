@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ConferenceController;
+use App\Http\Controllers\Api\ConferenceScheduleController;
 use App\Http\Controllers\Api\ConferenceSessionController;
 use App\Http\Controllers\Api\SessionAlternateNameController;
 use App\Http\Controllers\Api\SessionInterestController;
@@ -58,6 +59,7 @@ Route::middleware(['auth:sanctum'])->group( function() {
 Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function () {
     Route::apiResource('conference', ConferenceController::class);
     Route::apiResource('conference-session', ConferenceSessionController::class);
+    Route::apiResource('conference-schedule', ConferenceScheduleController::class);
     Route::apiResource('configuration', SiteConfigController::class);
     Route::apiResource('session-interest', SessionInterestController::class);
     Route::apiResource('session-status', SessionStatusController::class);
