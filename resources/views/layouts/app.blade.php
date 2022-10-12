@@ -20,6 +20,8 @@
         let FF_FOUC_FIX;
     </script>
 
+    @yield('header_scripts')
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">

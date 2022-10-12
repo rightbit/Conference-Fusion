@@ -13019,6 +13019,34 @@ textarea.form-control-lg {
   vertical-align: middle;
 }
 
+/* Fixed, scrollable tables */
+.table-scrollable-container {
+  max-height: 85vh;
+  overflow-y: scroll;
+  margin-bottom: 20px;
+}
+
+.table-scrollable td, th {
+  min-width: 150px;
+}
+
+.table-scrollable tr > :first-child {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0px;
+  min-width: 50px;
+  width: 50px;
+  z-index: 100;
+}
+
+.table-scrollable > thead {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+  overflow-x: scroll;
+  z-index: 100;
+}
+
 /* Turn off the "Current" span on pagination */
 .sr-only {
   display: none;

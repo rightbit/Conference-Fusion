@@ -1,5 +1,13 @@
 @extends('layouts.app')
 
+@section('header_scripts')
+
+@endsection
+
+@section('styles')
+
+@endsection
+
 @section('content')
     @php  /* @var $session_conference */  @endphp
     @php $canEdit = 0; @endphp
@@ -14,3 +22,6 @@
         :can-edit="{{ $canEdit }}"
     />
 @endsection
+
+
+

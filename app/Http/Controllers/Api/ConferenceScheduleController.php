@@ -20,10 +20,8 @@ class ConferenceScheduleController extends Controller
     public function index(ConferenceScheduleRequest $request)
     {
         $schedule =  ConferenceSchedule::getConferenceSchedule($request->conference_id, $request->date, $request->room_id);
-        $hello = new ConferenceScheduleResource($schedule);
+        return new ConferenceScheduleResource($schedule);
 
-        Log::debug([$hello]);
-        return $hello;
     }
 
     /**

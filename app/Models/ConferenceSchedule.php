@@ -99,7 +99,6 @@ class ConferenceSchedule extends Model
 
         }
 
-        Log::debug($schedule_resource);
         return $schedule_resource;
 
     }
