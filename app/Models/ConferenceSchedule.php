@@ -68,7 +68,7 @@ class ConferenceSchedule extends Model
         $schedule_resource = [];
         $schedule_resource['rooms'] = [];
         foreach($rooms as $room) {
-            $schedule_resource['rooms'][] = [
+            $schedule_resource['rooms'][$room->name] = [
                 "id" => $room->id,
                 "name" => $room->name,
             ];
