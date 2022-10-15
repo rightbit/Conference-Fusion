@@ -46,14 +46,28 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Schedule a session</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetTrack"></button>
                 </div>
                 <div class="modal-body">
-
+                    <label for="choose-type">Choose a type</label>
+                    <select id="choose-type" v-model="typeId" class="form-select mb-2" aria-label="select category" @change="loadSessions">
+                        <option value="">All Types</option>
+                        <option v-for="type in types" v-bind:value="type.id">{{ type.name }}</option>
+                    </select>
+                    <label for="choose-track">Choose a track</label>
+                    <select v-model="trackId" class="form-select mb-2" id="choose-track" @change="loadSessions">
+                        <option v-for="track in tracks" :value="track.id">{{ track.name }}</option>
+                        <option value="0" class="">No Track</option>
+                    </select>
+                    <label for="choose-track">Choose a session</label>
+                    <select v-model="sessionId" class="form-select mb-2" id="choose-track" @change="loadSessions">
+                        <option value="0" class="">No Session</option>
+                        <option v-for="session in sessions" :value="session.id">{{ session.name }}</option>
+                    </select>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" v-on:click="addSession" data-bs-dismiss="modal">Assign session</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetTrack">Cancel</button>
+                    <button type="button" class="btn btn-primary" @click="addSession" data-bs-dismiss="modal">Save to schedule</button>
                 </div>
             </div>
         </div>
@@ -69,10 +83,20 @@ export default {
         return {
             schedule: {},
             room_session: {},
+            tracks: {},
+            sessions: {},
+            types: {},
+            trackId: 0,
+            sessionId: 0,
+            typeId: '',
+
         }
     },
     mounted() {
         this.loadScheduleBoard(this.conferenceStartDate);
+        this.loadTypes();
+        this.loadTracks();
+
     },
     methods: {
         loadScheduleBoard: function (date) {
@@ -91,8 +115,51 @@ export default {
             });
 
         },
+        loadTypes: function () {
+            axios.get('/api/admin/session-type')
+                .then((response) => {
+                    this.types = response.data.data;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not load the session types`);
+                });
+        },
+        loadTracks: function () {
+            axios.get('/api/admin/track')
+                .then((response) => {
+                    console.log(response.data.data);
+                    this.tracks = response.data.data;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not load the tracks`);
+                });
+        },
+        loadSessions: function() {
+            if(!this.trackId) {
+                this.sessions = {};
+                return;
+            }
+            axios.get('/api/admin/conference-session', {
+                params: {
+                    conference_id: this.conferenceId,
+                    track_id: this.trackId,
+                    type_id: this.typeId,
+                    all_statuses: '',
+                }
+            })
+                .then((response) => {
+                    console.log( response.data.data);
+                    this.sessions = response.data.data;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not find the sessions`);
+                });
+        },
         populateSessionModal: function (room, time, room_name) {
 
+        },
+        resetTrack: function() {
+            this.trackId = 0;
         },
         addSession: function () {
             this.schedule.timeslots[time][room_name] = {
