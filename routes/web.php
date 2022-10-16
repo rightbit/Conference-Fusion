@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CreateUserController;
 use App\Models\SiteConfig;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,14 @@ Route::middleware(['auth'])->group( function() {
 
 //Admin Group
 Route::group(['prefix' => 'admin', 'middleware' => ['auth','can:view_admin']], function () {
+    //Add a user
+    Route::view('user-create', 'admin.create_user')
+        ->middleware('can:edit_users')
+        ->name('admin_user_create');
+    Route::post('user-create', [CreateUserController::class, 'create'])
+        ->middleware('can:edit_users')
+        ->name('admin_post_user_create');
+
     //Vue Only
     Route::view('conference-session-list', 'admin.conference_session_list')->name('admin_conference_session_list');
     Route::get('conference-session/{id}', function($id) {
