@@ -5,7 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Add new user ') }}</div>
+                <div class="card-header">
+                    {{ __('Add new user ') }}
+                    <span class="float-end"><a href="{{ route('admin_user_list') }}">Back to user search</a></span>
+                </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('admin_post_user_create') }}">
                         @csrf
