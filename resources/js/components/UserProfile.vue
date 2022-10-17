@@ -1,8 +1,11 @@
 <template>
     <div class="container rounded bg-white mt-5 mb-5">
         <div class="row pb-3"  v-if="allowForm">
-            <form class="needs-validation row" novalidate @submit.prevent="addUpdateUser">
-                <div class="col-sm-12 mt-2 text-right"><button class="btn btn-primary profile-button float-end" type="submit">Save Profile</button></div>
+            <form class="needs-validation row" novalidate @submit.prevent="addUpdateUser()">
+                <div class="row mt-4">
+                    <div class="col-sm-10 ps-4"><h2>User profile</h2></div>
+                    <div class="col-sm-2 text-right p-0"><button class="btn btn-primary profile-button float-end" type="submit">Save Profile</button></div>
+                </div>
                 <div class="col-md-3 border-right">
                     <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                         <img class="rounded-circle mt-5" style="width:150px;" :src="profileImage" />
@@ -102,7 +105,7 @@
                         <div class="row g-2 mb-4">
                             <div class="col-md-12">
                                 <label for="website">Website</label>
-                                <input type="text" class="form-control" id="website" placeholder="Badge name" v-model="user.info.website">
+                                <input type="text" class="form-control" id="website" placeholder="Public website url" v-model="user.info.website">
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -185,15 +188,15 @@
                 <div class="col-md-4">
                     <div class="row mt-5 g-2 form-group">
                         <div class="d-flex justify-content-between align-items-center experience"><span class="h4">Personal Info</span></div>
-                        <partials-user-info-data v-if="this.finished_loading" :category="'personal'" :user-info="user.info.personal_data" @changeInfoData="updateInfoData" />
+                        <partials-user-info-data v-if="finished_loading" :category="'personal'" :user-info="user.info.personal_data" @changeInfoData="updateInfoData" />
                     </div>
                     <div class="row mt-3 g-2 form-group">
                         <div class="d-flex justify-content-between align-items-center experience"><span class="h4">Social Info</span></div>
-                        <partials-user-info-data v-if="this.finished_loading" :category="'social'" :user-info="user.info.social_data" @changeInfoData="updateInfoData" />
+                        <partials-user-info-data v-if="finished_loading" :category="'social'" :user-info="user.info.social_data" @changeInfoData="updateInfoData" />
                     </div>
                     <div class="row mt-3 g-2 form-group">
                         <div class="d-flex justify-content-between align-items-center experience"><span class="h4">Participant Info</span></div>
-                        <partials-user-info-data v-if="this.finished_loading" :category="'participant'" :user-info="user.info.participant_data" @changeInfoData="updateInfoData" />
+                        <partials-user-info-data v-if="finished_loading" :category="'participant'" :user-info="user.info.participant_data" @changeInfoData="updateInfoData" />
                     </div>
 
                 </div>
@@ -275,9 +278,9 @@ export default {
     },
     methods: {
         getUser: function() {
-            // Don't try to load if a new user
+            // Don't try to load if no user
             if(this.userId === 0) {
-                this.finished_loading = true;
+                this.allowForm = false;
                 return;
             }
             axios.get(`/api/profile/user/${this.userId}`)
@@ -315,7 +318,7 @@ export default {
                 });
         },
         getUserSessionTotals: function() {
-            if(this.userId === 0) {
+            if(!this.user.id) {
                 return
             }
             axios.get(`/api/user-session-totals/${this.userId}`)
@@ -374,13 +377,14 @@ export default {
                         this.$toast.error(`Could not save the user info<br />` + error.response.data.message);
                     });
             } else {
-                axios.post('/api/profile/user', this.user)
+                axios.post('/api/profile/user', this.user )
                     .then((response) => {
                         this.user = response.data.data;
                         this.$toast.success(`Created a new user successfully`);
-                        window.history.replaceState(null, "", '/user-profile/'+this.user.id );
+                        window.history.replaceState(null, "", '/user-profile/'+ this.user.id );
                     })
                     .catch((error) => {
+                        console.log(error);
                         this.$toast.error(`Could not create a new user<br />` + error.response.data.message);
                     });
             }
