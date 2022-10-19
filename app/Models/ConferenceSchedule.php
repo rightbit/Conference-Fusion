@@ -14,6 +14,7 @@ class ConferenceSchedule extends Model
         'conference_id',
         'conference_session_id',
         'track_id',
+        'room_id',
         'date',
         'time',
     ];

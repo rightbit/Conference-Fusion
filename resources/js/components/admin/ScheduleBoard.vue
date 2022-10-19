@@ -1,7 +1,24 @@
+<style>
+    .swap-buttons {
+        display: none; /* Hide button */
+        opacity: 75%;
+    }
+
+    .card:hover .swap-buttons {
+        display: block; /* On :hover of div show button */
+    }
+</style>
+
+
 <template>
     <div class="container">
         <div class="table-scrollable-container">
-            <h4 class="position-sticky" style="left:0px;">Schedule Board</h4>
+            <h4 class="position-sticky" style="left:0px;">
+                <label for="date-select" class="me-3 mt-2">Schedule Board</label>
+                <select id="date-select" class="form-select form-select-sm w-auto d-inline" v-model="boardDate" @change="loadScheduleBoard">
+                    <option v-for="day in scheduleDates" :value="day">{{ day }}</option>
+                </select>
+            </h4>
             <table class="table table-scrollable table-striped bg-white">
                 <thead class="bg-secondary text-white">
                     <tr  class="d-flex align-content-stretch">
@@ -16,21 +33,33 @@
                         <td class="bg-secondary text-white">{{ time }}</td>
                         <td v-for="(room, room_name) in rooms" class="p-1">
                             <div class="card h-100">
-                                <div v-if="room.session_name" class="card-body lh-1 p-2">
-                                    <a href="#" class="btn stretched-link lh-1 text-start p-0">
-                                        <small>{{ room.session_name }}</small>
+                                <div v-if="room.session_name" class="swap-buttons h-100 w-100 text-center" style="position:absolute; top:33%; z-index: 100">
+                                    <button class="btn btn-sm btn-secondary me-2"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#session-schedule-modal"
+                                            @click="populateSessionModal(time, room_name)">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </button>
+                                    <a :href="'/admin/conference-session/'+room.session_id" class="btn btn-sm btn-primary" target="_blank">
+                                        <i class="bi bi-box-arrow-up-right"></i>
                                     </a>
+                                </div>
+                                <div v-if="room.session_name" class="card-body lh-1 p-2">
+                                        <small>{{ room.session_name }}</small>
                                 </div>
                                 <div v-else class="card-body text-center">
                                     <button class="btn btn-sm btn-outline-secondary text-nowrap"
                                             data-bs-toggle="modal"
                                             data-bs-target="#session-schedule-modal"
-                                            @click="populateSessionModal(room, time, room_name)">
+                                            @click="populateSessionModal(time, room_name)">
                                         <i class="bi bi-plus-circle "></i> Add
                                     </button>
                                 </div>
                                 <div v-if="room.track_name" class="card-footer lh-1 text-center">
-                                    <small><b>{{ room.track_name }}</b></small>
+                                    <div>
+                                        <small><b>{{ room.track_name }}</b></small>
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -46,34 +75,35 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Schedule a session</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetTrack"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetModal"></button>
                 </div>
                 <div class="modal-body">
+                    <h5>{{ boardDate }} {{ sessionTime }} in {{ roomName }}</h5>
                     <label for="choose-type">Choose a type</label>
-                    <select id="choose-type" v-model="typeId" class="form-select mb-2" aria-label="select category" @change="loadSessions">
+                    <select id="choose-type" v-model="this.typeId" class="form-select mb-2" aria-label="select category" @change="loadSessions">
                         <option value="">All Types</option>
                         <option v-for="type in types" v-bind:value="type.id">{{ type.name }}</option>
                     </select>
                     <label for="choose-track">Choose a track</label>
-                    <select v-model="trackId" class="form-select mb-2" id="choose-track" @change="loadSessions">
+                    <select v-model="this.trackId" class="form-select mb-2" id="choose-track" @change="loadSessions">
                         <option v-for="track in tracks" :value="track.id">{{ track.name }}</option>
                         <option value="0" class="">No Track</option>
                     </select>
                     <label for="choose-track">Choose a session</label>
-                    <select v-model="sessionId" class="form-select mb-2" id="choose-track" @change="loadSessions">
+                    <select v-model="this.sessionId" class="form-select mb-2" id="choose-track" @change="loadSessions">
                         <option value="0" class="">No Session</option>
                         <option v-for="session in sessions" :value="session.id">{{ session.name }}</option>
                     </select>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetTrack">Cancel</button>
-                    <button type="button" class="btn btn-primary" @click="addSession" data-bs-dismiss="modal">Save to schedule</button>
+                    <button v-if="editSession" type="button" class="btn btn-primary" @click="updateSession" data-bs-dismiss="modal">Edit schedule</button>
+                    <button v-else type="button" class="btn btn-primary" @click="addSession" data-bs-dismiss="modal">Save to schedule</button>
                 </div>
             </div>
         </div>
     </div>
 </template>
-
 
 
 <script>
@@ -86,20 +116,28 @@ export default {
             tracks: {},
             sessions: {},
             types: {},
+            scheduleId: null,
             trackId: 0,
             sessionId: 0,
+            roomId: 0,
+            roomName: '',
             typeId: '',
+            sessionTime: '',
+            boardDate: this.conferenceStartDate,
+            scheduleDates: [],
+            editSession: 0,
 
         }
     },
     mounted() {
-        this.loadScheduleBoard(this.conferenceStartDate);
+        this.loadScheduleBoard();
         this.loadTypes();
         this.loadTracks();
-
+        this.calcScheduleDates(this.conferenceStartDate, this.conferenceEndDate);
     },
     methods: {
-        loadScheduleBoard: function (date) {
+        loadScheduleBoard: function () {
+            let date = this.boardDate;
             axios.get('/api/admin/conference-schedule', {
                 params: {
                     conference_id: this.conferenceId,
@@ -108,7 +146,7 @@ export default {
             })
             .then((response) => {
                 this.schedule = response.data.data;
-                console.log(this.schedule);
+
             })
             .catch((error) => {
                 this.$toast.error(`Could not find the schedule`);
@@ -127,12 +165,31 @@ export default {
         loadTracks: function () {
             axios.get('/api/admin/track')
                 .then((response) => {
-                    console.log(response.data.data);
                     this.tracks = response.data.data;
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not load the tracks`);
                 });
+        },
+        calcScheduleDates: function(start, end) {
+            let startDate = new Date(start);
+            startDate.setMinutes((startDate.getMinutes()) + startDate.getTimezoneOffset());
+            let endDate = new Date(end);
+            endDate.setMinutes((endDate.getMinutes()) + endDate.getTimezoneOffset());
+
+            const dates = []
+            let currentDate = startDate
+            const addDays = function (days) {
+                const date = new Date(this.valueOf())
+                date.setDate(date.getDate() + days)
+                return date
+            }
+            while (currentDate <= endDate) {
+                dates.push(currentDate.toISOString().split('T')[0])
+                currentDate = addDays.call(currentDate, 1)
+            }
+
+            this.scheduleDates = dates;
         },
         loadSessions: function() {
             if(!this.trackId) {
@@ -140,39 +197,105 @@ export default {
                 return;
             }
             axios.get('/api/admin/conference-session', {
-                params: {
-                    conference_id: this.conferenceId,
-                    track_id: this.trackId,
-                    type_id: this.typeId,
-                    all_statuses: '',
-                }
-            })
+                    params: {
+                        conference_id: this.conferenceId,
+                        track_id: this.trackId,
+                        type_id: this.typeId,
+                        all_statuses: '',
+                    }
+                })
                 .then((response) => {
-                    console.log( response.data.data);
                     this.sessions = response.data.data;
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not find the sessions`);
                 });
         },
-        populateSessionModal: function (room, time, room_name) {
-
+        populateSessionModal: function (time, room_name) {
+            this.trackId = this.schedule.timeslots[time][room_name].track_id ?? 0;
+            this.loadSessions();
+            this.editSession = 0;
+            if(this.schedule.timeslots[time][room_name].id) {
+                this.editSession = 1;
+            }
+            this.scheduleId = this.schedule.timeslots[time][room_name].id ?? 0;
+            this.sessionId = this.schedule.timeslots[time][room_name].session_id ?? 0;
+            this.roomId = this.schedule.rooms[room_name].id;
+            this.sessionTime = time;
+            this.roomName = room_name;
         },
-        resetTrack: function() {
+        resetModal: function() {
+            this.scheduleId = null;
             this.trackId = 0;
+            this.sessionId = 0;
+            this.roomId = 0;
+            this.roomName = '';
+            this.sessionTime = '';
+            this.sessions = {};
         },
         addSession: function () {
-            this.schedule.timeslots[time][room_name] = {
-                conference_id: 1,
-                date: "2023-02-16",
-                id: 2,
-                room_id: 1,
-                session_id: 71,
-                session_name: "Gamification for Creators - What Video Games Teach Us about Motivation",
-                time: "09:00",
-                track_id: 1,
-                track_name: "Gaming",
+            axios.post('/api/admin/conference-schedule', {
+                        'conference_id': this.conferenceId,
+                        'conference_session_id': this.sessionId ? this.sessionId : null,
+                        'track_id': this.trackId ? this.trackId : null,
+                        'room_id': this.roomId,
+                        'date': this.boardDate,
+                        'time': this.sessionTime,
+
+                })
+                .then((response) => {
+                    let newSchedule = response.data.data;
+                    this.populateCard(newSchedule.id);
+                    this.$toast.success(`The schedule was successfully saved`);
+                    this.resetModal();
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not schedule the session`);
+                    this.resetModal();
+                })
+
+        },
+        updateSession: function() {
+            if (this.trackId == "0") this.trackId = 0;
+            if (this.trackId == "0" || this.sessionId == "0") this.sessionId = 0;
+            axios.put(`/api/admin/conference-schedule/${this.scheduleId}`, {
+                'conference_id': this.conferenceId,
+                'conference_session_id': this.sessionId ? this.sessionId : null,
+                'track_id': this.trackId ? this.trackId : null,
+                'room_id': this.roomId,
+                'date': this.boardDate,
+                'time': this.sessionTime,
+
+            })
+                .then((response) => {
+                    let updatedSchedule = response.data.data;
+                    this.populateCard(updatedSchedule.id);
+                    this.$toast.success(`The schedule was successfully updated`);
+                    this.resetModal();
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not update the schedule`);
+                    this.resetModal();
+                })
+        },
+        populateCard: function(id) {
+            this.schedule.timeslots[this.sessionTime][this.roomName] = {
+                conference_id: this.conferenceId,
+                date: this.boardDate,
+                id: id,
+                room_id: this.roomId,
+                conference_session_id: this.sessionId ? this.sessionId : null,
+                session_name: this.sessionId ? this.getItemNameById(this.sessions, this.sessionId) : 0,
+                time: this.sessionTime,
+                track_id: this.trackId ? this.trackId : null,
+                track_name: this.trackId ? this.getItemNameById(this.tracks, this.trackId) : 0,
             }
+        },
+        getItemNameById: function(data, id) {
+            let item = data.filter(
+                function(data) { if( data.id == id) return data.name }
+            );
+            return item[0].name;
         },
         truncate: function (text, length, suffix) {
             if (text && text.length > length) {

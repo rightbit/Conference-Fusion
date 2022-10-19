@@ -14,10 +14,10 @@ class ConferenceScheduleController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Http\Requests\ConferenceScheduleRequest $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index(ConferenceScheduleRequest $request)
+    public function index(Request $request)
     {
         $schedule =  ConferenceSchedule::getConferenceSchedule($request->conference_id, $request->date, $request->room_id);
         return new ConferenceScheduleResource($schedule);
@@ -37,12 +37,14 @@ class ConferenceScheduleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\ConferenceScheduleRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ConferenceScheduleRequest $request)
     {
-        //
+        $schedule = new ConferenceSchedule($request->all());
+        $schedule->save();
+        return new ConferenceScheduleResource($schedule);
     }
 
     /**
@@ -70,13 +72,19 @@ class ConferenceScheduleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\ConferenceScheduleRequest  $request
      * @param  \App\Models\ConferenceSchedule  $conferenceSchedule
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ConferenceSchedule $conferenceSchedule)
+    public function update(ConferenceScheduleRequest $request, ConferenceSchedule $conferenceSchedule)
     {
-        //
+        $conferenceSchedule->conference_session_id = $request->conference_session_id ?: null;
+        $conferenceSchedule->track_id = $request->track_id ?: null;
+        $conferenceSchedule->room_id = $request->room_id;
+        $conferenceSchedule->date = $request->date;
+        $conferenceSchedule->time = $request->time;
+        $conferenceSchedule->save();
+        return new ConferenceScheduleResource($conferenceSchedule);
     }
 
     /**
