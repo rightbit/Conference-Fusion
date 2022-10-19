@@ -384,7 +384,6 @@ export default {
                         window.history.replaceState(null, "", '/user-profile/'+ this.user.id );
                     })
                     .catch((error) => {
-                        console.log(error);
                         this.$toast.error(`Could not create a new user<br />` + error.response.data.message);
                     });
             }

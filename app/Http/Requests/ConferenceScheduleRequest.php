@@ -15,6 +15,7 @@ class ConferenceScheduleRequest extends FormRequest
     public function authorize()
     {
         return Auth::user()->hasPermission('view_admin');
+
     }
 
     /**
@@ -27,7 +28,28 @@ class ConferenceScheduleRequest extends FormRequest
         return [
             'conference_id' => 'required|integer',
             'date' => 'required',
+            'time' => 'nullable',
             'room_id' => 'nullable|integer',
+            'track_id' => 'nullable|integer',
+            'conference_session_id' => 'nullable|integer',
+        ];
+    }
+
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'conference_id' => 'conference id required',
+            'date' => 'date required',
+            'time' => 'time error',
+            'room_id' => 'room id error',
+            'track_id' => 'track id error',
+            'conference_session_id' => 'conference session error',
         ];
     }
 }
