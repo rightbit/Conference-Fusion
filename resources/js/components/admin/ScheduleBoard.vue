@@ -18,6 +18,7 @@
                 <select id="date-select" class="form-select form-select-sm w-auto d-inline" v-model="boardDate" @change="loadScheduleBoard">
                     <option v-for="day in scheduleDates" :value="day">{{ day }}</option>
                 </select>
+                <button class="btn btn-sm btn-link" @click="loadScheduleBoard"><b><i class="bi bi-arrow-repeat"></i> Reload</b></button>
             </h4>
             <table class="table table-scrollable table-striped bg-white">
                 <thead class="bg-secondary text-white">
@@ -25,11 +26,8 @@
                         <td class="bg-secondary text-white">Time</td>
                         <td v-for="room in this.schedule.rooms" class="text-center ts-sc">
                             {{ room.name }}
-                            <small><i class="bi bi-info-circle"
-                                      data-toggle="tooltip"
-                                      data-placement="top"
-                                      data-html="true"
-                                      :title="'Capacity: '+room.capacity+' AV: '+room.has_av"></i>
+                            <br />
+                            <small>Capacity: {{ room.capacity }} <i v-if="room.has_av" class="bi bi-person-video3"></i>
                             </small>
                         </td>
                     </tr>
