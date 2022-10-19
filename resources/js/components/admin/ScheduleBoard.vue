@@ -208,6 +208,7 @@ export default {
                         track_id: this.trackId,
                         type_id: this.typeId,
                         all_statuses: '',
+                        no_paginate: 1,
                     }
                 })
                 .then((response) => {
