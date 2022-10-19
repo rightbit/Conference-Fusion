@@ -48,7 +48,11 @@ class ConferenceSessionController extends Controller
             ->when($request->filled('type_id'), function ($query) use ($request) {
                 $query->where('type_id', $request->type_id);
             });
-
+        
+        if($request->no_paginate) {
+            return ConferenceSessionResource::collection($conference_sessions->get());   
+        }
+        
         return ConferenceSessionResource::collection($conference_sessions->paginate(25));
     }
 
