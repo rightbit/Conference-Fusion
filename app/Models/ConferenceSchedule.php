@@ -72,6 +72,9 @@ class ConferenceSchedule extends Model
             $schedule_resource['rooms'][$room->name] = [
                 "id" => $room->id,
                 "name" => $room->name,
+                "capacity" => $room->capacity,
+                "has_av" => $room->has_av,
+                "notes" => $room->notes,
             ];
         }
 

@@ -25,6 +25,12 @@
                         <td class="bg-secondary text-white">Time</td>
                         <td v-for="room in this.schedule.rooms" class="text-center ts-sc">
                             {{ room.name }}
+                            <small><i class="bi bi-info-circle"
+                                      data-toggle="tooltip"
+                                      data-placement="top"
+                                      data-html="true"
+                                      :title="'Capacity: '+room.capacity+' AV: '+room.has_av"></i>
+                            </small>
                         </td>
                     </tr>
                 </thead>
@@ -146,7 +152,7 @@ export default {
             })
             .then((response) => {
                 this.schedule = response.data.data;
-
+                console.log(this.schedule);
             })
             .catch((error) => {
                 this.$toast.error(`Could not find the schedule`);
