@@ -91,7 +91,6 @@
                     axios.get(`/api/admin/report/${this.reportId}/${this.conferenceId}`, { params })
                         .then((response) => {
                             this.data = response.data.data;
-                            console.log(this.data);
                         })
                         .catch((error) => {
                             this.$toast.error(`Could not find the report`);

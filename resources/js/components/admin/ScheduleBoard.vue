@@ -152,7 +152,6 @@ export default {
             })
             .then((response) => {
                 this.schedule = response.data.data;
-                console.log(this.schedule);
             })
             .catch((error) => {
                 this.$toast.error(`Could not find the schedule`);
