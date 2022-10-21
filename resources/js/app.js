@@ -9,6 +9,7 @@ import LaravelVuePagination from 'laravel-vue-pagination';
 import AdminConferenceList from "./components/admin/ConferenceList";
 import AdminConferenceInfo from "./components/admin/ConferenceInfo";
 import AdminConfiguration from './components/admin/Configuration'
+import AdminReports from "./components/admin/Reports";
 import AdminRoomList from "./components/admin/RoomList";
 import AdminScheduleBoard from "./components/admin/ScheduleBoard";
 import AdminTrackList from "./components/admin/TrackList";
@@ -19,7 +20,6 @@ import AdminConferenceSession from "./components/admin/ConferenceSession";
 import CallForPanels from "./components/CallForPanels";
 import CallForPresentations from "./components/CallForPresentations";
 import UserProfile from "./components/UserProfile";
-
 
 import PartialsTrackOptions from "./components/partials/TrackOptions";
 import PartialsTypeOptions from "./components/partials/TypeOptions";
@@ -44,6 +44,7 @@ app.component('admin-conference-info', AdminConferenceInfo)
 app.component('admin-conference-list', AdminConferenceList)
 app.component('admin-configuration', AdminConfiguration)
 app.component('admin-room-list', AdminRoomList)
+app.component('admin-reports', AdminReports)
 app.component('admin-schedule-board', AdminScheduleBoard)
 app.component('admin-track-list', AdminTrackList)
 app.component('admin-user-list', AdminUserList)

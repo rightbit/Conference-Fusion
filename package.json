@@ -28,6 +28,7 @@
         "bootstrap-icons": "^1.8.1",
         "dayjs": "^1.11.4",
         "laravel-vue-pagination": "^3.0.0",
+        "moment": "^2.29.4",
         "vue-star-rating": "^2.1.0"
     }
 }

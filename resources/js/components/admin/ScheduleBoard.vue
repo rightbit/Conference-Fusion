@@ -25,10 +25,12 @@
                     <tr  class="d-flex align-content-stretch">
                         <td class="bg-secondary text-white">Time</td>
                         <td v-for="room in this.schedule.rooms" class="text-center ts-sc">
-                            {{ room.name }}
-                            <br />
-                            <small>Capacity: {{ room.capacity }} <i v-if="room.has_av" class="bi bi-person-video3"></i>
-                            </small>
+                            <div class="mb-0 p-0">
+                                {{ room.name }}
+                            </div>
+                            <div class="mt-0 p-0">
+                                <small>Capacity: {{ room.capacity }} <i v-if="room.has_av" class="bi bi-person-video3"></i></small>
+                            </div>
                         </td>
                     </tr>
                 </thead>
@@ -59,8 +61,8 @@
                                         <i class="bi bi-plus-circle "></i> Add
                                     </button>
                                 </div>
-                                <div v-if="room.track_name" class="card-footer lh-1 text-center">
-                                    <div>
+                                <div v-if="room.track_name" class="card-footer lh-1 text-center bg-info bg-gradient">
+                                    <div class="">
                                         <small><b>{{ room.track_name }}</b></small>
                                     </div>
 

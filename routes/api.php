@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\ConferenceController;
 use App\Http\Controllers\Api\ConferenceScheduleController;
 use App\Http\Controllers\Api\ConferenceSessionController;
-use App\Http\Controllers\Api\SessionAlternateNameController;
+use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SessionInterestController;
 use App\Http\Controllers\Api\SessionStatusController;
 use App\Http\Controllers\Api\SessionTypeController;
@@ -67,6 +67,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
     Route::apiResource('room', RoomController::class);
     Route::apiResource('track', TrackController::class);
     Route::apiResource('permissions', UserPermissionController::class)->middleware('can:admin');
+
+    Route::group(['prefix' => 'report'], function() {
+        Route::get('schedule-list/{conference_id}', [ReportController::class, 'scheduleList']);
+    });
+
+
 });
 
 

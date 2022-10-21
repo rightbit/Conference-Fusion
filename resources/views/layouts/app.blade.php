@@ -60,6 +60,7 @@
                                     <li><a class="dropdown-item" href="{{ route('admin_user_list') }}">{{ __('Users') }}</a></li>
                                     <li><a class="dropdown-item" href="{{ route('admin_conference_session_list') }}">{{ __('Sessions') }}</a></li>
                                     <li><a class="dropdown-item" href="{{ route('admin_schedule_board') }}">{{ __('Schedule') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin_reports') }}">{{ __('Reports') }}</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li class="ps-2"><b>Settings</b></li>
                                     <li><a class="dropdown-item" href="{{ route('admin_conference_list') }}">{{ __('Conferences') }}</a></li>
