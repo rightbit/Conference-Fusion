@@ -82,8 +82,16 @@ class SessionInterest extends Model
         $participant_list = [];
         $current_user = 0;
         $previous_user = 0;
+        $previous_session_timestamp = 0;
+        $two_sessions_in_a_row = false;
         foreach($schedule_participants as $p) {
             if($p->user_id != $current_user) {
+                //Check for previous user errors
+                if($previous_user && count($participant_list[$previous_user]['sessions']) < 3) {
+                    $participant_list[$previous_user]['errors']['under_session_limit'] = 'User is in less than three sessions';
+                }
+
+                $two_sessions_in_a_row = false;
                 $previous_user = $current_user;
                 $current_user = $p->user_id;
                 $participant_list[$current_user] = [
@@ -98,7 +106,6 @@ class SessionInterest extends Model
                     'sessions'                  => [],
                     'errors'                    => null,
                 ];
-
             }
 
 
@@ -118,7 +125,28 @@ class SessionInterest extends Model
                 'session_type'          => $p->session_type,
             ];
 
+            //Check for errors
+            $current_session_timestamp = strtotime($p->date . " " . $p->time);
+            if($current_session_timestamp === $previous_session_timestamp) {
+                $participant_list[$current_user]['errors']['time_conflict'] = 'User is in two sessions at the same time';
+            }
 
+            if($current_session_timestamp - $previous_session_timestamp <= 3600) {
+                if($two_sessions_in_a_row === true) {
+                    $participant_list[$current_user]['errors']['busy_user'] = 'User is in several sessions in a row';
+                }
+                $two_sessions_in_a_row = true;
+            } else {
+                $two_sessions_in_a_row = false;
+            }
+
+            $previous_session_timestamp =  $current_session_timestamp;
+
+        }
+
+        // Check last user errors
+        if($previous_user && count($participant_list[$previous_user]['sessions']) < 3) {
+            $participant_list[$previous_user]['errors']['under_session_limit'] = 'User is in less than three sessions';
         }
 
         return $participant_list;

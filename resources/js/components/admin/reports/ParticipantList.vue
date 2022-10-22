@@ -29,13 +29,13 @@
                             data-bs-target="#user-errors-modal"
                             @click="populateErrorModal(d)"
                 >
-                <i  class="bi bi-exclamation-octagon-fill "></i></button></td>
+                <i  class="bi bi-exclamation-octagon"></i></button></td>
                 <td class="w-50">
                     <a :href="`/admin/user-profile/${d.user_id}`" target="_blank" class="text-decoration-none text-body fw-bold">
                         {{ d.last_name }}, {{ d.first_name }} ({{d.badge_name}}) <i class="bi bi-box-arrow-up-right"></i>
                     </a>
                 </td>
-                <td class="text-nowrap">{{ d.email }}</td>
+                <td class="text-nowrap"><span v-if="d.share_email_permission">{{ d.email }}</span></td>
                 <td :class="[d.share_email_permission ? 'text-center':'text-center bg-danger']"><span :class="[d.share_email_permission ? '':'text-white fw-bold']">{{ d.share_email_permission ? "Y":"N" }}</span></td>
                 <td :class="[d.recording_permission ? 'text-center':'text-center bg-danger']"><span :class="[d.recording_permission ? '':'text-white fw-bold']">{{ d.recording_permission ? "Y":"N" }}</span></td>
                 <td :class="[d.staff_notes ? 'text-center bg-warning':'']"><i v-if="d.staff_notes" class="bi-journal-bookmark-fill" ></i></td>
