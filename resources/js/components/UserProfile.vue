@@ -26,13 +26,13 @@
                             <hr />
                             <h5>Session participation info</h5>
                             <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData(1, 'interests')">
-                                <i class="bi bi-eye-fill"></i> Interests: {{ this.sessionCounts.interest }}
+                                <i class="bi bi-eye-fill"></i> Interests: {{ sessionCounts.interest }}
                             </button>
                             <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData(1, 'panelist')">
-                                <i class="bi bi-eye-fill"></i> Panelist: {{ this.sessionCounts.panelist }}
+                                <i class="bi bi-eye-fill"></i> Panelist: {{ sessionCounts.panelist }}
                             </button>
                             <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData(1, 'presenter')">
-                                <i class="bi bi-eye-fill"></i> Presenter: {{ this.sessionCounts.presenter }}
+                                <i class="bi bi-eye-fill"></i> Presenter: {{ sessionCounts.presenter }}
                             </button>
                             <hr />
                             <h5>Staff notes <span class="text-secondary">(private)</span></h5>
@@ -274,7 +274,7 @@ export default {
     },
     mounted() {
         this.getUser();
-        this.getUserSessionTotals();
+
     },
     methods: {
         getUser: function() {
@@ -306,6 +306,7 @@ export default {
                         this.getUserPermissions();
                     }
                     this.finished_loading = true;
+                    this.getUserSessionTotals();
 
                 })
                 .catch((error) => {
