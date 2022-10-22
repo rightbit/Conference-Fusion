@@ -179,11 +179,11 @@ class ConferenceSchedule extends Model
                 $previous_session_participants = !empty($schedule_list[$previous_session]['sublist']) ? count($schedule_list[$previous_session]['sublist']) : 0;
 
                 if($previous_session && $schedule_list[$previous_session]['session_type_id'] == '1' && in_array($previous_session_participants, [1,2])) {
-                    $schedule_list[$previous_session]['errors']['small_panel'] = 'Less than three people on this on panel';
+                    $schedule_list[$previous_session]['errors']['small_panel'] = 'Less than three people on this panel';
                 }
 
                 if($previous_session && $schedule_list[$previous_session]['session_type_id'] == '1' && $previous_session_participants > 6) {
-                    $schedule_list[$previous_session]['errors']['large_panel'] = 'More than six people on this on session';
+                    $schedule_list[$previous_session]['errors']['large_panel'] = 'More than six people on this session';
                 }
 
                 if($p->session_type_id == '1' && !$p->is_moderator) {

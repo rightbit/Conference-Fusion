@@ -4,7 +4,7 @@
 }
 </style>
 <template>
-    <div class="table-scrollable-container">
+    <div class="">
         <h2>Schedule List</h2>
         <h6>Alphabetical list of sessions on the schedule including participants and errors</h6>
         {{ data.length }} sessions found
@@ -12,7 +12,7 @@
             <option value="0">All Tracks</option>
             <option v-for="track in tracks" :value="track.id">{{ track.name }}</option>
         </select>
-        <table class="table table-scrollable table-free-width table-sm table-striped">
+        <table class="table table-scrollable table-free-width table-sm table-striped bg-white">
             <thead style="z-index: 500">
             <tr class="bg-secondary text-white">
                 <td class=""></td>

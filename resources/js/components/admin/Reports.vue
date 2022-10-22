@@ -14,7 +14,7 @@
                         <li>
                             <a href="#submenuSchedule" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
                                 <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Schedule reports</span></a>
-                            <ul class="collapse nav flex-column ms-1" id="submenuSchedule" data-bs-parent="#menu">
+                            <ul class="collapse nav flex-column ms-2" id="submenuSchedule" data-bs-parent="#menu">
                                 <li class="w-100">
                                     <a href="/admin/reports/schedule-list" id="schedule-list-nav" class="nav-link px-0"> <span class="d-none d-sm-inline">Schedule list</span><span class="d-sm-none">SL</span></a>
                                 </li>
@@ -35,16 +35,16 @@
                         <li>
                             <a href="#submenuParticipant" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
                                 <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Participant reports</span> </a>
-                            <ul class="collapse nav flex-column ms-1" id="submenuParticipant" data-bs-parent="#menu">
+                            <ul class="collapse nav flex-column ms-2" id="submenuParticipant" data-bs-parent="#menu">
                                 <li>
-                                    <a href="#" id="participant-schedules-nav" class="nav-link px-0 disabled"> <span class="d-none d-sm-inline">Participant schedules</span><span class="d-sm-none">PS</span></a>
+                                    <a href="/admin/reports/participant-list" id="participant-list-nav" class="nav-link px-0"> <span class="d-none d-sm-inline">Participant schedules</span><span class="d-sm-none">PS</span></a>
                                 </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0 disabled"> <span class="d-none d-sm-inline">Participant hours</span><span class="d-sm-none">PH</span></a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0 disabled"> <span class="d-none d-sm-inline">Session conflicts</span><span class="d-sm-none">SC</span></a>
-                                </li>
+<!--                                <li>-->
+<!--                                    <a href="#" class="nav-link px-0 disabled"> <span class="d-none d-sm-inline">Participant hours</span><span class="d-sm-none">PH</span></a>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <a href="#" class="nav-link px-0 disabled"> <span class="d-none d-sm-inline">Session conflicts</span><span class="d-sm-none">SC</span></a>-->
+<!--                                </li>-->
                             </ul>
                         </li>
                         <li>
@@ -65,6 +65,7 @@
 
 <script>
     import ScheduleList from "./reports/ScheduleList"
+    import ParticipantList from "./reports/ParticipantList"
 
     export default {
         props: ['reportId', 'conferenceId', 'conferenceName'],
@@ -106,7 +107,8 @@
             },
         },
         components: {
-            ScheduleList
+            ScheduleList,
+            ParticipantList,
         }
     }
 </script>

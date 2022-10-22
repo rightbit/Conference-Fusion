@@ -70,6 +70,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
 
     Route::group(['prefix' => 'report'], function() {
         Route::get('schedule-list/{conference_id}', [ReportController::class, 'scheduleList']);
+        Route::get('participant-list/{conference_id}', [ReportController::class, 'participantList']);
     });
 
 
