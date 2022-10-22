@@ -44,7 +44,7 @@
                 <td colspan="6">
                     <table class="table table-sm table-borderless table-striped w-100">
                         <tr v-for="session in d.sessions">
-                            <td class="text-end p-0"><i v-if="session.session_user_staff_notes" class="bi-journal-bookmark-fill text-warning" ></i><i v-if="session.is_moderator" class="bi bi-person-circle"></i></td>
+                            <td class="text-end p-0"><i v-if="session.session_user_staff_notes" class="bi-journal-bookmark-fill text-warning" ></i><i v-if="session.is_moderator" class="bi bi-mic-fill"></i></td>
                             <td class="w-50">
                                 <a :href="`/admin/conference-session/${session.session_id}`" target="_blank">
                                     {{ session.session_name }}

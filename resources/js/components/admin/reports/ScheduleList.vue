@@ -49,7 +49,7 @@
                 <td colspan="7">
                     <table class="table table-sm table-borderless table-striped w-100">
                         <tr v-for="p in d.sublist">
-                            <td class="ps-4"><i v-if="p.is_moderator" class="bi bi-person-circle"></i></td>
+                            <td class="ps-4"><i v-if="p.is_moderator" class="bi bi-mic-fill"></i></td>
                             <td class="w-100">
                                 <a :href="`/admin/user-profile/${p.user_id}`" target="_blank">
                                     {{ p.badge_name }}
