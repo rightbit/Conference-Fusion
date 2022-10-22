@@ -19,6 +19,7 @@
                 <td class="ts-sc text-center">Share Email</td>
                 <td class="ts-sc text-center">Can Record </td>
                 <td class="ts-sc text-center">Staff Notes</td>
+                <td class="ts-sc text-center"></td>
             </tr>
             </thead>
             <tbody v-for="d in data">
@@ -39,9 +40,10 @@
                 <td :class="[d.share_email_permission ? 'text-center':'text-center bg-danger']"><span :class="[d.share_email_permission ? '':'text-white fw-bold']">{{ d.share_email_permission ? "Y":"N" }}</span></td>
                 <td :class="[d.recording_permission ? 'text-center':'text-center bg-danger']"><span :class="[d.recording_permission ? '':'text-white fw-bold']">{{ d.recording_permission ? "Y":"N" }}</span></td>
                 <td :class="[d.staff_notes ? 'text-center bg-warning':'']"><i v-if="d.staff_notes" class="bi-journal-bookmark-fill" ></i></td>
+                <td><button class="btn btn-link p-0" @click="reloadUser(d)"><i class="bi bi-arrow-repeat float-end"></i></button></td>
             </tr>
             <tr>
-                <td colspan="6">
+                <td colspan="7">
                     <table class="table table-sm table-borderless table-striped w-100">
                         <tr v-for="session in d.sessions">
                             <td class="text-end p-0"><i v-if="session.session_user_staff_notes" class="bi-journal-bookmark-fill text-warning" ></i><i v-if="session.is_moderator" class="bi bi-mic-fill"></i></td>
@@ -115,6 +117,9 @@ export default {
         resetModal: function() {
             this.userErrors = {};
         },
+        reloadUser: function(user) {
+            this.$emit("queryParams", {0:{name: 'user_id', value: user.user_id}});
+        }
     },
 }
 </script>

@@ -73,9 +73,9 @@ class SessionInterest extends Model
             ->orderBy('csh.date')
             ->orderBy('csh.time');
 
-        if($request->type_id) {
-            $query->where('cs.type_id', $request->type_id);
-        }
+//        if($request->user_id) {
+//            $query->where('u.id', $request->user_id);
+//        }
 
         $schedule_participants = $query->get();
 

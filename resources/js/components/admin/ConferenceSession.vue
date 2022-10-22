@@ -262,10 +262,7 @@
                 }
                 axios.get(`/api/admin/conference-session/${this.sessionId}`)
                     .then((response) => {
-                        console.log(response.data.data);
                         this.session = response.data.data;
-
-                        console.log(this.session);
                     })
                     .catch((error) => {
                         this.$toast.show(`Could not find the session. Click here to go back`, {
