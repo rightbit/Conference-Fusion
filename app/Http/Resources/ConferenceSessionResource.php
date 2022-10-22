@@ -40,6 +40,8 @@ class ConferenceSessionResource extends JsonResource
             'max_registration' => $this->max_registration,
             'attendance' => $this->attendance,
             'proposed_date' => $this->proposed_date,
+            'conference_schedule' => $this->conference_schedule,
+
         ];
     }
 }

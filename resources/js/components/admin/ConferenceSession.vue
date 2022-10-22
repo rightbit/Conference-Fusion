@@ -6,6 +6,10 @@
                 <div class="py-2">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h2 class="text-right">Session info</h2>
+                            <div v-if="session.conference_schedule.length" class="d-flex justify-content-start p-2">
+                                <div class="h4 align-self-center mb-lg-0">Scheduled Times:</div>
+                                <a v-for="schedule in session.conference_schedule" class="btn btn-outline-dark ms-2" href="/admin/schedule-board" target="_blank"><i class="bi bi-calendar-check"></i> {{ schedule.date }} {{ schedule.time }}</a>
+                            </div>
                         <h5 v-if="false">Like this session idea? Vote: <i class="bi bi-hand-thumbs-up-fill text-primary"></i><i class="bi bi-hand-thumbs-down text-secondary"></i> +0(0)</h5>
                     </div>
                     <div class="row g-2 mb-3">
@@ -89,6 +93,12 @@
                 </div>
             </div>
             </form>
+            <div class="container mb-2">
+                <div class="d-flex justify-content-start p-2">
+                    <div class="h4 align-self-center mb-lg-0">Scheduled Times:</div>
+                    <a v-for="schedule in session.conference_schedule" class="btn btn-outline-dark ms-2" href="/admin/schedule-board" target="_blank"><i class="bi bi-calendar-check"></i> {{ schedule.date }} {{ schedule.time }}</a>
+                </div>
+            </div>
             <div class="container mb-2">
                 <div class="row justify-content-center">
                     <div class="col-md-12">
@@ -227,6 +237,7 @@
                     'track_id': null,
                     'type_id': null,
                     'registration_required': 0,
+                    'conference_schedule': [],
                 },
                 types: [],
                 statuses: [],
@@ -251,7 +262,10 @@
                 }
                 axios.get(`/api/admin/conference-session/${this.sessionId}`)
                     .then((response) => {
+                        console.log(response.data.data);
                         this.session = response.data.data;
+
+                        console.log(this.session);
                     })
                     .catch((error) => {
                         this.$toast.show(`Could not find the session. Click here to go back`, {

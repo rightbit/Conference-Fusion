@@ -58,6 +58,10 @@ class ConferenceSession extends Model
         return $this->hasOne( SessionInterest::class);
     }
 
+    public function conference_schedule() {
+        return $this->hasMany( ConferenceSchedule::class, 'conference_session_id', 'id');
+    }
+
     public static function getUserPanelInterests($user_id, $conference_id, $request)
     {
         $panels = self::where('conference_id', '=', $conference_id)
