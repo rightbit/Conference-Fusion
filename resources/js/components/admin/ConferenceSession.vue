@@ -23,7 +23,7 @@
                         <div class="col-md-2">
                             <label for="track">Track</label>
                             <select id="track" v-model="session.track_id" class="form-select" aria-label="select category">
-                                <partials-track-options />
+                                <partials-track-options v-if="finished_loading" />
                             </select>
                         </div>
                         <div class="col-md-2">
@@ -248,6 +248,7 @@
                 searchUsers: {},
                 totalUsers: 0,
                 keyword: '',
+                finished_loading: false,
             }
         },
         mounted() {
@@ -263,6 +264,7 @@
                 axios.get(`/api/admin/conference-session/${this.sessionId}`)
                     .then((response) => {
                         this.session = response.data.data;
+                        this.finished_loading = true;
                     })
                     .catch((error) => {
                         this.$toast.show(`Could not find the session. Click here to go back`, {

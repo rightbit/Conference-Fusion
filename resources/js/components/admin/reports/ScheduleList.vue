@@ -23,6 +23,7 @@
                 <td class="ts-sc text-center">Date & Time </td>
                 <td class="ts-sc text-center">Room</td>
                 <td class="ts-sc w-auto pe-2">Status</td>
+                <td class="ts-sc w-auto pe-2"></td>
             </tr>
             </thead>
             <tbody v-for="d in data">
@@ -44,9 +45,10 @@
                 <td class="text-nowrap">{{ formattedDate(d.date) }} {{ d.time }}</td>
                 <td class="text-nowrap  text-center">{{ d.room_name }} {{ d.capacity }} <i v-if="d.has_av" class="bi bi-person-video3"></i></td>
                 <td class="text-center"><i :class="[goodStatuses.includes(d.status_id) ? 'bi-check-square text-success':'bi-exclamation-triangle-fill text-warning']" ></i></td>
+                <td class="text-center"><button class="btn btn-sm btn-link float-end" @click="changeTrack"><b><i class="bi bi-arrow-repeat"></i></b></button></td>
             </tr>
             <tr>
-                <td colspan="7">
+                <td colspan="8">
                     <table class="table table-sm table-borderless table-striped w-100">
                         <tr v-for="p in d.sublist">
                             <td class="ps-4"><i v-if="p.is_moderator" class="bi bi-mic-fill"></i></td>
