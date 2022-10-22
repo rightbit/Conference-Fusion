@@ -94,6 +94,7 @@ class SessionInterest extends Model
                 $two_sessions_in_a_row = false;
                 $previous_user = $current_user;
                 $current_user = $p->user_id;
+                $previous_session_timestamp = 0;
                 $participant_list[$current_user] = [
                     'user_id'                   => $p->user_id,
                     'first_name'                => $p->first_name,
@@ -135,12 +136,15 @@ class SessionInterest extends Model
                 if($two_sessions_in_a_row === true) {
                     $participant_list[$current_user]['errors']['busy_user'] = 'User is in several sessions in a row';
                 }
+
                 $two_sessions_in_a_row = true;
+
             } else {
                 $two_sessions_in_a_row = false;
+
             }
 
-            $previous_session_timestamp =  $current_session_timestamp;
+            $previous_session_timestamp = $current_session_timestamp;
 
         }
 
