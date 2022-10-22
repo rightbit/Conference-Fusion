@@ -69,6 +69,7 @@ class SessionInterest extends Model
             ->where('si.is_participant', '=', '1')
             ->where('csh.conference_id', '=', $conference_id)
             ->orderBy('u.last_name')
+            ->orderBy('u.id')
             ->orderBy('csh.date')
             ->orderBy('csh.time');
 
