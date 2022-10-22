@@ -48,11 +48,11 @@ class ConferenceSessionController extends Controller
             ->when($request->filled('type_id'), function ($query) use ($request) {
                 $query->where('type_id', $request->type_id);
             });
-        
+
         if($request->no_paginate) {
-            return ConferenceSessionResource::collection($conference_sessions->get());   
+            return ConferenceSessionResource::collection($conference_sessions->get());
         }
-        
+
         return ConferenceSessionResource::collection($conference_sessions->paginate(25));
     }
 
@@ -64,15 +64,6 @@ class ConferenceSessionController extends Controller
      */
     public function store(ConferenceSessionRequest $request)
     {
-        $existing_session = ConferenceSession::where('conference_id', $request->conference_id)
-            ->where('room_id', $request->room_id)
-            ->where('date', $request->date)
-            ->where('time', $request->time)
-            ->first();
-
-        if($existing_session) {
-            abort(422, "Session already exists");
-        }
 
         $conference_session = new ConferenceSession($request->all());
         $conference_session->save();

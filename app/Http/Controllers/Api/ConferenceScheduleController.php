@@ -42,6 +42,17 @@ class ConferenceScheduleController extends Controller
      */
     public function store(ConferenceScheduleRequest $request)
     {
+
+        $existing_session = ConferenceSchedule::where('conference_id', $request->conference_id)
+            ->where('room_id', $request->room_id)
+            ->where('date', $request->date)
+            ->where('time', $request->time)
+            ->first();
+
+        if($existing_session) {
+            abort(422, "Session already exists");
+        }
+
         $schedule = new ConferenceSchedule($request->all());
         $schedule->save();
         return new ConferenceScheduleResource($schedule);
