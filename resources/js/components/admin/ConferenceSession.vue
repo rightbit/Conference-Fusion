@@ -353,6 +353,7 @@
                 this.session.registration_required = 0;
                 this.session.duration_minutes = this.defaultSessionDuration;
                 this.session.session_status_id = 1;
+                this.session.conference_schedule = [];
             },
             reloadInterestList: function() {
                 this.interestListKey += 1;
