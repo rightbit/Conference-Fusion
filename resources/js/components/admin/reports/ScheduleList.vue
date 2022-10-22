@@ -12,6 +12,7 @@
             <option value="0">All Tracks</option>
             <option v-for="track in tracks" :value="track.id">{{ track.name }}</option>
         </select>
+        <button class="btn btn-sm btn-link float-end" @click="changeTrack"><b><i class="bi bi-arrow-repeat"></i> Reload</b></button>
         <table class="table table-scrollable table-free-width table-sm table-striped bg-white">
             <thead style="z-index: 500">
             <tr class="bg-secondary text-white">
