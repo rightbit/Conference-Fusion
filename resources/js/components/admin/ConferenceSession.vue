@@ -29,7 +29,7 @@
                         <div class="col-md-2">
                             <label for="type">Type</label>
                             <select id="type" v-model="session.type_id" class="form-select" aria-label="select category" required>
-                                <partials-type-options />
+                                <partials-type-options v-if="finished_loading" />
                             </select>
                             <div class="invalid-feedback">
                                 Please provide a session type
@@ -38,7 +38,7 @@
                         <div class="col-md-2">
                             <label for="status">Status</label>
                             <select id="status" v-model="session.session_status_id" class="form-select" aria-label="select category" required>
-                                <partials-session-status-options />
+                                <partials-session-status-options v-if="finished_loading" />
                             </select>
                             <div class="invalid-feedback">
                                 Please provide a session status
@@ -93,13 +93,13 @@
                 </div>
             </div>
             </form>
-            <div class="container mb-2">
+            <div class="container mb-2" v-if="session.id">
                 <div class="d-flex justify-content-start p-2">
                     <div class="h4 align-self-center mb-lg-0">Scheduled Times:</div>
                     <a v-for="schedule in session.conference_schedule" class="btn btn-outline-dark ms-2" href="/admin/schedule-board" target="_blank"><i class="bi bi-calendar-check"></i> {{ schedule.date }} {{ schedule.time }}</a>
                 </div>
             </div>
-            <div class="container mb-2">
+            <div class="container mb-2" v-if="session.id">
                 <div class="row justify-content-center">
                     <div class="col-md-12">
                         <div class="card">
@@ -112,15 +112,15 @@
                 </div>
             </div>
 
-            <partials-session-participants-list :session-id="this.sessionId" :key="participantListKey" @reloadInterests="reloadInterestList" class="mb-2" />
-            <partials-session-interest-list :session-id="this.sessionId" :key="interestListKey"  @reloadParticipants="reloadParticipantList" />
+            <partials-session-participants-list v-if="session.id" :session-id="sessionId" :key="participantListKey" @reloadInterests="reloadInterestList" class="mb-2" />
+            <partials-session-interest-list v-if="session.id" :session-id="sessionId" :key="interestListKey"  @reloadParticipants="reloadParticipantList" />
         </div>
         <div v-else class="p-5 text-center">
             <h1>Error 404</h1>
             Session not found
         </div>
     </div>
-    <div class="modal" id="sessionInterestModal" >
+    <div class="modal" id="sessionInterestModal" v-if="session.id" >
         <form id="interestForm" class="needs-validation row" novalidate @submit.prevent="">
             <div class="modal-dialog modal-lg" style="min-width: 25%;">
                 <div class="modal-content">
@@ -258,6 +258,7 @@
             loadSession: function() {
                 // Don't try to load if a new session
                 if(this.sessionId == 0) {
+                    this.finished_loading = true;
                     this.resetDefaults();
                     return;
                 }

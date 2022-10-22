@@ -27,7 +27,7 @@ return new class extends Migration
             $table->unsignedInteger('duration_minutes')->default('45');
             $table->foreignIdFor(SessionStatus::class)->nullable()->constrained()->nullOnDelete();
             $table->unsignedInteger('registration_required')->default(0);
-            $table->unsignedInteger('max_registration')->default(0);
+            $table->unsignedInteger('max_registration')->nullable();
             $table->unsignedInteger('attendance')->nullable();
             $table->foreignIdFor(Conference::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Track::class)->nullable()->constrained()->nullOnDelete();
