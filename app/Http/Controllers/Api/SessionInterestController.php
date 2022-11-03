@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SessionInterestResource;
+use App\Models\SessionHistory;
 use App\Models\SessionInterest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -82,6 +83,10 @@ class SessionInterestController extends Controller
             $session_interest->notes = 'Added by: ' . Auth::user()->first_name . ' ' . Auth::user()->last_name;
         }
         $session_interest->save();
+
+        $history_message =  "Added user: {$session_interest->user_info->badge_name} to {$session_interest->conference_session->name}";
+        SessionHistory::save_history(Auth::user()->id, $session_interest->conference_session_id, 'updated_session_participants',  $history_message);
+
         return new SessionInterestResource($session_interest);
     }
 
@@ -116,16 +121,22 @@ class SessionInterestController extends Controller
      */
     public function update(Request $request, SessionInterest $sessionInterest)
     {
+        $history_message = '';
+
         if($request->action == 'make_participant') {
             if(!$sessionInterest->update(['is_participant' => 1])) {
                 abort(500, 'Error updating record');
             }
+
+            $history_message = "Added user: {$sessionInterest->user_info->badge_name} to {$sessionInterest->conference_session->name}";
         }
 
         if($request->action == 'remove_participant') {
             if(!$sessionInterest->update(['is_participant' => 0, 'is_moderator' => 0])) {
                 abort(500, 'Error updating record');
             }
+
+            $history_message = "Removed user: {$sessionInterest->user_info->badge_name} from {$sessionInterest->conference_session->name}";
         }
 
         if($request->action == 'make_moderator') {
@@ -136,12 +147,19 @@ class SessionInterestController extends Controller
             if(!$sessionInterest->update(['is_moderator' => 1])) {
                 abort(500, 'Error updating record');
             }
+
+
+            $history_message = "Assigned moderator: {$sessionInterest->user_info->badge_name} to {$sessionInterest->conference_session->name}";
         }
 
         if($request->action == 'save_staff_notes') {
             if(!$sessionInterest->update(['staff_notes' => $request->staff_notes])) {
                 abort(500, 'Error updating record');
             }
+        }
+
+        if(!empty($history_message)) {
+            SessionHistory::save_history(Auth::user()->id, $sessionInterest->conference_session_id, 'updated_session_participants',  $history_message);
         }
 
         return new SessionInterestResource($sessionInterest);
@@ -159,7 +177,7 @@ class SessionInterestController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Show total session interests by category.
      *
      * @param  int  $user_id
      * @return \Illuminate\Http\Response
@@ -214,7 +232,7 @@ class SessionInterestController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Get a list of session interests by user.
      *
      * @param  int  $user_id
      * @return \Illuminate\Http\Response
@@ -249,7 +267,7 @@ class SessionInterestController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Get a list of panels for a user.
      *
      * @param  int  $user_id
      * @return \Illuminate\Http\Response
@@ -275,7 +293,7 @@ class SessionInterestController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Get a list of presentations for a user.
      *
      * @param  int  $user_id
      * @return \Illuminate\Http\Response

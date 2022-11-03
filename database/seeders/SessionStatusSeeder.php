@@ -17,10 +17,10 @@ class SessionStatusSeeder extends Seeder
     public function run()
     {
         SessionStatus::create(['status' => 'Planning']);
-        SessionStatus::create(['status' => 'Ready for Call','save_history' => 1]);
-        SessionStatus::create(['status' => 'User Suggested', 'save_history' => 1]);
-        SessionStatus::create(['status' => 'Participants Assigned', 'save_history' => 1]);
-        SessionStatus::create(['status' => 'Scheduled', 'save_history' => 1]);
+        SessionStatus::create(['status' => 'Ready for Call']);
+        SessionStatus::create(['status' => 'User Suggested']);
+        SessionStatus::create(['status' => 'Participants Assigned']);
+        SessionStatus::create(['status' => 'Scheduled']);
         SessionStatus::create(['status' => 'Not Used']);
         SessionStatus::create(['status' => 'Canceled']);
     }

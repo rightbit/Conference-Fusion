@@ -17,7 +17,6 @@ class SessionStatusResource extends JsonResource
         return [
             'id' => $this->id,
             'status' => $this->status,
-            'save_history' => $this->save_history,
         ];
     }
 }

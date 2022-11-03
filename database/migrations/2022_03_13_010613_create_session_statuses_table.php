@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('session_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('status');
-            $table->boolean('save_history')->default('0');
             $table->timestamps();
             //Indexes
             $table->unique('status');
