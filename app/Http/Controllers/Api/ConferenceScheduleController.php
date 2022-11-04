@@ -99,11 +99,12 @@ class ConferenceScheduleController extends Controller
      */
     public function update(ConferenceScheduleRequest $request, ConferenceSchedule $conferenceSchedule)
     {
-        $old_conference_session = $conferenceSchedule->session->name ?? "blank";
-        $conference_session = ConferenceSession::find($request->conference_session_id);
+        $old_conference_session = $conferenceSchedule->session->name ?? "No session";
+        $conference_session_name = $request->conference_session_id ? ConferenceSession::find($request->conference_session_id)->value('name') : "No session";
         $room = Room::find($request->room_id);
-        $history_message = "Updated schedule, changed '{$old_conference_session}' to '{$conference_session->name}' to schedule at {$request->date} {$request->time} in room {$room->name}";
-        SessionHistory::save_history(Auth::user()->id, $request->conference_session_id, 'updated_schedule',  $history_message);
+        $history_message = "Updated schedule, changed '{$old_conference_session}' to '{$conference_session_name}' to schedule at {$request->date} {$request->time} in room {$room->name}";
+        $conference_session_id = $request->conference_session_id ?? $conferenceSchedule->conference_session_id;
+        SessionHistory::save_history(Auth::user()->id, $conference_session_id, 'updated_schedule',  $history_message);
 
         $conferenceSchedule->conference_session_id = $request->conference_session_id ?: null;
         $conferenceSchedule->track_id = $request->track_id ?: null;
