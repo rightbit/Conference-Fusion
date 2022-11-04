@@ -101,7 +101,7 @@ class SessionInterest extends Model
                     'first_name'                => $p->first_name,
                     'last_name'                 => $p->last_name,
                     'badge_name'                => $p->badge_name,
-                    'email'                     => $p->share_email_permission ? ($p->contact_email ?: $p->email) : null,
+                    'email'                     => $p->share_email_permission || $request->export_emails ? ($p->contact_email ?: $p->email) : null,
                     'share_email_permission'    => $p->share_email_permission,
                     'recording_permission'      => $p->recording_permission,
                     'staff_notes'               => $p->staff_notes,

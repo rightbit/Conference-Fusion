@@ -113,9 +113,6 @@ class ConferenceScheduleController extends Controller
         $conferenceSchedule->time = $request->time;
         $conferenceSchedule->save();
 
-
-
-
         return new ConferenceScheduleResource($conferenceSchedule);
     }
 

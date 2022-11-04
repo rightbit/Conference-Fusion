@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CreateUserController;
+use App\Http\Controllers\ExportController;
 use App\Models\SiteConfig;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -66,6 +67,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','can:view_admin']], f
             })->name('admin_conference_info');
 
     Route::view('configuration', 'admin.configuration')->name('admin_configuration');
+
+    Route::group(['prefix' => 'export'], function () {
+        Route::get('participant-list/{conference_id}',  [ExportController::class, 'exportParticipantList']);
+    });
 
     Route::view('reports', 'admin.reports')->name('admin_reports');
     Route::get('reports/{report_id}', function($report_id) {
