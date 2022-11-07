@@ -23,13 +23,15 @@
                         <div class="col-md-2">
                             <label for="track">Track</label>
                             <select id="track" v-model="session.track_id" class="form-select" aria-label="select category">
-                                <partials-track-options v-if="finished_loading" />
+                                <option value="null" disabled hidden selected>Select a track</option>
+                                <option v-for="track in tracks" v-bind:value="track.id">{{ track.name }}</option>
                             </select>
                         </div>
                         <div class="col-md-2">
                             <label for="type">Type</label>
                             <select id="type" v-model="session.type_id" class="form-select" aria-label="select category" required>
-                                <partials-type-options v-if="finished_loading" />
+                                <option value="null" disabled hidden selected>Select a type</option>
+                                <option v-for="type in types" v-bind:value="type.id">{{ type.name }}</option>
                             </select>
                             <div class="invalid-feedback">
                                 Please provide a session type
@@ -38,7 +40,8 @@
                         <div class="col-md-2">
                             <label for="status">Status</label>
                             <select id="status" v-model="session.session_status_id" class="form-select" aria-label="select category" required>
-                                <partials-session-status-options v-if="finished_loading" />
+                                <option value="null" disabled hidden selected>Select a status</option>
+                                <option v-for="status in statuses" v-bind:value="status.id">{{ status.status }}</option>
                             </select>
                             <div class="invalid-feedback">
                                 Please provide a session status
@@ -248,24 +251,51 @@
                 searchUsers: {},
                 totalUsers: 0,
                 keyword: '',
-                finished_loading: false,
             }
         },
         mounted() {
+            this.loadTracks();
+            this.loadStatuses();
+            this.loadTypes();
             this.loadSession();
         },
         methods: {
+            loadTracks: function () {
+                axios.get('/api/track-list')
+                    .then((response) => {
+                        this.tracks = response.data.data;
+                    })
+                    .catch((error) => {
+                        this.$toast.error(`Could not load the tracks`);
+                    });
+            },
+            loadStatuses: function () {
+                axios.get('/api/admin/session-status')
+                    .then((response) => {
+                        this.statuses = response.data.data;
+                    })
+                    .catch((error) => {
+                        this.$toast.error(`Could not load the session statuses`);
+                    });
+            },
+            loadTypes: function () {
+                axios.get('/api/type-list')
+                    .then((response) => {
+                        this.types = response.data.data;
+                    })
+                    .catch((error) => {
+                        this.$toast.error(`Could not load the session types`);
+                    });
+            },
             loadSession: function() {
                 // Don't try to load if a new session
                 if(this.sessionId == 0) {
-                    this.finished_loading = true;
                     this.resetDefaults();
                     return;
                 }
                 axios.get(`/api/admin/conference-session/${this.sessionId}`)
                     .then((response) => {
                         this.session = response.data.data;
-                        this.finished_loading = true;
                     })
                     .catch((error) => {
                         this.$toast.show(`Could not find the session. Click here to go back`, {
