@@ -52,7 +52,7 @@ class SessionInterest extends Model
                     ->get();
     }
 
-    public static function getParticipantListReport($conference_id, $request)
+    public static function getParticipantListReport(int $conference_id, $request): ?array
     {
         $query =  DB::table('session_interests AS si')
             ->join('user_infos AS ui', 'si.user_id', '=', 'ui.user_id')
@@ -155,6 +155,26 @@ class SessionInterest extends Model
         }
 
         return $participant_list;
+
+    }
+
+    public static function getNonParticipantListReport(int $conference_id): ?array
+    {
+        $non_participants = DB::select(DB::raw('
+                                SELECT DISTINCT si.user_id, u.first_name, u.last_name, ui.badge_name, COALESCE(ui.contact_email, u.email) as email
+                                FROM session_interests si
+                                JOIN users u ON si.user_id = u.id
+                                JOIN user_infos ui ON si.user_id = ui.user_id
+                                WHERE si.user_id NOT IN
+                                    (SELECT DISTINCT user_id
+                                        FROM session_interests si
+                                        JOIN conference_schedules cs
+                                        ON si.conference_session_id = cs.conference_session_id
+                                        AND si.is_participant = 1
+                                        AND cs.conference_id = :conference_id)
+                                '), ['conference_id' => $conference_id]);
+
+        return $non_participants;
 
     }
 

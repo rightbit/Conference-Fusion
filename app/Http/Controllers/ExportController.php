@@ -35,21 +35,15 @@ class ExportController extends Controller
             fputcsv($file, $columns);
 
             foreach ($users as $user) {
-                $row['First_Name']  = $user['first_name'];
-                $row['Last_Name']   = $user['last_name'];
-                $row['Badge_Name']  = $user['badge_name'];
-                $row['Email']       = $user['email'] ?? null;
-
-                $row['Sessions']  = '';
+                $row['sessions']  = '';
                 foreach ($user['sessions'] as $session) {
-                    $row['Sessions'] .= !empty($row['Sessions']) ? "\r\n" : '';
+                    $row['sessions'] .= !empty($row['Sessions']) ? "\r\n" : '';
                     $session_time = date("D M j, g:i a", strtotime($session['date'] . ' '. $session['time']));
-                    $row['Sessions'] .= "{$session['session_name']} ({$session['track_name']} {$session['session_type']}) - {$session_time}";
-                    $row['Sessions'] .= $session['is_moderator'] ? " *Moderator" : "";
+                    $row['sessions'] .= "{$session['session_name']} ({$session['track_name']} {$session['session_type']}) - {$session_time}";
+                    $row['sessions'] .= $session['is_moderator'] ? " *Moderator" : "";
                 }
 
-
-                fputcsv($file, array($row['First_Name'], $row['Last_Name'], $row['Badge_Name'], $row['Email'], $row['Sessions']));
+                fputcsv($file, array($user['first_name'], $user['last_name'],$user['badge_name'], $user['email'] ?? null, $row['sessions']));
             }
 
             fclose($file);
@@ -58,5 +52,40 @@ class ExportController extends Controller
         return response()->stream($callback, 200, $headers);
 
 
+    }
+
+    /**
+     * Export csv of conference participants.
+     *
+     * @param  int  $conference_id
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function exportNonParticipantList(int $conference_id, Request $request)
+    {
+        $users = SessionInterest::getNonParticipantListReport($conference_id); //array of objects
+
+        $fileName = 'non-participants-contact-list.csv';
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $columns = array('First_Name', 'Last_Name', 'Badge_Name', 'Email');
+        $callback = function() use($users, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($users as $user) {
+                fputcsv($file, array($user->first_name, $user->last_name, $user->badge_name, $user->email));
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

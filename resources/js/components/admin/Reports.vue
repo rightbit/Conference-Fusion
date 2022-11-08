@@ -40,11 +40,12 @@
                                     <a href="/admin/reports/participant-list" id="participant-list-nav" class="nav-link px-0"> <span class="d-none d-sm-inline">Participant schedules</span><span class="d-sm-none">PS</span></a>
                                 </li>
                                 <li>
-                                    <a :href="`/admin/export/participant-list/${conferenceId}?export_emails=1`" id="export-participant-list-nav" class="nav-link px-0" target="_blank"> <span class="d-none d-sm-inline">Export participant emails</span><span class="d-sm-none">PEx</span></a>
+                                    <a :href="`/admin/export/participant-list/${conferenceId}?export_emails=1`" id="export-participant-list-nav" class="nav-link px-0" target="_blank"> <span class="d-none d-sm-inline">Export participants</span><span class="d-sm-none">PEx</span></a>
                                 </li>
-<!--                                <li>-->
-<!--                                    <a href="/admin/reports/export-participant-list" class="nav-link px-0 disabled"> <span class="d-none d-sm-inline">Session conflicts</span><span class="d-sm-none">SC</span></a>-->
-<!--                                </li>-->
+                                <li>
+                                    <a :href="`/admin/export/non-participant-list/${conferenceId}`" id="export-non-participant-list-nav" class="nav-link px-0" target="_blank"> <span class="d-none d-sm-inline">Export non-participants</span><span class="d-sm-none">NEx</span></a>
+                                </li>
+
                             </ul>
                         </li>
                         <li>

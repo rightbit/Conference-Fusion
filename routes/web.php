@@ -70,6 +70,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','can:view_admin']], f
 
     Route::group(['prefix' => 'export'], function () {
         Route::get('participant-list/{conference_id}',  [ExportController::class, 'exportParticipantList']);
+        Route::get('non-participant-list/{conference_id}',  [ExportController::class, 'exportNonParticipantList']);
     });
 
     Route::view('reports', 'admin.reports')->name('admin_reports');
