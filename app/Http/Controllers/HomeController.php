@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CallForPanelistResource;
+use App\Http\Resources\UserScheduleConferenceResource;
+use App\Http\Resources\UserScheduleSessionResource;
 use App\Models\Conference;
+use App\Models\ConferenceSchedule;
 use App\Models\ConferenceSession;
+use App\Models\SessionInterest;
 use App\Models\SiteConfig;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +43,7 @@ class HomeController extends Controller
 
         $today = Carbon::today();
 
+        $user_sessions = [];
         foreach($conferences as &$conference) {
             if($today->gte($conference->call_start_date) && $today->lte($conference->call_end_date)) {
                 $conference->call_active = true;
@@ -46,14 +51,21 @@ class HomeController extends Controller
             $conference->start_date_display = Carbon::parse($conference->start_date)->format('M j, Y');
             $conference->end_date_display = Carbon::parse($conference->end_date)->format('M j, Y');
             $conference->call_start_date_display = Carbon::parse($conference->call_start_date)->format('F j, Y');
-        }
+            $conference_sessions = SessionInterest::getUserSchedule(Auth::user()->id, $conference->id);
 
+            if(count($conference_sessions) > 0) {
+                $user_sessions[] = [
+                    'conference_info' => $conference,
+                    'session_info' => $conference_sessions,
+                ];
+            }
+        }
         //TODO Add list of upcoming sessions, requested and approved.
 
         return view('home')
             ->with('conferences', $conferences)
             ->with('home_page_message', $home_page_message->value)
-            ->with('user_sessions', null);
+            ->with('user_sessions', $user_sessions);
     }
 
     /**

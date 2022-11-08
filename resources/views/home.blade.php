@@ -48,7 +48,7 @@
                                                     {{ __('Call for panelists') }}
                                                 </a>
                                             @else
-                                                The call is now closed, please check back soon.
+                                                The call is now closed, schedules will be posted below.
                                             @endif
                                         </div>
                                     </div>
@@ -56,11 +56,26 @@
                             @endforeach
                         @endif
                     </div>
-                    @if ($user_sessions)
-                    <h2 class="mt-2">{{ __('My sessions') }}</h2>
-                    <div class="row py-4 border-bottom">
-                        <p class="text-center">{{ __('None found. Sessions you submit requests for will appear here.') }}</p>
-                    </div>
+                    @if (!empty($user_sessions))
+                        <h2 class="mt-2">{{ __('Your schedule') }}</h2>
+                        <div class="py-4 border-bottom">
+                            @foreach($user_sessions as $session)
+                                <h4>{{ $session['conference_info']->name }}</h4>
+                                @foreach($session['session_info'] as $session_info)
+                                    @foreach($session_info->conference_schedule as $conference_schedule)
+                                        <div class="d-flex border">
+                                            <div class="p-2 flex-grow-1">
+                                                {{ $session_info->conference_session->name }}
+                                                ({{ $session_info->conference_session->track->name }} {{ $session_info->conference_session->session_type->name }}{{ $session_info->is_moderator ? ' Moderator':'' }})</div>
+                                            <div class="p-2 text-nowrap">
+                                                {{ date("D M j, g:i a", strtotime($conference_schedule->date . ' '. $conference_schedule->time)) }}
+                                            </div>
+
+                                        </div>
+                                    @endforeach
+                                @endforeach
+                            @endforeach
+                        </div>
                     @endif
                 </div>
             </div>

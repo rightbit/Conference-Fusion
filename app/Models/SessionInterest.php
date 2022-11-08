@@ -39,6 +39,11 @@ class SessionInterest extends Model
         return $this->belongsTo(ConferenceSession::class);
     }
 
+    public function conference_schedule()
+    {
+        return $this->hasMany(ConferenceSchedule::class, 'conference_session_id', 'conference_session_id');
+    }
+
     public static function getUserPresentationInterests($user_id, $conference_id)
     {
         return self::where('user_id', $user_id)
@@ -50,6 +55,19 @@ class SessionInterest extends Model
                     })
                     ->with('user','conference_session')
                     ->get();
+    }
+
+    public static function getUserSchedule(int $user_id, int $conference_id) {
+        return self::where('user_id', $user_id)
+            ->where('is_participant', "=", 1)
+            ->whereHas('conference_session', function($query) {
+                $query->where('session_status_id', "=", "5");
+            })
+            ->whereHas('conference_schedule', function($query) use($conference_id) {
+                $query->where('conference_id', '=', $conference_id);
+            })
+            ->with('conference_session','conference_session.track','conference_session.session_type','conference_schedule')
+            ->get();
     }
 
     public static function getParticipantListReport(int $conference_id, $request): ?array
