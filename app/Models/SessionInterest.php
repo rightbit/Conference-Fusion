@@ -58,15 +58,20 @@ class SessionInterest extends Model
     }
 
     public static function getUserSchedule(int $user_id, int $conference_id) {
-        return self::where('user_id', $user_id)
-            ->where('is_participant', "=", 1)
-            ->whereHas('conference_session', function($query) {
-                $query->where('session_status_id', "=", "5");
-            })
-            ->whereHas('conference_schedule', function($query) use($conference_id) {
-                $query->where('conference_id', '=', $conference_id);
-            })
-            ->with('conference_session','conference_session.track','conference_session.session_type','conference_schedule')
+        return  DB::table('session_interests AS si')
+            ->select( 'cs.id as session_id', 'cs.name as session_name', 'csh.date', 'csh.time',
+                 't.name as track_name',
+                'si.is_moderator',  'st.name as session_type')
+            ->join('conference_sessions AS cs', 'si.conference_session_id', '=', 'cs.id')
+            ->join('conference_schedules AS csh', 'si.conference_session_id', '=', 'csh.conference_session_id')
+            ->join('tracks AS t', 'cs.track_id', '=', 't.id')
+            ->join('session_types AS st', 'cs.type_id', '=', 'st.id')
+            ->where('si.user_id', "=", $user_id)
+            ->where('si.is_participant', "=", 1)
+            ->where('cs.session_status_id', "=", "5")
+            ->where('csh.conference_id', '=', $conference_id)
+            ->orderBy('csh.date')
+            ->orderBy('csh.time')
             ->get();
     }
 
