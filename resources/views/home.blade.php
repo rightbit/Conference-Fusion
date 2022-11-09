@@ -48,7 +48,7 @@
                                                     {{ __('Call for panelists') }}
                                                 </a>
                                             @else
-                                                The call is now closed, schedules will be posted below.
+                                                The call is now closed.
                                             @endif
                                         </div>
                                     </div>
@@ -65,7 +65,8 @@
                                     <div class="d-flex border">
                                         <div class="p-2 flex-grow-1">
                                             {{ $session_info->session_name }}
-                                            <span class="text-secondary"> | {{ $session_info->track_name }} {{ $session_info->session_type }}</span>{!! $session_info->is_moderator ? ' <b class="bg-warning  bg-opacity-75 px-2"><i class="bi bi-mic-fill"></i> Moderator</b>':'' !!}</div>
+                                            <span class="text-secondary"> | {{ $session_info->track_name }} {{ $session_info->session_type }}</span>
+                                            {!! $session_info->is_moderator ? ' <b class="bg-warning  bg-opacity-75 px-1 ms-1"><small><i class="bi bi-mic-fill"></i></small> Moderator</b>':'' !!}</div>
                                         <div class="p-2 text-nowrap">
                                             {{ date("D M j, g:i a", strtotime($session_info->date . ' '. $session_info->time)) }}
                                         </div>
