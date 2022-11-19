@@ -28,6 +28,10 @@ class ConferenceSession extends Model
         'proposed_date',
     ];
 
+    public function conference() {
+        return $this->hasOne( Conference::class, 'id', 'conference_id');
+    }
+
     public function track() {
         return $this->hasOne(Track::class, 'id', 'track_id')->withDefault([
             'id' => null,
@@ -51,6 +55,12 @@ class ConferenceSession extends Model
 
     public function session_interest() {
         return $this->hasMany( SessionInterest::class);
+    }
+
+    public function session_participants() {
+        return $this->session_interest()->where('is_participant', '=', 1)
+            ->with('user', 'user_info')
+            ->orderByDesc('is_moderator');
     }
 
 

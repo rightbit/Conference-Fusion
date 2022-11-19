@@ -38,9 +38,14 @@ Route::middleware(['auth'])->group( function() {
         return view('user.call_for_panelists', ['conference' => $conference]);
     })->name('call_for_panelists');
 
+    Route::get('/c/{conference_slug}/session/{session_id}', function($conference_slug, $session_id) {
+        return view('user.session_view', ['conference_slug' => $conference_slug, 'session_id' => $session_id]);
+    })->name('user-session-view');
+
     Route::get('/user/profile', function() {
         return view('user.profile', ['id' => Auth::id()]);
     })->name('profile');
+
 });
 
 

@@ -9,7 +9,7 @@ use App\Http\Requests\PresentationSessionRequest;
 use App\Http\Resources\CallForPanelistResource;
 use App\Http\Resources\ConferenceSessionResource;
 use App\Http\Resources\SessionInterestResource;
-use App\Http\Resources\UserPresentationResource;
+use App\Http\Resources\UserScheduledSessionInfoResource;
 use App\Models\ConferenceSession;
 use App\Models\SessionInterest;
 use App\Models\SessionStatus;
@@ -264,6 +264,32 @@ class ConferenceSessionController extends Controller
         }
 
         abort(500, 'An error occurred deleting this panel interest');
+
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $session_id
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function userScheduledSessionInfo(Request $request, int $session_id)
+    {
+
+        //Get scheduled session info with active participants
+        $session = ConferenceSession::where('id', $session_id)
+                    ->where('session_status_id', 5)
+                    ->with('conference', 'session_participants', 'track', 'session_type', 'conference_schedule')
+                    ->first();
+
+        $user_id = Auth::user()->id;
+        //Check user is in session
+        if($session->session_participants->contains('user_id', $user_id)) {
+            return new UserScheduledSessionInfoResource($session);
+        }
+
+        abort(400, 'Not found');
 
     }
 

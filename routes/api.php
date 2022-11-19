@@ -34,13 +34,17 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum'])->group( function() {
     Route::get('track-list', [TrackController::class, 'index']);
     Route::get('type-list', [SessionTypeController::class, 'index']);
-    Route::get('user-presentation-list/{conference_id}', [ConferenceSessionController::class, 'userPresentationIndex']);
-    Route::get('user-panel-list/{conference_id}', [ConferenceSessionController::class, 'userPanelIndex']);
-    Route::get('user-session-totals/{user_id}', [SessionInterestController::class, 'userSessionTotals']);
+
+    Route::get('configuration/messsage/{key}', [SiteConfigController::class, 'getConfigMessage']);
+    Route::get('conference/session/{session_id}', [ConferenceSessionController::class, 'userScheduledSessionInfo']);
 
     Route::get('user/{user_id}/sessions/interests', [SessionInterestController::class, 'userSessionsInterests']);
     Route::get('user/{user_id}/sessions/panelist', [SessionInterestController::class, 'userSessionsPanelist']);
     Route::get('user/{user_id}/sessions/presenter', [SessionInterestController::class, 'userSessionsPresenter']);
+
+    Route::get('user-presentation-list/{conference_id}', [ConferenceSessionController::class, 'userPresentationIndex']);
+    Route::get('user-panel-list/{conference_id}', [ConferenceSessionController::class, 'userPanelIndex']);
+    Route::get('user-session-totals/{user_id}', [SessionInterestController::class, 'userSessionTotals']);
 
     Route::post('profile-image/{user}', [UserController::class, 'uploadProfileImage']);
     Route::post('presentations/submit', [ConferenceSessionController::class, 'storePresentation']);

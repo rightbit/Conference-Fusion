@@ -34,7 +34,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $home_page_message = SiteConfig::where('key', 'home_page_message')->first();
+        $home_page_message = SiteConfig::where('key', 'message_home_page')->first();
 
         $conferences = Conference::where('end_date', '>=', NOW())
             ->whereNotNull('call_start_date')

@@ -96,4 +96,20 @@ class SiteConfigController extends Controller
     {
         abort(404);
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  string  $key
+     * @return \Illuminate\Http\Response
+     */
+    public function getConfigMessage(string  $key)
+    {
+        if (preg_match("/^message_/", $key)) {
+            $configuration = SiteConfig::where('key', '=', $key)->first();
+            return new SiteConfigResource($configuration);
+        }
+
+        abort(404);
+    }
 }

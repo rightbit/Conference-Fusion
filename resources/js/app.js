@@ -20,6 +20,7 @@ import AdminConferenceSession from "./components/admin/ConferenceSession";
 import CallForPanels from "./components/CallForPanels";
 import CallForPresentations from "./components/CallForPresentations";
 import UserProfile from "./components/UserProfile";
+import UserSessionView from "./components/UserSessionView";
 
 import PartialsTrackOptions from "./components/partials/TrackOptions";
 import PartialsTypeOptions from "./components/partials/TypeOptions";
@@ -52,6 +53,7 @@ app.component('admin-user-list', AdminUserList)
 app.component('call-for-panels', CallForPanels)
 app.component('call-for-presentations', CallForPresentations)
 app.component('user-profile', UserProfile)
+app.component('user-session-view', UserSessionView)
 
 app.component('partials-track-options', PartialsTrackOptions)
 app.component('partials-type-options', PartialsTypeOptions)

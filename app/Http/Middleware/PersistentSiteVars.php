@@ -27,15 +27,20 @@ class PersistentSiteVars
 
         // Get the site name
         $config_site_name = 'Scheduler';
+        $config_contact_email = null;
         $default_conference = 0;
         if(Schema::hasTable('site_configs')) {
             $site_name_config = SiteConfig::where('key', 'site_name')->first();
             $config_site_name = $site_name_config->value ?? $config_site_name;
 
+            $contact_email_config = SiteConfig::where('key', 'contact_email')->first();
+            $config_contact_email = $contact_email_config->value ?? $config_contact_email;
+
             $site_config = SiteConfig::where('key', 'default_conference_id')->first();
             $default_conference = $site_config->value ?? 0;
         }
         View::share('config_sitename', $config_site_name);
+        View::share('config_contact_email', $config_contact_email);
 
         // Has the default user login been changed?
         $finish_setup = true;

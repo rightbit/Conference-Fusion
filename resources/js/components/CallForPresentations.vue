@@ -49,7 +49,7 @@
                             <tr scope="row" v-for="presentation in conferenceSessions">
                                 <td class="ps-2">{{ presentation.conference_session.name }}</td>
                                 <td>{{ presentation.conference_session.description }}</td>
-                                <td class="m-0 px-0"><button class="btn btn-danger btn-sm" @click="deleteSession(presentation)"><i class="bi bi-trash-fill"></i></button></td>
+                                <td class="m-0 pe-1"><button class="btn btn-danger btn-sm" @click="deleteSession(presentation)"><i class="bi bi-trash-fill"></i></button></td>
                             </tr>
                             </tbody>
                         </table>

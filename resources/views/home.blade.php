@@ -64,9 +64,9 @@
                                 @foreach($session['session_info'] as $session_info)
                                     <div class="d-flex border">
                                         <div class="p-2 flex-grow-1">
-                                            {{ $session_info->session_name }}
+                                            <a href="{{ route('user-session-view', ['conference_slug' => $session['conference_info']->short_name, 'session_id' => $session_info->session_id] ) }}"><i class="bi bi-calendar-check-fill me-2"></i>{{ $session_info->session_name }}</a>
                                             <span class="text-secondary"> | {{ $session_info->track_name }} {{ $session_info->session_type }}</span>
-                                            {!! $session_info->is_moderator ? ' <b class="bg-warning  bg-opacity-75 px-1 ms-1"><small><i class="bi bi-mic-fill"></i></small> Moderator</b>':'' !!}</div>
+                                            {!! $session_info->is_moderator ? ' <b class="bg-warning  bg-opacity-75 px-1 ms-1"><i class="bi bi-mic-fill small"></i> Moderator</b>':'' !!}</div>
                                         <div class="p-2 text-nowrap">
                                             {{ date("D M j, g:i a", strtotime($session_info->date . ' '. $session_info->time)) }}
                                         </div>
