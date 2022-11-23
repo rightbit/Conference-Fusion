@@ -76,16 +76,6 @@
                         <div class="row mb-2">
                             <div class="col-md-4"></div>
                             <div class="col-md-6 form-check">
-                                <input class="form-check-input" type="checkbox" name="recording_permission" id="recording_permission" checked>
-                                <label class="form-check-label" for="recording_permission">
-                                    Give permission to be photographed and recorded <br />
-                                    <small>(Optional, for use in promoting the conference)</small>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-md-4"></div>
-                            <div class="col-md-6 form-check">
                                 <input class="form-check-input" type="checkbox" name="share_email" id="share_email" checked>
                                 <label class="form-check-label" for="share_email">
                                     Allow us to share your email with other panelists<br />

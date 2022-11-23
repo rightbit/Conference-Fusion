@@ -31,7 +31,6 @@ class CreateUserController extends Controller
             'user_id' => $user->id,
             'badge_name' => $request->first_name . ' ' . $request->last_name,
             'contact_email' => $request->email,
-            'recording_permission' => 1,
             'share_email_permission' => 1,
             'agree_to_terms' => 1,
         ]);

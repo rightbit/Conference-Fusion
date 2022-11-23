@@ -40,7 +40,6 @@ class UserResource extends JsonResource
                 'social_data' => json_decode($this->info->social_data),
                 'participant_data' => json_decode($this->info->participant_data),
                 'profile_image' => $this->info->profile_image,
-                'recording_permission' => $this->info->recording_permission ? true:false,
                 'share_email_permission' => $this->info->share_email_permission ? true:false,
                 'agree_to_terms' => $this->info->agree_to_terms ? true:false,
             ],

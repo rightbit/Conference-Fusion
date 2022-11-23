@@ -78,7 +78,6 @@ class RegisterController extends Controller
             'user_id' => $user->id,
             'badge_name' => $data['first_name'] . ' ' . $data['last_name'],
             'contact_email' => $data['email'],
-            'recording_permission' => !empty($data['recording_permission']) ? 1 : 0,
             'share_email_permission' => !empty($data['share_email']) ? 1 : 0,
             'agree_to_terms' => 1,
         ]);

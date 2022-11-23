@@ -20,7 +20,6 @@ class UserInfo extends Model
         'contact_email',
         'notes',
         'staff_notes',
-        'recording_permission',
         'share_email_permission',
         'agree_to_terms',
     ];

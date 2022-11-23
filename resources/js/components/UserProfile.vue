@@ -76,6 +76,18 @@
                                 <input type="text" class="form-control" id="contactEmail" placeholder="Contact email"  v-model="user.info.contact_email" />
                             </div>
                         </div>
+                        <div class="form-groupm mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" v-model="user.info.share_email_permission" id="shareEmail">
+                                <label class="form-check-label" for="shareEmail">
+                                    Give permission to share your email with other panelists
+                                    <i class="bi bi-question-circle text-primary"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="right"
+                                       title="Your email can be shared with moderators and panelists in the same session with you."></i>
+                                </label>
+                            </div>
+                        </div>
                         <div class="row g-2 mb-3">
                             <div class="col-md-12">
                                <a href="/password/reset">Change my password</a>
@@ -166,22 +178,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" v-model="user.info.recording_permission" id="recorded">
-                                <label class="form-check-label" for="recorded">
-                                    Give permission to be photographed and recorded
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" v-model="user.info.share_email_permission" id="shareEmail">
-                                <label class="form-check-label" for="shareEmail">
-                                    Give permission to share your email with other panelists
-                                </label>
-                            </div>
-                        </div>
                         <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Save Profile</button></div>
                     </div>
                 </div>
@@ -244,6 +240,7 @@
 
 
 <script>
+import { Tooltip } from "bootstrap";
 export default {
     props: ['userId', 'currentUser', 'superAdmin', 'viewAdmin', 'permissions', 'conferenceId'],
     data: function() {
@@ -273,8 +270,10 @@ export default {
         }
     },
     mounted() {
+        new Tooltip(document.body, {
+            selector: "[data-bs-toggle='tooltip']",
+        }),
         this.getUser();
-
     },
     methods: {
         getUser: function() {

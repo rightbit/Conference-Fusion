@@ -26,7 +26,7 @@ return new class extends Migration
             $table->json('personal_data')->nullable();
             $table->json('participant_data')->nullable();
             $table->string('profile_image')->nullable();
-            $table->boolean('recording_permission')->default('0');
+            $table->boolean('recording_permission')->default('1');
             $table->boolean('share_email_permission')->default('0');
             $table->boolean('agree_to_terms')->default('0');
             $table->timestamps();

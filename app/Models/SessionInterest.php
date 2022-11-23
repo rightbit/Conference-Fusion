@@ -86,7 +86,7 @@ class SessionInterest extends Model
             ->join('tracks AS t', 'cs.track_id', '=', 't.id')
             ->join('session_types AS st', 'cs.type_id', '=', 'st.id')
             ->select('u.id as user_id','u.last_name', 'u.first_name', 'u.email', 'ui.contact_email', 'ui.badge_name', 'ui.staff_notes',
-                'ui.share_email_permission', 'ui.recording_permission', 'cs.id as session_id', 'cs.name as session_name', 'csh.date', 'csh.time',
+                'ui.share_email_permission', 'cs.id as session_id', 'cs.name as session_name', 'csh.date', 'csh.time',
                 'csh.room_id', 'r.name as room_name','r.capacity', 'r.has_av', 'cs.track_id', 't.name as track_name',
                 'si.is_moderator', 'si.staff_notes as session_user_staff_notes', 'st.id as session_type_id', 'st.name as session_type')
             ->where('si.is_participant', '=', '1')
@@ -126,7 +126,6 @@ class SessionInterest extends Model
                     'badge_name'                => $p->badge_name,
                     'email'                     => $p->share_email_permission || $request->export_emails ? ($p->contact_email ?: $p->email) : null,
                     'share_email_permission'    => $p->share_email_permission,
-                    'recording_permission'      => $p->recording_permission,
                     'staff_notes'               => $p->staff_notes,
                     'sessions'                  => [],
                     'errors'                    => null,

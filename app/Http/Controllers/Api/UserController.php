@@ -112,7 +112,6 @@ class UserController extends Controller
             $user->info->notes = $request->info['notes'];
             $user->info->staff_notes = $request->info['staff_notes'];
             $user->info->website = $request->info['website'];
-            $user->info->recording_permission = $request->info['recording_permission'] ?? 0;
             $user->info->share_email_permission = $request->info['share_email_permission'] ?? 0;
             $user->info->agree_to_terms = $request->info['agree_to_terms'] ?? 0;
             $user->info->personal_data = !empty($request->info['personal_data']) ? json_encode($request->info['personal_data']) : NULL;
