@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 
 class TrackResource extends JsonResource
 {
@@ -18,8 +19,7 @@ class TrackResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'show_on_call' => $this->show_on_call,
-            'track_heads' => $this->conference_track_heads,
-
+            'track_heads' => TrackUserResource::collection($this->conference_track_heads),
         ];
     }
 }

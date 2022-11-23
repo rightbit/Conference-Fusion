@@ -10,9 +10,8 @@
                 <div class="card mb-3">
                     <div class="card-header d-flex justify-content-between">
                         <div class="h4 align-self-center mb-lg-0">{{ session.name }}</div>
-
+                        <a class="btn btn-primary text-nowrap" :href="'mailto:' + contactEmail + '?subject=Participant question'" ><i class="bi bi-envelope-fill"></i> Contact us about this session</a>
                     </div>
-
                     <div class="card-body">
                         <h4><b>Description</b></h4>
                         <div v-if="session.description" class="col-lg-9 mb-3">{{ session.description }}</div>
@@ -23,11 +22,10 @@
                         <div class="mb-2"><b>Duration:</b> {{ session.duration_minutes }} minutes</div>
                         <div class="mb-2"><b>Type:</b> {{ session.type_name }}</div>
                         <div class="mb-4"><b>Track:</b> {{ session.track_name }}</div>
-<!--                        <div class="mb-4"><b>Track head:</b> </div> -->
-
+<!--                    <div class="mb-4"><b>Track head:</b> </div> -->
 
                         <h4>Participants</h4>
-                        <div class="alert alert-info col-lg-10 d-flex my-2 py-2" role="alert">
+                        <div v-if="session.session_participants?.length > 1" class="alert alert-info col-lg-10 d-flex my-2 py-2" role="alert">
                             <div><i class="bi bi-exclamation-circle-fill me-1"></i></div>
                             <div class="flex-grow-1">
                                 <div>If you would like to share your email with other panelists, you must give permission on <a href="/user/profile">your profile page.</a></div>
@@ -74,9 +72,7 @@
                         <div v-if="session.seed_questions" class="col-lg-9 mb-3" style="white-space: pre">{{ session.seed_questions }}</div>
                         <div v-else class="col-lg-9 mb-3" >None</div>
                     </div>
-                    <div class="card-footer text-center">
-                        <a class="btn btn-primary" :href="'mailto:' + contactEmail " ><i class="bi bi-envelope-fill"></i> Contact Guest Services about this session</a>
-                    </div>
+                    <div class="card-footer text-center"></div>
                 </div>
             </div>
         </div>
@@ -98,7 +94,9 @@
         props: ['userId', 'sessionId', 'conferenceSlug', 'contactEmail'],
         data: function() {
             return {
-                session: {},
+                session: {
+                    participants: []
+                },
                 user: {},
                 page_message: {},
                 foundSession: true,
@@ -123,8 +121,6 @@
                         this.user = this.session.session_participants.find(({user_id}) => user_id === this.userId);
 
                         this.loadMessage();
-                        console.log(this.session);
-                        console.log(this.user);
                     })
                     .catch((error) => {
                         this.$toast.error(`Could not find the session`);

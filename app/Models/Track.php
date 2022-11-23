@@ -19,13 +19,14 @@ class Track extends Model
         'display_order',
     ];
 
-    public function track_heads() {
-        return $this->belongsToMany(User::class);
+    public function track_heads()
+    {
+        return $this->hasMany(TrackUser::class, 'track_id', 'id');
     }
 
     public function conference_track_heads() {
         $selected_conference = session('selected_conference', '');
-        return $this->track_heads()->wherePivot('conference_id', $selected_conference);
+        return $this->track_heads()->where('conference_id', $selected_conference);
     }
 
     public function conference_sessions() {

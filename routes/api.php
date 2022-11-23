@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\SessionStatusController;
 use App\Http\Controllers\Api\SessionTypeController;
 use App\Http\Controllers\Api\SiteConfigController;
 use App\Http\Controllers\Api\TrackController;
+use App\Http\Controllers\Api\TrackHeadController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UserInfoDataCategoryController;
 use App\Http\Controllers\Api\UserPermissionController;
@@ -70,6 +71,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
     Route::apiResource('session-type', SessionTypeController::class);
     Route::apiResource('room', RoomController::class);
     Route::apiResource('track', TrackController::class);
+    Route::apiResource('track-head', TrackHeadController::class);
     Route::apiResource('permissions', UserPermissionController::class)->middleware('can:admin');
 
     Route::group(['prefix' => 'report'], function() {
