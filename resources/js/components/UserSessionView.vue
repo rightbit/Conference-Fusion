@@ -69,7 +69,7 @@
                         </div>
 
                         <h4 class="mt-4">Discussion prompts and seed questions</h4>
-                        <div v-if="session.seed_questions" class="col-lg-9 mb-3" style="white-space: pre">{{ session.seed_questions }}</div>
+                        <div v-if="session.seed_questions" class="col-lg-9 mb-3" style="white-space: pre-wrap">{{ session.seed_questions }}</div>
                         <div v-else class="col-lg-9 mb-3" >None</div>
                     </div>
                     <div class="card-footer text-center"></div>

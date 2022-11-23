@@ -52,14 +52,14 @@ class SiteConfigSeeder extends Seeder
         ]);
 
         SiteConfig::create([
-            'key' => 'home_page_message',
+            'key' => 'message_home_page',
             'value' => 'Please make sure the personal info in your profile is up to date.',
             'description' => 'Add a message displayed on the home page (Leave 0 for no message)',
             'last_updated_user_id' => 1,
         ]);
 
         SiteConfig::create([
-            'key' => 'user_session_view_message',
+            'key' => 'message_user_session_view',
             'value' => '0',
             'description' => 'Add a message displayed on the session page (Leave 0 for no message)',
             'last_updated_user_id' => 1,
