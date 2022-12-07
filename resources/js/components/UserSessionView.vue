@@ -36,22 +36,22 @@
                                 {{ participant.badge_name }}
                                 <span v-if="participant.is_moderator"><b class="bg-warning  bg-opacity-75 px-1 ms-1"><i class="bi bi-mic-fill small"></i> Moderator</b></span>
                             </div>
-                            <div class="p-2" v-if="participant.social_data.twitter" >
+                            <div class="p-2" v-if="participant.social_data?.twitter" >
                                 <a class="" :href="isValidUrl(participant.social_data.twitter) ? participant.social_data.twitter : null" target="_blank">
                                     <i class="bi bi-twitter h5" data-bs-toggle="tooltip" data-bs-placement="top" :title="participant.social_data.twitter"></i>
                                 </a>
                             </div>
-                            <div class="p-2" v-if="participant.social_data.facebook" >
+                            <div class="p-2" v-if="participant.social_data?.facebook" >
                                 <a class="" :href="isValidUrl(participant.social_data.facebook) ? participant.social_data.facebook : null" target="_blank">
                                     <i class="bi bi-facebook h5" data-bs-toggle="tooltip" data-bs-placement="top" :title="participant.social_data.facebook"></i>
                                 </a>
                             </div>
-                            <div class="p-2" v-if="participant.social_data.instagram" >
+                            <div class="p-2" v-if="participant.social_data?.instagram" >
                                 <a class="" :href="isValidUrl(participant.social_data.instagram) ? participant.social_data.instagram : null" target="_blank">
                                     <i class="bi bi-instagram h5" data-bs-toggle="tooltip" data-bs-placement="top" :title="participant.social_data.instagram"></i>
                                 </a>
                             </div>
-                            <div class="p-2" v-if="participant.social_data.discord" >
+                            <div class="p-2" v-if="participant.social_data?.discord" >
                                 <a class="" :href="isValidUrl(participant.social_data.discord) ? participant.social_data.discord : null" target="_blank">
                                     <i class="bi bi-discord h5" data-bs-toggle="tooltip" data-bs-placement="top" :title="participant.social_data.discord"></i>
                                 </a>
