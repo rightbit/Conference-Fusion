@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SessionInterest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ExportController extends Controller
 {
@@ -37,9 +38,9 @@ class ExportController extends Controller
             foreach ($users as $user) {
                 $row['sessions']  = '';
                 foreach ($user['sessions'] as $session) {
-                    $row['sessions'] .= !empty($row['Sessions']) ? "\r\n" : '';
+                    $row['sessions'] .= !empty($row['sessions']) ? "\r\n" : '';
                     $session_time = date("D M j, g:i a", strtotime($session['date'] . ' '. $session['time']));
-                    $row['sessions'] .= "{$session['session_name']} ({$session['track_name']} {$session['session_type']}) - {$session_time}";
+                    $row['sessions'] .= "{$session['session_name']} ({$session['track_name']} {$session['session_type']}) - {$session['room_name']} | {$session_time}";
                     $row['sessions'] .= $session['is_moderator'] ? " *Moderator" : "";
                 }
 
