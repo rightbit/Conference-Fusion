@@ -40,7 +40,7 @@ class ExportController extends Controller
                 foreach ($user['sessions'] as $session) {
                     $row['sessions'] .= !empty($row['sessions']) ? "\r\n" : '';
                     $session_time = date("D M j, g:i a", strtotime($session['date'] . ' '. $session['time']));
-                    $row['sessions'] .= "{$session['session_name']} ({$session['track_name']} {$session['session_type']}) - {$session['room_name']} | {$session_time}";
+                    $row['sessions'] .= " {$session_time} |  {$session['room_name']} - {$session['session_name']} ({$session['track_name']} {$session['session_type']})";
                     $row['sessions'] .= $session['is_moderator'] ? " *Moderator" : "";
                 }
 
