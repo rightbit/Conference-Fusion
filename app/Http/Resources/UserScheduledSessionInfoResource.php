@@ -24,7 +24,7 @@ class UserScheduledSessionInfoResource extends JsonResource
             'track_name' => $this->track->name,
             'type_name' => $this->session_type->name,
             'conference_schedules' => ConferenceScheduleResource::collection($this->conference_schedule),
-            'session_participants' => UserSessionParticipantInfoResource::collection($this->session_participants)
+            'session_participants' => UserSessionParticipantInfoResource::collection($this->session_participants),
         ];
     }
 }

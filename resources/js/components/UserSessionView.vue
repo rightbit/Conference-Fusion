@@ -14,15 +14,15 @@
                     </div>
                     <div class="card-body">
                         <h4><b>Description</b></h4>
-                        <div v-if="session.description" class="col-lg-9 mb-3">{{ session.description }}</div>
-                        <div v-else class="col-lg-9 mb-3">None</div>
-                        <div class="mb-2"><b>Days and times:</b>
+                        <div v-if="session.description" class="col-lg-9 mb-3 ms-1">{{ session.description }}</div>
+                        <div v-else class="col-lg-9 mb-3 ms-1">None</div>
+                        <div class="mb-2 ms-1"><b>Days and times:</b>
                             <span v-for="schedule in session.conference_schedules" class="mx-2"><i class="bi bi-calendar-check h6"></i> {{ formatDate(schedule.date + ' ' + schedule.time) }}</span>
                         </div>
-                        <div class="mb-2"><b>Duration:</b> {{ session.duration_minutes }} minutes</div>
-                        <div class="mb-2"><b>Type:</b> {{ session.type_name }}</div>
-                        <div class="mb-4"><b>Track:</b> {{ session.track_name }}</div>
-<!--                    <div class="mb-4"><b>Track head:</b> </div> -->
+                        <div class="mb-2 ms-1"><b>Duration:</b> {{ session.duration_minutes }} minutes</div>
+                        <div class="mb-2 ms-1"><b>Type:</b> {{ session.type_name }}</div>
+                        <div class="mb-4 ms-1"><b>Track:</b> {{ session.track_name }}</div>
+<!--                    <div class="mb-4 ms-1"><b>Track head:</b> </div> -->
 
                         <h4>Participants</h4>
                         <div v-if="session.session_participants?.length > 1" class="alert alert-info col-lg-10 d-flex my-2 py-2" role="alert">
@@ -69,8 +69,24 @@
                         </div>
 
                         <h4 class="mt-4">Discussion prompts and seed questions</h4>
-                        <div v-if="session.seed_questions" class="col-lg-9 mb-3" style="white-space: pre-wrap">{{ session.seed_questions }}</div>
-                        <div v-else class="col-lg-9 mb-3" >None</div>
+                        <div v-if="session.seed_questions" class="col-lg-9 mb-3 ms-1" style="white-space: pre-wrap">{{ session.seed_questions }}</div>
+                        <div v-else class="col-lg-9 mb-3 ms-1" >None</div>
+
+                        <h4 class="mt-2 border-top pt-2">Participant comments and requests</h4>
+                        <div v-if="session_comments" class="col-lg-9 mb-3" style="white-space: pre-wrap">
+                            <div v-for="comment in session_comments" class="bg-gray-300 p-2 mb-2">
+                                {{ comment.comment }}
+                                <br>- {{ comment.badge_name }} | {{ formatDate(comment.created_at) }}
+                            </div>
+                        </div>
+
+                        <label for="new-session-comment" >Do you have a special request or a comment about this session?</label>
+                        <div class="mt-1 col-lg-9" >
+                            <input type="text" v-model="newSessionComment" id="new-session-comment" class="form-control " placeholder="Add request or comment"  />
+                            <button type="button" id="save-comment-button" class="btn btn-primary mt-2" @click="saveComment">Save comment</button>
+                        </div>
+
+
                     </div>
                     <div class="card-footer text-center"></div>
                 </div>
@@ -97,9 +113,11 @@
                 session: {
                     participants: []
                 },
+                session_comments: {},
                 user: {},
                 page_message: {},
                 foundSession: true,
+                newSessionComment: '',
             }
         },
         mounted() {
@@ -121,6 +139,7 @@
                         this.user = this.session.session_participants.find(({user_id}) => user_id === this.userId);
 
                         this.loadMessage();
+                        this.loadComments();
                     })
                     .catch((error) => {
                         this.$toast.error(`Could not find the session`);
@@ -135,6 +154,27 @@
                     .catch((error) => {
 
                     })
+            },
+            loadComments: function() {
+                axios.get('/api/session-user-comment', {params : {conference_session_id: this.sessionId}})
+                    .then((response) => {
+                        this.session_comments = response.data.data;
+                    })
+                    .catch((error) => {
+
+                    })
+            },
+            saveComment: function() {
+                axios.post('/api/session-user-comment', {conference_session_id: this.sessionId, comment: this.newSessionComment})
+                    .then((response) => {
+                        this.loadComments();
+                        this.newSessionComment = '';
+                        this.$toast.success(`New comment saved.`);
+                    })
+                    .catch((error) => {
+                        this.$toast.error(`Could not save the comment.`);
+                    })
+
             },
             isValidUrl: function(string) {
                 try {

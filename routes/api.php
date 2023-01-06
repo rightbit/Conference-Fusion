@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SessionInterestController;
 use App\Http\Controllers\Api\SessionStatusController;
 use App\Http\Controllers\Api\SessionTypeController;
+use App\Http\Controllers\Api\SessionUserCommentController;
 use App\Http\Controllers\Api\SiteConfigController;
 use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\TrackHeadController;
@@ -58,6 +59,8 @@ Route::middleware(['auth:sanctum'])->group( function() {
         Route::apiResource('user', UserController::class);
         Route::apiResource('user-info-data', UserInfoDataCategoryController::class);
     });
+
+    Route::apiResource('session-user-comment', SessionUserCommentController::class);
 
 });
 

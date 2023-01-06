@@ -63,13 +63,16 @@ class ConferenceSession extends Model
             ->orderByDesc('is_moderator');
     }
 
-
     public function user_session_interest() {
         return $this->hasOne( SessionInterest::class);
     }
 
     public function conference_schedule() {
         return $this->hasMany( ConferenceSchedule::class, 'conference_session_id', 'id');
+    }
+
+    public function session_user_comments() {
+        return $this->hasMany( SessionUserComment::class, 'conference_session_id', 'id');
     }
 
     public static function getUserPanelInterests($user_id, $conference_id, $request)
