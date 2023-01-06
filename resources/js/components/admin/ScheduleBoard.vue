@@ -75,6 +75,7 @@
                 </tbody>
             </table>
         </div>
+        <div class="text-end"><a href="/admin/schedule-board-plain">Printable plain schedule</a></div>
     </div>
     <div class="modal" id="session-schedule-modal" >
         <div class="modal-dialog">
