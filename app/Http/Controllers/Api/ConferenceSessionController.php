@@ -10,7 +10,9 @@ use App\Http\Resources\CallForPanelistResource;
 use App\Http\Resources\ConferenceSessionResource;
 use App\Http\Resources\SessionInterestResource;
 use App\Http\Resources\UserScheduledSessionInfoResource;
+use App\Models\ConferenceSchedule;
 use App\Models\ConferenceSession;
+use App\Models\SessionHistory;
 use App\Models\SessionInterest;
 use App\Models\SessionStatus;
 use App\Models\SiteConfig;
@@ -90,6 +92,21 @@ class ConferenceSessionController extends Controller
      */
     public function update(ConferenceSessionRequest $request, ConferenceSession $conference_session)
     {
+        Log::debug($conference_session);
+        //Save session title / desc changes if it is on the schedule
+        if(ConferenceSchedule::where('conference_session_id', $conference_session->id)->first()) {
+            $session_message = "Updated session id:  $conference_session->id. ";
+            if($conference_session->name != $request->name) {
+                $action_message = $session_message . "Changed title from: '$conference_session->name' to '$request->name'";
+                SessionHistory::save_history(Auth::user()->id, $conference_session->id, 'updated_session_title', $action_message );
+            }
+
+            if($conference_session->description != $request->description) {
+                $action_message = $session_message . "Description updated to: $request->description";
+                SessionHistory::save_history(Auth::user()->id, $conference_session->id, 'updated_session_description', $action_message );
+            }
+        }
+
         $conference_session->name = $request->name;
         $conference_session->track_id = $request->track_id;
         $conference_session->type_id = $request->type_id;
