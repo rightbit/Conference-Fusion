@@ -126,7 +126,7 @@ class ConferenceSchedule extends Model
             ->join('tracks AS t', 'cs.track_id', '=', 't.id')
             ->join('session_types AS st', 'cs.type_id', '=', 'st.id')
             ->join('session_statuses AS ss', 'cs.session_status_id', '=', 'ss.id')
-            ->select('cs.id AS session_id', 'cs.name AS session_name', 'ss.id AS status_id',
+            ->select('cs.id AS session_id', 'cs.name AS session_name', 'ss.id AS status_id', 'cs.description',
                 'ss.status AS status_name', 'csh.date', 'csh.time',
                 'ui.user_id', 'ui.badge_name', 'si.is_moderator', 'si.interest_level', 'si.experience_level',
                 'csh.room_id', 'r.name as room_name', 'r.capacity', 'r.has_av', 'cs.track_id', 't.name AS track_name',
@@ -152,6 +152,7 @@ class ConferenceSchedule extends Model
                 $schedule_list[$current_session] = [
                     'session_id'        => $p->session_id,
                     'session_name'      => $p->session_name,
+                    'description'       => $p->description,
                     'date'              => $p->date,
                     'time'              => $p->time,
                     'room_name'         => $p->room_name,
@@ -191,9 +192,6 @@ class ConferenceSchedule extends Model
                         $schedule_list[$current_session]['errors']['no_moderator'] = 'No moderator on panel';
                     }
                 }
-
-
-
 
             }
 
