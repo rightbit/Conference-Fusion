@@ -85,7 +85,8 @@ class SessionInterest extends Model
             ->join('rooms AS r', 'csh.room_id', '=', 'r.id')
             ->join('tracks AS t', 'cs.track_id', '=', 't.id')
             ->join('session_types AS st', 'cs.type_id', '=', 'st.id')
-            ->select('u.id as user_id','u.last_name', 'u.first_name', 'u.email', 'ui.contact_email', 'ui.badge_name', 'ui.biography', 'ui.staff_notes',
+            ->select('u.id as user_id','u.last_name', 'u.first_name', 'u.email', 'ui.contact_email',
+                'ui.badge_name', 'ui.biography', 'ui.website', 'ui.social_data', 'ui.staff_notes',
                 'ui.share_email_permission', 'cs.id as session_id', 'cs.name as session_name', 'csh.date', 'csh.time',
                 'csh.room_id', 'r.name as room_name','r.capacity', 'r.has_av', 'cs.track_id', 't.name as track_name',
                 'si.is_moderator', 'si.staff_notes as session_user_staff_notes', 'st.id as session_type_id', 'st.name as session_type')
@@ -125,6 +126,8 @@ class SessionInterest extends Model
                     'last_name'                 => $p->last_name,
                     'badge_name'                => $p->badge_name,
                     'biography'                 => $p->biography,
+                    'website'                   => $p->website,
+                    'social_data'               => $p->social_data,
                     'email'                     => $p->share_email_permission || $request->export_emails ? ($p->contact_email ?: $p->email) : null,
                     'share_email_permission'    => $p->share_email_permission,
                     'staff_notes'               => $p->staff_notes,

@@ -29,7 +29,7 @@ class ExportController extends Controller
             "Expires"             => "0"
         );
 
-        $columns = array('First_Name', 'Last_Name', 'Badge_Name', 'Biography', 'Email', 'Sessions');
+        $columns = array('First_Name', 'Last_Name', 'Badge_Name', 'Biography', 'Email', 'Website', 'Social', 'Sessions');
 
         $callback = function() use($users, $columns) {
             $file = fopen('php://output', 'w');
@@ -44,7 +44,13 @@ class ExportController extends Controller
                     $row['sessions'] .= $session['is_moderator'] ? " *Moderator" : "";
                 }
 
-                fputcsv($file, array($user['first_name'], $user['last_name'],$user['badge_name'], $user['biography'], $user['email'] ?? null, $row['sessions']));
+                $social_links = '';
+                if(!empty($user['social_data'])) {
+                    $social_link_array = json_decode($user['social_data'], true);
+                    $social_links = implode("\r\n", array_filter($social_link_array));
+                }
+
+                fputcsv($file, array($user['first_name'], $user['last_name'],$user['badge_name'], $user['biography'], $user['email'] ?? null, $user['website'], $social_links, $row['sessions']));
             }
 
             fclose($file);
