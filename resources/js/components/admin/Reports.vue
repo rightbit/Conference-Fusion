@@ -30,6 +30,9 @@
 <!--                                <li class="w-100">-->
 <!--                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Panel moderators</span><span class="d-sm-none">PM</span></a>-->
 <!--                                </li>-->
+                                <li>
+                                    <a :href="`/admin/export/schedule-list/${conferenceId}?skip-checks=1`" id="export-schedule-list-nav" class="nav-link px-0" target="_blank"> <span class="d-none d-sm-inline">Export Schedule List</span><span class="d-sm-none">SCx</span></a>
+                                </li>
                             </ul>
                         </li>
                         <li>

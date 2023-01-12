@@ -92,7 +92,6 @@ class ConferenceSessionController extends Controller
      */
     public function update(ConferenceSessionRequest $request, ConferenceSession $conference_session)
     {
-        Log::debug($conference_session);
         //Save session title / desc changes if it is on the schedule
         if(ConferenceSchedule::where('conference_session_id', $conference_session->id)->first()) {
             $session_message = "Updated session id:  $conference_session->id. ";

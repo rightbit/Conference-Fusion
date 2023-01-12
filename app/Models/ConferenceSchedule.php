@@ -161,34 +161,38 @@ class ConferenceSchedule extends Model
                     'track_name'        => $p->track_name,
                     'session_type_id'   => $p->session_type_id,
                     'session_type'      => $p->session_type,
-                    'status_id'       => $p->status_id,
+                    'status_id'         => $p->status_id,
                     'status_name'       => $p->status_name,
                     'sublist'           => [],
                     'errors'            => null,
                 ];
 
-                //Check for problems
-                if(!in_array($p->status_id, [4,5])) {
-                    $schedule_list[$current_session]['errors']['status'] = 'Session status not ready for scheduling';
+                if(!$request->skip_checks) {
+                    //Check for problems
+                    if(!in_array($p->status_id, [4,5])) {
+                        $schedule_list[$current_session]['errors']['status'] = 'Session status not ready for scheduling';
+                    }
+
+                    if(!$p->user_id) {
+                        $schedule_list[$current_session]['errors']['zero_participants'] = 'No participants assigned';
+                    }
+
+                    $previous_session_participants = !empty($schedule_list[$previous_session]['sublist']) ? count($schedule_list[$previous_session]['sublist']) : 0;
+
+                    if($previous_session && $schedule_list[$previous_session]['session_type_id'] == '1' && in_array($previous_session_participants, [1,2])) {
+                        $schedule_list[$previous_session]['errors']['small_panel'] = 'Less than three people on this panel';
+                    }
+
+                    if($previous_session && $schedule_list[$previous_session]['session_type_id'] == '1' && $previous_session_participants > 6) {
+                        $schedule_list[$previous_session]['errors']['large_panel'] = 'More than six people on this session';
+                    }
+
+                    if($p->session_type_id == '1' && !$p->is_moderator) {
+                        $schedule_list[$current_session]['errors']['no_moderator'] = 'No moderator on panel';
+                    }
                 }
 
-                if(!$p->user_id) {
-                    $schedule_list[$current_session]['errors']['zero_participants'] = 'No participants assigned';
-                }
 
-                $previous_session_participants = !empty($schedule_list[$previous_session]['sublist']) ? count($schedule_list[$previous_session]['sublist']) : 0;
-
-                if($previous_session && $schedule_list[$previous_session]['session_type_id'] == '1' && in_array($previous_session_participants, [1,2])) {
-                    $schedule_list[$previous_session]['errors']['small_panel'] = 'Less than three people on this panel';
-                }
-
-                if($previous_session && $schedule_list[$previous_session]['session_type_id'] == '1' && $previous_session_participants > 6) {
-                    $schedule_list[$previous_session]['errors']['large_panel'] = 'More than six people on this session';
-                }
-
-                if($p->session_type_id == '1' && !$p->is_moderator) {
-                    $schedule_list[$current_session]['errors']['no_moderator'] = 'No moderator on panel';
-                }
 
 
             }

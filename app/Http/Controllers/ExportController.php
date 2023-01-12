@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConferenceSchedule;
 use App\Models\SessionInterest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -58,7 +59,6 @@ class ExportController extends Controller
 
         return response()->stream($callback, 200, $headers);
 
-
     }
 
     /**
@@ -88,6 +88,61 @@ class ExportController extends Controller
 
             foreach ($users as $user) {
                 fputcsv($file, array($user->first_name, $user->last_name, $user->badge_name, $user->email));
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Export csv of conference participants.
+     *
+     * @param  int  $conference_id
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function exportScheduleList(int $conference_id, Request $request)
+    {
+        $sessions = ConferenceSchedule::getConferenceScheduleListReport($conference_id, $request);
+
+        $fileName = 'schedule-list.csv';
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $columns = array('Name', 'Date', 'Time', 'Room', 'Capacity', 'Has AV', 'Track', 'Type', 'Participants');
+        $callback = function() use($sessions, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($sessions as $session) {
+
+                $participant_list = '';
+                if(!empty($session['sublist'])) {
+                    foreach ($session['sublist'] as $participant) {
+                        if (!empty($participant_list)) {
+                            $participant_list .= ", ";
+                        }
+
+                        if (!empty($participant['is_moderator'])) {
+                            $participant_list .= "Moderator: ";
+                        }
+
+                        $participant_list .= $participant['badge_name'];
+                    }
+                }
+
+                fputcsv($file, [
+                    $session['session_name'], $session['date'], $session['time'], $session['room_name'],
+                    $session['capacity'], $session['has_av'], $session['track_name'], $session['session_type'],
+                    $participant_list
+                ]);
             }
 
             fclose($file);
