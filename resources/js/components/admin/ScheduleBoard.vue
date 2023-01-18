@@ -291,7 +291,7 @@ export default {
                 date: this.boardDate,
                 id: id,
                 room_id: this.roomId,
-                conference_session_id: this.sessionId ? this.sessionId : null,
+                session_id: this.sessionId ? this.sessionId : null,
                 session_name: this.sessionId ? this.getItemNameById(this.sessions, this.sessionId) : 0,
                 time: this.sessionTime,
                 track_id: this.trackId ? this.trackId : null,
