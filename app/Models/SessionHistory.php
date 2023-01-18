@@ -11,6 +11,7 @@ class SessionHistory extends Model
     use HasFactory;
 
     protected $fillable = [
+        'conference_id',
         'conference_session_id',
         'user_id',
         'action_short_code',
@@ -30,8 +31,8 @@ class SessionHistory extends Model
 
     public static function save_history($user_id, $conference_session_id, $action_short_code, $action)
     {
-
         return SessionHistory::create([
+            'conference_id' => session('selected_conference'),
             'conference_session_id' =>  $conference_session_id,
             'user_id' =>  $user_id,
             'action_short_code' =>  $action_short_code,

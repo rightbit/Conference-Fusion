@@ -70,6 +70,7 @@
 <script>
     import ScheduleList from "./reports/ScheduleList"
     import ParticipantList from "./reports/ParticipantList"
+    import SessionHistoryList from "./reports/SessionHistoryList"
 
     export default {
         props: ['reportId', 'conferenceId', 'conferenceName'],
@@ -93,8 +94,10 @@
             },
             loadReport: function(params = null) {
                 if(this.reportId) {
+                    console.log(this.reportId);
                     axios.get(`/api/admin/report/${this.reportId}/${this.conferenceId}`, { params })
                         .then((response) => {
+                            console.log(response.data.data);
                             this.data = response.data.data;
                         })
                         .catch((error) => {
@@ -113,6 +116,7 @@
         components: {
             ScheduleList,
             ParticipantList,
+            SessionHistoryList,
         }
     }
 </script>
