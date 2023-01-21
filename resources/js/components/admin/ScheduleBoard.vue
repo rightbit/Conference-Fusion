@@ -199,7 +199,7 @@ export default {
         },
         loadSessions: function() {
             if(!this.trackId) {
-                this.sessions = {};
+                this.sessions = {0:0};
                 return;
             }
             axios.get('/api/admin/conference-session', {
@@ -243,8 +243,8 @@ export default {
         addSession: function () {
             axios.post('/api/admin/conference-schedule', {
                         'conference_id': this.conferenceId,
-                        'conference_session_id': this.sessionId ? this.sessionId : null,
-                        'track_id': this.trackId ? this.trackId : null,
+                        'conference_session_id': this.sessionId ? this.sessionId : 0,
+                        'track_id': this.trackId ? this.trackId : 0,
                         'room_id': this.roomId,
                         'date': this.boardDate,
                         'time': this.sessionTime,

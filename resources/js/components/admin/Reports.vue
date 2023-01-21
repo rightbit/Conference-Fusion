@@ -12,7 +12,7 @@
                                 <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> </a>
                         </li>
                         <li>
-                            <a href="#submenuSchedule" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                            <a href="#submenuSchedule" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
                                 <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Schedule reports</span></a>
                             <ul class="collapse nav flex-column ms-2" id="submenuSchedule" data-bs-parent="#menu">
                                 <li class="w-100">
@@ -32,6 +32,9 @@
 <!--                                </li>-->
                                 <li>
                                     <a :href="`/admin/export/schedule-list/${conferenceId}?skip-checks=1`" id="export-schedule-list-nav" class="nav-link px-0" target="_blank"> <span class="d-none d-sm-inline">Export Schedule List</span><span class="d-sm-none">SCx</span></a>
+                                </li>
+                                <li class="w-100">
+                                    <a href="/admin/reports/session-history-list" id="session-history-list-nav" class="nav-link px-0"> <span class="d-none d-sm-inline">Change Log</span><span class="d-sm-none">CL</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -54,13 +57,18 @@
                         <li>
                             <a href="#" class="nav-link px-0 align-middle">
                                 <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Other</span> </a>
+                            <ul class="collapse nav flex-column ms-2" id="submenuParticipant" data-bs-parent="#menu">
+                                <li>
+                                    <a href="/admin/reports/participant-list" id="participant-list-nav" class="nav-link px-0"> <span class="d-none d-sm-inline">Participant schedules</span><span class="d-sm-none">PS</span></a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
             </div>
             <div class="col py-3">
                 <h2 v-if="!reportId">Choose a report</h2>
-                <component :is="reportId" :data="data" :returnQueryParams="params" @queryParams="reloadReportWithParams" />
+                <component :is="reportId" :data="data" :returnQueryParams="params" :conference-id="conferenceId" @queryParams="reloadReportWithParams" />
             </div>
         </div>
     </div>
@@ -87,17 +95,18 @@
         methods: {
             expandNav: function() {
                 if(this.reportId) {
-                    let el = document.getElementById(this.reportId+'-nav');
-                    el.closest('.collapse, .nav').classList.add("show");
+                    try {
+                        let el = document.getElementById(this.reportId+'-nav');
+                        el.closest('.collapse, .nav').classList.add("show");
+                    } catch (error) {
+                        // nav link does not exist
+                    }
                 }
-
             },
             loadReport: function(params = null) {
                 if(this.reportId) {
-                    console.log(this.reportId);
                     axios.get(`/api/admin/report/${this.reportId}/${this.conferenceId}`, { params })
                         .then((response) => {
-                            console.log(response.data.data);
                             this.data = response.data.data;
                         })
                         .catch((error) => {

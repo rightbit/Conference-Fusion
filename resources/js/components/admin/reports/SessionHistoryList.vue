@@ -1,80 +1,80 @@
-<template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between">
-                        <div class="h4 align-self-center mb-lg-0">Session History List</div>
-                    </div>
+<style>
+.log-list div:nth-child(odd) {
+    background-color: lightgrey;
+}
 
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mb-3">
-                            <div>
-                                Found {{ totalHistories }} Records
-                            </div>
-                            <div class="w-50">
-                                <div class="d-flex align-items-end">
-                                    <input type="text" class="form-control form-control-sm align-self-center me-2" placeholder="Search name or email" v-model="keyword" v-on:keyup.enter="loadUsers">
-                                    <button class="btn btn-outline-secondary btn-sm"  @click="loadHistory">
-                                        <i class="bi bi-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <table class="table table-striped table-sm fs-90">
-                            <thead>
-                            <tr>
-                                <th class="m-0 p-0"></th>
-                                <th class="ps-2">Action</th>
-                                <th>User</th>
-                                <th>Date</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr scope="row" v-for="history in histories">
-                                <td></td>
-                                <td class="ps-2">{{ history.action_short_code }}</td>
-                                <td>{{ history.user_id }}</td>
-                                <td>{{ history.created_at }}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer d-flex justify-content-center">
-                        <Pagination :data="laravelData" :limit="3" :show-disabled="false" @pagination-change-page="loadUsers" />
-                    </div>
-                </div>
+.log-list div:nth-child(even) {
+    background-color: white;
+}
+</style>
+
+<template>
+    <div class="">
+        <h2>Change Log</h2>
+        <select v-model="codeId" class="form-select w-25 mb-2 me-2 float-end" @change="loadReport">
+            <option value="0">All Codes</option>
+            <option v-for="shortCode in shortCodes" :value="shortCode.name">{{ shortCode.name }}</option>
+        </select>
+        <button class="btn btn-sm btn-link float-end" @click="loadReport"><b><i class="bi bi-arrow-repeat"></i> Reload</b></button>
+        <h6>History of important changes to sessions on the schedule, newest to oldest</h6>
+        <p>{{ totalHistory }} Changes found</p>
+        <div class="log-list border border-1">
+            <div v-for="log in logs" class="d-flex p-2 flex-column">
+                <p>
+                    {{ formattedDate(log.created_at) }} | <b>{{ log.action_short_code }}</b>
+                </p>
+                <p>
+                    {{ log.action }}
+                </p>
             </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-2">
+            <Pagination :data="laravelData" :limit="3" :show-disabled="false" @pagination-change-page="loadReport" />
         </div>
     </div>
 </template>
 
 <script>
+import moment from "moment/moment";
+
 export default {
-    props: ['data', 'returnQueryParams'],
+    props: ['data', 'conferenceId'],
     data: function() {
         return {
-            histories: {},
-            totalHistories: '0',
-            keyword: '',
+            shortCodes: {},
+            codeId: 0,
             laravelData: {},
+            totalHistory: 0,
+            logs: {},
         }
     },
+    emits: ['queryParams'],
     mounted() {
-        console.log(this.data);
+        this.handleReturnParams();
+        this.loadReport();
     },
     methods: {
-        loadUsers: function (page = 1) {
-            axios.get('/api/profile/user', { params: { keyword: this.keyword, page: page }})
+        loadReport: function(page = 1) {
+            axios.get(`/api/admin/report/session-history-list/${this.conferenceId}`, { params: { short_code: this.codeId, page: page }})
                 .then((response) => {
-                    console.log(response.data.data)
-                    this.totalHistories = response.data.meta.total;
-                    this.histories = response.data.data;
+                    // console.log(response.data.data);
+                    this.logs = response.data.data;
                     this.laravelData = response.data;
+                    this.totalHistory = response.data.meta.total;
                 })
                 .catch((error) => {
-                    this.$toast.error(`Could not load the users`);
+                    this.$toast.error(`Could not find the report`);
                 });
+        },
+        handleReturnParams: function() {
+
+        },
+        changeCodeId: function() {
+
+        },
+        formattedDate: function (date) {
+            return moment(date).format('MMM D, YYYY h:mm:ss a');
         },
     }
 }

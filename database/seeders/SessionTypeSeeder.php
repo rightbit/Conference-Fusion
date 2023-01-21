@@ -23,5 +23,6 @@ class SessionTypeSeeder extends Seeder
         SessionType::create(['id' => 5, 'name' => 'Masterclass']);
         SessionType::create(['id' => 6, 'name' => 'Chat']);
         SessionType::create(['id' => 7, 'name' => 'Pitch']);
+        SessionType::create(['id' => 8, 'name' => 'Other']);
     }
 }
