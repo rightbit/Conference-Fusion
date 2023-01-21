@@ -17,7 +17,6 @@
                 <td class="ts-sc w-50">Name</td>
                 <td class="ts-sc">Email</td>
                 <td class="ts-sc text-center">Share Email</td>
-                <td class="ts-sc text-center">Can Record </td>
                 <td class="ts-sc text-center">Staff Notes</td>
                 <td class="ts-sc text-center"></td>
             </tr>
@@ -92,20 +91,26 @@
 import moment from 'moment';
 
 export default {
-    props: ['data', 'returnQueryParams'],
+    props: ['conferenceId'],
     data: function () {
         return {
+            data: {},
             userErrors: {},
         }
     },
-    emits: ['queryParams'],
     mounted() {
-        this.handleReturnParams();
+        this.loadReport();
 
     },
     methods: {
-        handleReturnParams: function() {
-            //Placeholder for future filters
+        loadReport: function() {
+            axios.get(`/api/admin/report/participant-list/${this.conferenceId}`, { params: {  } })
+                .then((response) => {
+                    this.data = response.data.data;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not find the report`);
+                });
         },
         formattedDate: function (date) {
             return moment(date).format('MM-DD');

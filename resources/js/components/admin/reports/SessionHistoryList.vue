@@ -39,7 +39,7 @@
 import moment from "moment/moment";
 
 export default {
-    props: ['data', 'conferenceId'],
+    props: ['conferenceId'],
     data: function() {
         return {
             shortCodes: {},
@@ -49,9 +49,7 @@ export default {
             logs: {},
         }
     },
-    emits: ['queryParams'],
     mounted() {
-        this.handleReturnParams();
         this.loadReport();
     },
     methods: {
@@ -66,9 +64,6 @@ export default {
                 .catch((error) => {
                     this.$toast.error(`Could not find the report`);
                 });
-        },
-        handleReturnParams: function() {
-
         },
         changeCodeId: function() {
 

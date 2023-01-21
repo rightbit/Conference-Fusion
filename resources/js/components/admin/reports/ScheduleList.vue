@@ -8,11 +8,11 @@
         <h2>Schedule List</h2>
         <h6>Alphabetical list of sessions on the schedule including participants and errors</h6>
         {{ data.length }} sessions found
-        <select v-model="trackId" class="form-select w-25 mb-2 me-2 float-end" @change="changeTrack">
+        <select v-model="trackId" class="form-select w-25 mb-2 me-2 float-end" @change="loadReport">
             <option value="0">All Tracks</option>
             <option v-for="track in tracks" :value="track.id">{{ track.name }}</option>
         </select>
-        <button class="btn btn-sm btn-link float-end" @click="changeTrack"><b><i class="bi bi-arrow-repeat"></i> Reload</b></button>
+        <button class="btn btn-sm btn-link float-end" @click="loadReport"><b><i class="bi bi-arrow-repeat"></i> Reload</b></button>
         <table class="table table-scrollable table-free-width table-sm table-striped bg-white">
             <thead style="z-index: 500">
             <tr class="bg-secondary text-white">
@@ -45,7 +45,7 @@
                 <td class="text-nowrap">{{ formattedDate(d.date) }} {{ d.time }}</td>
                 <td class="text-nowrap  text-center">{{ d.room_name }} {{ d.capacity }} <i v-if="d.has_av" class="bi bi-person-video3"></i></td>
                 <td class="text-center"><i :class="[goodStatuses.includes(d.status_id) ? 'bi-check-square text-success':'bi-exclamation-triangle-fill text-warning']" ></i></td>
-                <td class="text-center"><button class="btn btn-sm btn-link float-end" @click="changeTrack"><b><i class="bi bi-arrow-repeat"></i></b></button></td>
+                <td class="text-center"><button class="btn btn-sm btn-link float-end" @click="loadReport"><b><i class="bi bi-arrow-repeat"></i></b></button></td>
             </tr>
             <tr>
                 <td colspan="8">
@@ -95,9 +95,10 @@
 import moment from 'moment';
 
 export default {
-    props: ['data', 'returnQueryParams'],
+    props: ['conferenceId'],
     data: function () {
         return {
+            data: {},
             tracks: {},
             trackId: 0,
             goodStatuses: [4,5],
@@ -107,7 +108,7 @@ export default {
     emits: ['queryParams'],
     mounted() {
         this.loadTracks();
-        this.handleReturnParams();
+        this.loadReport();
 
     },
     methods: {
@@ -120,10 +121,15 @@ export default {
                     this.$toast.error(`Could not load the tracks`);
                 });
         },
-        handleReturnParams: function() {
-            if(this.returnQueryParams.track_id) {
-                this.trackId = this.returnQueryParams.track_id;
-            }
+        loadReport: function() {
+            axios.get(`/api/admin/report/schedule-list/${this.conferenceId}`, { params: { track_id: this.trackId } })
+                .then((response) => {
+                    this.data = response.data.data;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not find the report`);
+                });
+
 
         },
         formattedDate: function (date) {
@@ -135,9 +141,6 @@ export default {
         resetModal: function() {
             this.sessionErrors = {};
         },
-        changeTrack: function() {
-            this.$emit("queryParams", {0:{name: 'track_id', value: this.trackId}});
-        }
     },
 }
 </script>

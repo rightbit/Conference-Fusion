@@ -54,21 +54,17 @@
 
                             </ul>
                         </li>
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Other</span> </a>
-                            <ul class="collapse nav flex-column ms-2" id="submenuParticipant" data-bs-parent="#menu">
-                                <li>
-                                    <a href="/admin/reports/participant-list" id="participant-list-nav" class="nav-link px-0"> <span class="d-none d-sm-inline">Participant schedules</span><span class="d-sm-none">PS</span></a>
-                                </li>
-                            </ul>
-                        </li>
+<!--                        <li>-->
+<!--                            <a href="#" class="nav-link px-0 align-middle">-->
+<!--                                <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Other</span> </a>-->
+<!--                            -->
+<!--                        </li>-->
                     </ul>
                 </div>
             </div>
             <div class="col py-3">
                 <h2 v-if="!reportId">Choose a report</h2>
-                <component :is="reportId" :data="data" :returnQueryParams="params" :conference-id="conferenceId" @queryParams="reloadReportWithParams" />
+                <component :is="reportId" :data="data" :returnQueryParams="params" :conference-id="conferenceId" />
             </div>
         </div>
     </div>
@@ -90,7 +86,6 @@
         },
         mounted() {
             this.expandNav();
-            this.loadReport();
         },
         methods: {
             expandNav: function() {
@@ -102,24 +97,6 @@
                         // nav link does not exist
                     }
                 }
-            },
-            loadReport: function(params = null) {
-                if(this.reportId) {
-                    axios.get(`/api/admin/report/${this.reportId}/${this.conferenceId}`, { params })
-                        .then((response) => {
-                            this.data = response.data.data;
-                        })
-                        .catch((error) => {
-                            this.$toast.error(`Could not find the report`);
-                        });
-                }
-
-            },
-            reloadReportWithParams: function(event) {
-                for (const [key, option] of Object.entries(event)) {
-                    this.params[option.name] = option.value
-                }
-                this.loadReport(this.params)
             },
         },
         components: {
