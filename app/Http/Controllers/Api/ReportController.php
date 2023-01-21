@@ -53,14 +53,12 @@ class ReportController extends Controller
      */
     public function sessionHistoryList(int $conference_id, Request $request)
     {
-        Log::debug($request);
         $history = SessionHistory::where('conference_id', $conference_id)
             ->when($request->filled('keyword'), function ($query) use ($request) {
                 $query->where('action_short_code', 'LIKE',"%$request->keyword%");
             })
             ->orderBy('created_at', 'DESC')
             ->paginate(25);
-        Log::debug($history);
         return GenericReportResource::collection($history);
 
     }
