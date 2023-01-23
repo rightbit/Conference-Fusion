@@ -100,7 +100,7 @@ class ConferenceScheduleController extends Controller
     public function update(ConferenceScheduleRequest $request, ConferenceSchedule $conferenceSchedule)
     {
         $old_conference_session = $conferenceSchedule->session->name ?? "No session";
-        $conference_session_name = $request->conference_session_id ? ConferenceSession::find($request->conference_session_id)->value('name') : "No session";
+        $conference_session_name = $request->conference_session_id ? ConferenceSession::where('id', $request->conference_session_id)->value('name') : "No session";
         $room = Room::find($request->room_id);
         $history_message = "Updated schedule, changed '{$old_conference_session}' to '{$conference_session_name}' to schedule at {$request->date} {$request->time} in room {$room->name}";
         $conference_session_id = $request->conference_session_id ?? $conferenceSchedule->conference_session_id;
