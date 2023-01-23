@@ -115,8 +115,8 @@
                 </div>
             </div>
 
-            <partials-session-participants-list v-if="session.id" :session-id="sessionId" :key="participantListKey" @reloadInterests="reloadInterestList" class="mb-2" />
-            <partials-session-interest-list v-if="session.id" :session-id="sessionId" :key="interestListKey"  @reloadParticipants="reloadParticipantList" />
+            <partials-session-participants-list v-if="session.id" :session-id="session.id" :key="participantListKey" @reloadInterests="reloadInterestList" class="mb-2" />
+            <partials-session-interest-list v-if="session.id" :session-id="session.id" :key="interestListKey"  @reloadParticipants="reloadParticipantList" />
         </div>
         <div v-else class="p-5 text-center">
             <h1>Error 404</h1>
@@ -353,7 +353,7 @@
                     form.classList.add('was-validated')
                     return;
                 }
-                this.interest.conference_session_id = this.sessionId;
+                this.interest.conference_session_id = this.session.id;
 
                 axios.post('/api/admin/session-interest', this.interest)
                     .then((response) => {
