@@ -126,7 +126,8 @@ class ConferenceSchedule extends Model
             ->join('tracks AS t', 'cs.track_id', '=', 't.id')
             ->join('session_types AS st', 'cs.type_id', '=', 'st.id')
             ->join('session_statuses AS ss', 'cs.session_status_id', '=', 'ss.id')
-            ->select('cs.id AS session_id', 'cs.name AS session_name', 'ss.id AS status_id', 'cs.description',
+            ->select('cs.id AS session_id', 'cs.name AS session_name', 'ss.id AS status_id',
+                'cs.description', 'cs.staff_notes',
                 'ss.status AS status_name', 'csh.date', 'csh.time',
                 'ui.user_id', 'ui.badge_name', 'si.is_moderator', 'si.interest_level', 'si.experience_level',
                 'csh.room_id', 'r.name as room_name', 'r.capacity', 'r.has_av', 'cs.track_id', 't.name AS track_name',
@@ -153,6 +154,7 @@ class ConferenceSchedule extends Model
                     'session_id'        => $p->session_id,
                     'session_name'      => $p->session_name,
                     'description'       => $p->description,
+                    'staff_notes'       => $p->staff_notes,
                     'date'              => $p->date,
                     'time'              => $p->time,
                     'room_name'         => $p->room_name,
@@ -195,20 +197,22 @@ class ConferenceSchedule extends Model
 
             }
 
-            if ($p->user_id) {
-                if(!empty($schedule_list[$current_session]['sublist'][$p->user_id])) {
-                    $schedule_list[$current_session]['errors']['duplicate_participants'] = "Duplicate entry for user {$p->user_id}";
+            if(!$request->skip_checks) {
+                if ($p->user_id) {
+                    if(!empty($schedule_list[$current_session]['sublist'][$p->user_id])) {
+                        $schedule_list[$current_session]['errors']['duplicate_participants'] = "Duplicate entry for user {$p->user_id}";
+                    }
+
+                    $schedule_list[$current_session]['sublist'][$p->user_id] = [
+                        'user_id'       => $p->user_id,
+                        'badge_name'    => $p->badge_name,
+                        'is_moderator'  => $p->is_moderator,
+                    ];
+
+                } elseif (empty($schedule_list[$current_session]['errors']['zero_participants'])) {
+                    $schedule_list[$current_session]['errors']['blank_participants'] = 'A blank participant entry exists';
+
                 }
-
-                $schedule_list[$current_session]['sublist'][$p->user_id] = [
-                    'user_id'       => $p->user_id,
-                    'badge_name'    => $p->badge_name,
-                    'is_moderator'  => $p->is_moderator,
-                ];
-
-            } elseif (empty($schedule_list[$current_session]['errors']['zero_participants'])) {
-                $schedule_list[$current_session]['errors']['blank_participants'] = 'A blank participant entry exists';
-
             }
 
         }
