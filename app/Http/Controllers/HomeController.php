@@ -36,7 +36,7 @@ class HomeController extends Controller
     {
         $home_page_message = SiteConfig::where('key', 'message_home_page')->first();
 
-        $conferences = Conference::where('end_date', '>=', NOW())
+        $conferences = Conference::where('end_date', '>=', 'CURDATE() + INTERVAL 1 DAY')
             ->whereNotNull('call_start_date')
             ->orderBy('start_date')
             ->get();
