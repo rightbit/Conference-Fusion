@@ -33,9 +33,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="text-end mb-3">
+                        <div class="text-end">
                             <input type="checkbox" v-model="searchAllStatuses" class="form-check-input" id="statuses">
                             <label class="form-check-label ms-2" for="statuses">Include not used/canceled sessions </label>
+                        </div>
+                        <div class="text-end mb-3">
+                            <input type="checkbox" v-model="searchNotScheduled" class="form-check-input" id="statuses">
+                            <label class="form-check-label ms-2" for="statuses">Exclude scheduled sessions </label>
                         </div>
                         <table class="table table-striped table-sm fs-90">
                             <thead>
@@ -101,6 +105,7 @@ export default {
             searchTrackId: '',
             searchTypeId: '',
             searchAllStatuses: false,
+            searchNotScheduled: false,
             keyword: '',
             laravelData: {},
             new_session: {
@@ -144,6 +149,7 @@ export default {
                         track_id: this.searchTrackId,
                         type_id: this.searchTypeId,
                         all_statuses: this.searchAllStatuses ? '1' : '',
+                        not_scheduled: this.searchNotScheduled ? '1' : '',
                         keyword: this.keyword,
                         page: page
                     }
