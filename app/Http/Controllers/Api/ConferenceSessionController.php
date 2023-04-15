@@ -34,6 +34,7 @@ class ConferenceSessionController extends Controller
     public function index(Request $request)
     {
         $conference_sessions = ConferenceSession::orderBy('name')
+            ->where('conference_id', session('selected_conference'))
             ->when($request->filled('keyword'), function ($query) use ($request) {
                 $query->where('name', 'LIKE',"%$request->keyword%");
             })
