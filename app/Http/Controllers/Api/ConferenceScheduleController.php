@@ -110,7 +110,9 @@ class ConferenceScheduleController extends Controller
         $room = Room::find($request->room_id);
         $history_message = "Updated schedule, changed '{$old_conference_session}' to '{$conference_session_name}' to schedule at {$request->date} {$request->time} in room {$room->name}";
         $conference_session_id = $request->conference_session_id ?? $conferenceSchedule->conference_session_id;
-        SessionHistory::save_history(Auth::user()->id, $conference_session_id, 'updated_schedule',  $history_message);
+        if($conference_session_id) {
+            SessionHistory::save_history(Auth::user()->id, $conference_session_id, 'updated_schedule',  $history_message);
+        }
 
         $conferenceSchedule->conference_session_id = $request->conference_session_id ?: null;
         $conferenceSchedule->track_id = $request->track_id ?: null;
