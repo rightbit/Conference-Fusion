@@ -243,8 +243,8 @@ export default {
         addSession: function () {
             axios.post('/api/admin/conference-schedule', {
                         'conference_id': this.conferenceId,
-                        'conference_session_id': this.sessionId ? this.sessionId : 0,
-                        'track_id': this.trackId ? this.trackId : 0,
+                        'conference_session_id': this.sessionId ? this.sessionId : null,
+                        'track_id': this.trackId ? this.trackId : null,
                         'room_id': this.roomId,
                         'date': this.boardDate,
                         'time': this.sessionTime,

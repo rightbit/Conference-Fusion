@@ -58,12 +58,18 @@ class ConferenceScheduleController extends Controller
         }
 
         $schedule = new ConferenceSchedule($request->all());
+        //Can't save 0's because of foreign keys
+        $schedule->conference_session_id ?: null;
+        $schedule->track_id ?: null;
         $schedule->save();
 
-        $conference_session = ConferenceSession::find($request->conference_session_id);
+        $conference_session = $request->conference_session_id ? ConferenceSession::find($request->conference_session_id) : null;
         $room = Room::find($request->room_id);
-        $history_message = "Added session {$conference_session->name} to schedule at {$request->date} {$request->time} in room {$room->name}";
-        SessionHistory::save_history(Auth::user()->id, $request->conference_session_id, 'added_to_schedule',  $history_message);
+        if($conference_session) {
+            $history_message = "Added session {$conference_session->name} to schedule at {$request->date} {$request->time} in room {$room->name}";
+            SessionHistory::save_history(Auth::user()->id, $request->conference_session_id, 'added_to_schedule',  $history_message);
+        }
+
 
         return new ConferenceScheduleResource($schedule);
     }
