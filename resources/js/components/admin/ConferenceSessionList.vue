@@ -71,16 +71,22 @@
                         <h4 class="ms-2 mb-4"> Quick-add new session</h4>
                         <form id="newsession" class="row g-3 align-items-center" @submit.prevent="addSession">
                             <div class="col-md-2">
-                                <select id="inputCategory" v-model="new_session.track_id" class="form-select" aria-label="select category">
-                                    <option value="" disabled hidden selected>Track (optional)</option>
+                                <select id="inputCategory" v-model="new_session.track_id" class="form-select" aria-label="select category" required>
+                                    <option value="" disabled hidden selected>Track</option>
                                     <option v-for="track in tracks" v-bind:value="track.id">{{ track.name }}</option>
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <input type="text" v-model="new_session.name" class="form-control" id="inputName" placeholder="Name" required>
                             </div>
-                            <div class="col-md-5">
-                                <input type="text" v-model="new_session.description" class="form-control" id="inputOptions" placeholder="Description (optional)">
+                            <div class="col-md-4">
+                                <input type="text" v-model="new_session.description" class="form-control" id="inputOptions" placeholder="Description" required>
+                            </div>
+                            <div class="col-md-2">
+                                <select id="inputCategory" v-model="new_session.type_id" class="form-select" aria-label="select category" required>
+                                    <option value="" disabled hidden selected>Type</option>
+                                    <option v-for="type in types" v-bind:value="type.id">{{ type.name }}</option>
+                                </select>
                             </div>
                             <div class="col-md-1 text-center">
                                 <button type="submit" class="btn btn-primary btn-sm" ><i class="bi bi-arrow-up-circle me-2"></i>Save</button>
@@ -111,6 +117,7 @@ export default {
             new_session: {
                 conference_id: '',
                 track_id: '',
+                type_id: '',
                 name: '',
                 description: '',
             },
@@ -166,11 +173,11 @@ export default {
         addSession: function() {
             this.new_session.conference_id = this.conferenceId;
             this.new_session.session_status_id = 1;
+
             axios.post('/api/admin/conference-session', this.new_session)
                 .then((response) =>{
                     this.$toast.success(`New session added`);
                     this.loadSessions();
-                    this.new_session.track_id = '';
                     this.new_session.name = '';
                     this.new_session.description = '';
                 })
