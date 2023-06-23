@@ -34,11 +34,11 @@
                             </div>
                         </div>
                         <div class="text-end">
-                            <input type="checkbox" v-model="searchAllStatuses" class="form-check-input" id="statuses">
+                            <input type="checkbox" v-model="searchAllStatuses" class="form-check-input" id="statuses" v-on:change="loadSessions">
                             <label class="form-check-label ms-2" for="statuses">Include not used/canceled sessions </label>
                         </div>
                         <div class="text-end mb-3">
-                            <input type="checkbox" v-model="searchNotScheduled" class="form-check-input" id="statuses">
+                            <input type="checkbox" v-model="searchNotScheduled" class="form-check-input" id="statuses" v-on:change="loadSessions">
                             <label class="form-check-label ms-2" for="statuses">Exclude scheduled sessions </label>
                         </div>
                         <table class="table table-striped table-sm fs-90">
@@ -48,6 +48,7 @@
                                 <th  class="w-30">Description</th>
                                 <th>Track</th>
                                 <th>Type</th>
+                                <th class="text-center">Scheduled</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -57,6 +58,14 @@
                                 <td>{{ truncate(session.description , 50, '...') }}</td>
                                 <td>{{ session.track }}</td>
                                 <td>{{ session.session_type.name }}</td>
+                                <td class="text-center">
+                                    <i v-if="session.conference_schedule && session.conference_schedule.length > 0"
+                                       class='bi bi-calendar-check-fill text-success'
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       :title="formatDate(session.conference_schedule[0].date + ' ' + session.conference_schedule[0].time)"
+                                    ></i>
+                                </td>
                                 <td><a class="btn btn-sm btn-outline-secondary" v-bind:href="this.sessionLink +'/'+ session.id"><i class="bi bi-pencil-square"></i></a></td>
                             </tr>
                             </tbody>
@@ -102,6 +111,8 @@
 
 
 <script>
+import dayjs from "dayjs";
+
 export default {
     props: ['conferenceId', 'sessionLink'],
     data: function() {
@@ -131,6 +142,11 @@ export default {
         this.loadTypes();
     },
     methods: {
+        formatDate(dateString) {
+            if(!dateString) { return null }
+            const date = dayjs(dateString);
+            return date.format('ddd MMM DD, h A');
+        },
         loadTracks: function () {
             axios.get('/api/admin/track')
                 .then((response) => {
@@ -164,6 +180,7 @@ export default {
                 .then((response) => {
                     this.totalSessions = response.data.meta.total;
                     this.conferenceSessions = response.data.data;
+                    console.log(this.conferenceSessions);
                     this.laravelData = response.data;
                 })
                 .catch((error) => {
