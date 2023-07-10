@@ -110,6 +110,22 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-10 mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="h4 align-self-center mb-lg-0">Tools</div>
+                            </div>
+                            <div class="card-body d-flex">
+                                <button class="btn btn-primary me-2" @click="syncProposedStartTimes" ><i class="bi bi-calendar-week"></i> Sync call start times</button>
+                                <button class="btn btn-primary me-2" @click="syncScheduledStatus" ><i class="bi bi-calendar-check"></i> Set session scheduled status</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -175,6 +191,30 @@
                         })
                         .catch((error) => {
                             this.$toast.error(`Could not save the conference info<br />` + error.response.data.message);
+                        });
+                }
+            },
+            syncProposedStartTimes: function() {
+                if(confirm("Do you really want to update all session times for the call?")) {
+                    axios.get(`/api/admin/tools/proposed-session-times/${this.conference.id}`)
+                        .then((response) => {
+
+                            this.$toast.success(`Updated proposed session times successfully`);
+                        })
+                        .catch((error) => {
+                            this.$toast.error(`Could not sync call schedule<br />` + error.response.data.message);
+                        });
+                }
+            },
+            syncScheduledStatus: function() {
+                if(confirm("Do you really want to update all session statuses based on the schedule?")) {
+                    axios.get(`/api/admin/tools/sync-scheduled-status/${this.conference.id}`)
+                        .then((response) => {
+
+                            this.$toast.success(`Updated session statuses successfully`);
+                        })
+                        .catch((error) => {
+                            this.$toast.error(`Could not update session statuses<br />` + error.response.data.message);
                         });
                 }
             }

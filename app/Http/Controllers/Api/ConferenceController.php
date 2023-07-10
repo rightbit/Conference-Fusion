@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ConferenceRequest;
 use App\Http\Resources\ConferenceResource;
 use App\Models\Conference;
+use App\Models\ConferenceSchedule;
+use App\Models\ConferenceSession;
 use Illuminate\Http\Request;
 
 class ConferenceController extends Controller
@@ -114,5 +116,54 @@ class ConferenceController extends Controller
     public function destroy(Conference $conference)
     {
         //
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $conference_id
+     * @return \Illuminate\Http\Response
+     */
+    public function proposedTimeSync($conference_id)
+    {
+        $sessions = ConferenceSession::where('conference_id', '=', $conference_id)->get();
+        foreach ($sessions as $session) {
+            $schedule = ConferenceSchedule::where('conference_session_id', '=', $session->id)
+                        ->where('conference_id', '=', $conference_id)
+                        ->first();
+            if($schedule) {
+                $session->proposed_date = $schedule->date . ' ' . $schedule->time;
+                $session->save();
+            }
+        }
+        return response()->noContent();
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $conference_id
+     * @return \Illuminate\Http\Response
+     */
+    public function scheduledStatusSync($conference_id)
+    {
+        $sessions = ConferenceSession::where('conference_id', '=', $conference_id)->get();
+        foreach ($sessions as $session) {
+            $schedule = ConferenceSchedule::where('conference_session_id', '=', $session->id)
+                ->where('conference_id', '=', $conference_id)
+                ->first();
+            if ($schedule) {
+                $session->session_status_id = 5;
+                $session->save();
+            } else {
+                if ($session->session_status_id == 5) {
+                    $session->session_status_id = 3;
+                    $session->save();
+                }
+            }
+        }
+        return response()->noContent();
     }
 }

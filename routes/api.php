@@ -83,6 +83,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
         Route::get('session-history-list/{conference_id}', [ReportController::class, 'sessionHistoryList']);
     });
 
+    Route::group(['prefix' => 'tools'], function() {
+        Route::get('proposed-session-times/{conference_id}', [ConferenceController::class, 'proposedTimeSync'])->middleware('can:admin');
+        Route::get('sync-scheduled-status/{conference_id}', [ConferenceController::class, 'scheduledStatusSync'])->middleware('can:admin');
+
+    });
 
 });
 

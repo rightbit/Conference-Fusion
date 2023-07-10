@@ -78,12 +78,8 @@ class ConferenceSession extends Model
     public static function getUserPanelInterests($user_id, $conference_id, $request)
     {
         $panels = self::where('conference_id', '=', $conference_id)
-                ->whereHas('status', function($query) {
-                    $query->where('status', '=', 'Ready for Call');
-                })
-                ->whereHas('session_type', function($query) {
-                    $query->where('name', '=', 'Panel');
-                })
+                ->whereIn('session_status_id', [2,5]) // Ready for call and Scheduled
+                ->where('type_id', '=', 1) // Panel
                 ->with(['user_session_interest' => function ($query) use($user_id) {
                     $query->where('user_id', $user_id);
                 }]);
@@ -105,7 +101,7 @@ class ConferenceSession extends Model
             $panels->where('track_id', '=', $request->filter);
         }
 
-        return $panels->orderBy('proposed_date')->paginate(25);
+        return $panels->orderByRaw('-proposed_date DESC')->paginate(25);
     }
 
 }
