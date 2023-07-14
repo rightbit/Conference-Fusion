@@ -10,8 +10,8 @@
                     <div class="card-body" id="addinfo">
                         <form id="newsession" class="row g-3 align-items-center" @submit.prevent="addSession">
                             <div class="col-md-3">
-                                <select id="inputCategory" v-model="new_session.track_id" class="form-select" aria-label="select category">
-                                    <option value="" disabled hidden selected>Track (optional)</option>
+                                <select id="inputCategory" v-model="new_session.track_id" class="form-select" aria-label="select category" required>
+                                    <option value="" disabled hidden selected>Choose a track</option>
                                     <option v-for="track in tracks" v-bind:value="track.id">{{ track.name }}</option>
                                 </select>
                             </div>
@@ -23,6 +23,15 @@
                             </div>
                             <div class="col-md-6">
                                 <textarea  v-model="new_session.participant_notes" class="form-control" id="participant_notes" placeholder="Other notes about you or the presentation to give to the staff (optional, but recommended)"></textarea>
+
+                            </div>
+                            <div class="col-md-6 offset-md-6">
+                                <select id="special_equipment" v-model="new_session.special_equipment" class="form-select" aria-label="select special equipment">
+                                    <option value="" disabled hidden selected>Special Equipment Requests (optional)</option>
+                                    <option v-for="equipment in equipments" v-bind:value="equipment.equipment">{{ equipment.equipment }}</option>
+                                    <option value="Other">Other (specify above)</option>
+                                    <option value="">None</option>
+                                </select>
                             </div>
                             <div class="col-md-12 text-end">
                                 <button type="submit" class="btn btn-primary " ><i class="bi bi-arrow-up-circle me-2"></i>Submit</button>
@@ -41,6 +50,7 @@
                             <thead>
                             <tr>
                                 <th class="ps-2">Name</th>
+                                <th>Track</th>
                                 <th>Description</th>
                                 <th class="m-0 p-0"></th>
                             </tr>
@@ -48,6 +58,7 @@
                             <tbody>
                             <tr scope="row" v-for="presentation in conferenceSessions">
                                 <td class="ps-2">{{ presentation.conference_session.name }}</td>
+                                <td class="ps-2">{{ presentation.conference_session.track_name }}</td>
                                 <td>{{ presentation.conference_session.description }}</td>
                                 <td class="m-0 pe-1"><button class="btn btn-danger btn-sm" @click="deleteSession(presentation)"><i class="bi bi-trash-fill"></i></button></td>
                             </tr>
@@ -71,12 +82,13 @@ export default {
             new_session: {
                 conference_id: '',
                 track_id: '',
+                special_equipment: '',
                 name: '',
                 description: '',
                 participant_notes: '',
             },
             tracks: [],
-            equipment: [],
+            equipments: [],
         }
     },
     mounted() {
@@ -97,7 +109,7 @@ export default {
         loadEquipment: function () {
             axios.get('/api/session-equipment-list')
                 .then((response) => {
-                    this.equipment = response.data.data;
+                    this.equipments = response.data.data;
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not load the special equipment`);
@@ -108,6 +120,7 @@ export default {
                 .then((response) => {
                     // this.totalSessions = response.data.meta.total;
                     this.conferenceSessions = response.data.data;
+                    console.log(this.conferenceSessions);
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not find your submissions`);
@@ -121,6 +134,7 @@ export default {
                     this.$toast.success(`New presentation added`);
                     this.loadSessions();
                     this.new_session.track_id = '';
+                    this.new_session.special_equipment = '';
                     this.new_session.name = '';
                     this.new_session.description = '';
                     this.new_session.participant_notes = '';

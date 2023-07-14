@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ConferenceScheduleController;
 use App\Http\Controllers\Api\ConferenceSessionController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SessionInterestController;
+use App\Http\Controllers\Api\SessionSpecialEquipmentController;
 use App\Http\Controllers\Api\SessionStatusController;
 use App\Http\Controllers\Api\SessionTypeController;
 use App\Http\Controllers\Api\SessionUserCommentController;
@@ -35,7 +36,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group( function() {
     Route::get('track-list', [TrackController::class, 'index']);
-    Route::get('track-list', [SessionSpecialEquipmentController::class, 'index']);
+    Route::get('session-equipment-list', [SessionSpecialEquipmentController::class, 'index']);
     Route::get('type-list', [SessionTypeController::class, 'index']);
 
     Route::get('configuration/messsage/{key}', [SiteConfigController::class, 'getConfigMessage']);
@@ -72,6 +73,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
     Route::apiResource('configuration', SiteConfigController::class);
     Route::apiResource('session-interest', SessionInterestController::class);
     Route::apiResource('session-status', SessionStatusController::class);
+    Route::apiResource('session-special-equipment', SessionSpecialEquipmentController::class);
     Route::apiResource('session-type', SessionTypeController::class);
     Route::apiResource('room', RoomController::class);
     Route::apiResource('track', TrackController::class);

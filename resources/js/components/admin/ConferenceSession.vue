@@ -69,11 +69,15 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label for="duration_minutes">Duration <span class="text-secondary">(minutes)</span></label>
                             <input type="text" class="form-control" id="duration_minutes"  v-model="session.duration_minutes" required>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <label for="special_equipment">Special Equipment Request</label>
+                            <input type="text" class="form-control" id="special_equipment"  v-model="session.special_equipment">
+                        </div>
+                        <div class="col-md-2">
                             <label for="description">Registration Required</label>
                             <select v-model="session.registration_required" class="form-select" aria-label="select category">
                                 <option value="0">No</option>
