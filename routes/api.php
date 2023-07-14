@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group( function() {
     Route::get('track-list', [TrackController::class, 'index']);
+    Route::get('track-list', [SessionSpecialEquipmentController::class, 'index']);
     Route::get('type-list', [SessionTypeController::class, 'index']);
 
     Route::get('configuration/messsage/{key}', [SiteConfigController::class, 'getConfigMessage']);

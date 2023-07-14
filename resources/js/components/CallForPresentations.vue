@@ -76,11 +76,13 @@ export default {
                 participant_notes: '',
             },
             tracks: [],
+            equipment: [],
         }
     },
     mounted() {
         this.loadSessions();
         this.loadTracks();
+        this.loadEquipment();
     },
     methods: {
         loadTracks: function () {
@@ -90,6 +92,15 @@ export default {
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not load the tracks`);
+                });
+        },
+        loadEquipment: function () {
+            axios.get('/api/session-equipment-list')
+                .then((response) => {
+                    this.equipment = response.data.data;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not load the special equipment`);
                 });
         },
         loadSessions: function () {
