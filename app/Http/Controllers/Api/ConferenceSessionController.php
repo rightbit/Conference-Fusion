@@ -72,6 +72,7 @@ class ConferenceSessionController extends Controller
     {
 
         $conference_session = new ConferenceSession($request->all());
+        $conference_session->special_equipment = $request->special_equipment ?? null;
         $conference_session->save();
         return new ConferenceSessionResource($conference_session);
     }
