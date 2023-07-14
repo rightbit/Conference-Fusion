@@ -44,6 +44,10 @@ class DatabaseSeeder extends Seeder
             //Create standard session types
             $this->call(SessionTypeSeeder::class);
             $this->command->info('Default session types seeded...');
+            //Create standard session types
+
+            $this->call(SessionSpecialEquipmentSeeder::class);
+            $this->command->info('Default session equipment seeded...');
 
         } else {
             $this->command->info('Exiting without seeding');

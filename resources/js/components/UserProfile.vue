@@ -120,53 +120,7 @@
                                 <input type="text" class="form-control" id="website" placeholder="Public website url" v-model="user.info.website">
                             </div>
                         </div>
-                        <div class="row mb-2">
-                            <div class="col-sm-12 mb-2"><span class="h4">Sell on Consignment</span><br/>
-                                If you would like to request a book partner to possibly carry your books on consignment or through traditional sale, please enter the information below.
-                            </div>
-                        </div>
-                        <div class="row mb-0">
-                            <label for="book1title">Book 1</label>
-                        </div>
-                        <div class="row g-2  mb-2">
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" v-model="user.info_consignment.book1_title" placeholder="Title" />
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" v-model="user.info_consignment.book1_author" placeholder="Author" />
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" v-model="user.info_consignment.book1_isbn" placeholder="ISBN" />
-                            </div>
-                        </div>
-                        <div class="row mb-0">
-                            <label for="book1title">Book 2</label>
-                        </div>
-                        <div class="row g-2 mb-2">
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" v-model="user.info_consignment.book2_title"  placeholder="Title" />
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" v-model="user.info_consignment.book2_author" placeholder="Author" />
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" v-model="user.info_consignment.book2_isbn" placeholder="ISBN" />
-                            </div>
-                        </div>
-                        <div class="row mb-0">
-                            <label for="book1title">Book 3</label>
-                        </div>
-                        <div class="row g-2 mb-3">
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" v-model="user.info_consignment.book3_title"  placeholder="Title" />
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" v-model="user.info_consignment.book3_author" placeholder="Author" />
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" v-model="user.info_consignment.book3_isbn" placeholder="ISBN" />
-                            </div>
-                        </div>
+
                         <div class="mt-4 form-group" v-if="!user.info.agree_to_terms">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" v-model="user.info.agree_to_terms" id="terms" required>
