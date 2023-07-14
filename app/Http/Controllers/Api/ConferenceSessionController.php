@@ -118,6 +118,7 @@ class ConferenceSessionController extends Controller
         $conference_session->seed_questions = $request->seed_questions;
         $conference_session->staff_notes = $request->staff_notes;
         $conference_session->duration_minutes = $request->duration_minutes;
+        $conference_session->special_equipment = $request->special_equipment ?? null;
         $conference_session->registration_required = $request->registration_required;
         $conference_session->max_registration = $request->max_registration;
         $conference_session->attendance = $request->attendance;
