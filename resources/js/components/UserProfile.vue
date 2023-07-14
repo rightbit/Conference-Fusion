@@ -111,7 +111,7 @@
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <label for="notes">Info and notes</label>
-                                <textarea id="notes" class="form-control" placeholder="General notes for the staff about you (not published)"  v-model="user.info.notes" ></textarea>
+                                <textarea id="notes" class="form-control" placeholder="General notes for the staff about you (not public). Please include special accommodations and any potential conflicts or concerns"  v-model="user.info.notes" ></textarea>
                             </div>
                         </div>
                         <div class="row g-2 mb-4">
@@ -205,7 +205,6 @@ export default {
                     social_data: {'':''},
                     participant_data: {'':''},
                 },
-                info_consignment: {}
             },
             profileImage: '/images/app/blank-profile.png',
             allowForm: true,
@@ -250,9 +249,6 @@ export default {
                     }
                     if(this.user.info.profile_image) {
                         this.profileImage = this.user.info.profile_image;
-                    }
-                    if(!this.user.info_consignment) {
-                        this.user.info_consignment = {};
                     }
                     this.allowForm = true;
                     if(this.superAdmin) {

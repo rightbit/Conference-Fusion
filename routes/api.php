@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\SiteConfigController;
 use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\TrackHeadController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\UserInfoConsignmentController;
 use App\Http\Controllers\Api\UserInfoDataCategoryController;
 use App\Http\Controllers\Api\UserPermissionController;
 use App\Http\Controllers\Api\RoomController;
@@ -60,6 +61,7 @@ Route::middleware(['auth:sanctum'])->group( function() {
     Route::group(['prefix' => 'profile'], function () {
         Route::apiResource('user', UserController::class);
         Route::apiResource('user-info-data', UserInfoDataCategoryController::class);
+        Route::apiResource('user-info-consignment', UserInfoConsignmentController::class);
     });
 
     Route::apiResource('session-user-comment', SessionUserCommentController::class);

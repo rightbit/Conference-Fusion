@@ -118,17 +118,6 @@ class UserController extends Controller
             $user->info->social_data = !empty($request->info['social_data']) ? json_encode($request->info['social_data']) : NULL;
             $user->info->participant_data = !empty($request->info['participant_data']) ? json_encode($request->info['participant_data']) : NULL;
             $user->info->save();
-
-            $user->info_consignment->book1_title = $request->info_consignment['book1_title'];
-            $user->info_consignment->book1_author = $request->info_consignment['book1_author'];
-            $user->info_consignment->book1_isbn = $request->info_consignment['book1_isbn'];
-            $user->info_consignment->book2_title = $request->info_consignment['book2_title'];
-            $user->info_consignment->book2_author = $request->info_consignment['book2_author'];
-            $user->info_consignment->book2_isbn = $request->info_consignment['book2_isbn'];
-            $user->info_consignment->book3_title = $request->info_consignment['book3_title'];
-            $user->info_consignment->book3_author = $request->info_consignment['book3_author'];
-            $user->info_consignment->book3_isbn = $request->info_consignment['book3_isbn'];
-            $user->info_consignment->save();
         }
     }
 

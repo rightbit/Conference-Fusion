@@ -92,8 +92,6 @@ class User extends Authenticatable
      */
     public function info_consignment()
     {
-        return $this->hasOne(UserInfoConsignment::class, 'user_id', 'id')->withDefault([
-            'id' => null,
-        ]);
+        return $this->hasMany(UserInfoConsignment::class, 'user_id', 'id');
     }
 }

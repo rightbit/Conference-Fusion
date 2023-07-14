@@ -43,18 +43,7 @@ class UserResource extends JsonResource
                 'share_email_permission' => $this->info->share_email_permission ? true:false,
                 'agree_to_terms' => $this->info->agree_to_terms ? true:false,
             ],
-            'info_consignment' => [
-                'id' => $this->info_consignment->id,
-                'book1_title' => $this->info_consignment->book1_title,
-                'book1_author' => $this->info_consignment->book1_author,
-                'book1_isbn' => $this->info_consignment->book1_isbn,
-                'book2_title' => $this->info_consignment->book2_title,
-                'book2_author' => $this->info_consignment->book2_author,
-                'book2_isbn' => $this->info_consignment->book2_isbn,
-                'book3_title' => $this->info_consignment->book3_title,
-                'book3_author' => $this->info_consignment->book3_author,
-                'book3_isbn' => $this->info_consignment->book3_isbn,
-            ]
+
         ];
     }
 }

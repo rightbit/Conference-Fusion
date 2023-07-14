@@ -10,6 +10,8 @@ class UserInfoConsignment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
+        'conference_id',
         'book1_title',
         'book1_author',
         'book1_isbn',
