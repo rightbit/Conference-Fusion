@@ -6,7 +6,6 @@
                 <div class="card mb-3">
                     <div class="card-header d-flex justify-content-between">
                         <div class="h4 align-self-center mb-lg-0">Call for Panelists</div>
-
                     </div>
 
                     <div class="card-body">
@@ -49,7 +48,7 @@
                                 <td class="ps-2 text-center"><span class="badge bg-secondary">{{ panel.track }}</span></td>
                                 <td class="ps-2 text-center" v-html="formatDate(panel.proposed_date)"></td>
                                 <td class="ps-2">{{ panel.name }}</td>
-                                <td>{{ panel.description }}</td>
+                                <td>{{ truncate(panel.description , 300, '...') }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -76,7 +75,7 @@
                         <p>{{ this.panelInfo.name }}</p>
 
                         <h5>Description:</h5>
-                        <p>{{ this.panelInfo.description }}</p>
+                        <p style="white-space: pre-line">{{ this.panelInfo.description }}</p>
                         <div class="mb-3">
                             <label for="interest_level">My level of interest</label>
                             <select class="form-select" v-model="interest.interest_level" id="interest_level" required>
@@ -263,7 +262,14 @@ export default {
                         this.$toast.error(`Could not delete panel interest`);
                     });
             }
-        }
+        },
+        truncate: function (text, length, suffix) {
+            if (text && text.length > length) {
+                return text.substring(0, length) + suffix;
+            } else {
+                return text;
+            }
+        },
     }
 }
 </script>
