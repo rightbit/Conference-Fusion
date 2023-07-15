@@ -46,6 +46,10 @@ Route::middleware(['auth'])->group( function() {
         return view('user.profile', ['id' => Auth::id()]);
     })->name('profile');
 
+    Route::get('/mass-signing/{conference}',  function($conference) {
+        return view('user.call_for_signing', ['conference' => $conference]);
+    })->name('call_for_signing');
+
 });
 
 

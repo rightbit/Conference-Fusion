@@ -12,6 +12,7 @@ class UserInfoConsignment extends Model
     protected $fillable = [
         'user_id',
         'conference_id',
+        'participating',
         'book1_title',
         'book1_author',
         'book1_isbn',

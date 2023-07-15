@@ -2,6 +2,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">
+                <div class="text-end"><a href="/home"><i class="bi bi-arrow-left-circle"></i> Back home</a></div>
                 <div class="card mb-3">
                     <div class="card-header d-flex justify-content-between">
                         <div class="h4 align-self-center mb-lg-0">Submit a new presentation</div>

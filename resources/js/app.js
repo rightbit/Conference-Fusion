@@ -31,6 +31,10 @@ import PartialsSessionStatusOptions from "./components/partials/SessionStatusOpt
 import PartialsUserInfoData from "./components/partials/UserInfoData";
 import PartialsUserProfileImageModal from "./components/partials/UserProfileImageModal";
 
+
+//Optional Modules
+import CallForSigning from "./components/CallForSigning";
+
 // Create and Use
 const app = createApp({})
 app.use(Toaster, {
@@ -64,6 +68,10 @@ app.component('partials-session-participants-list', PartialsSessionParticipantsL
 app.component('partials-session-status-options', PartialsSessionStatusOptions)
 app.component('partials-user-info-data', PartialsUserInfoData)
 app.component('partials-user-profile-image-modal', PartialsUserProfileImageModal)
+
+
+//Optional Modules
+app.component('call-for-signing', CallForSigning)
 
 
 

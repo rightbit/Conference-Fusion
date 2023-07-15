@@ -35,6 +35,7 @@ class HomeController extends Controller
     public function index()
     {
         $home_page_message = SiteConfig::where('key', 'message_home_page')->first();
+        $mass_signing_enabled = SiteConfig::where('key', 'book_signing_module')->first();
 
         $conferences = Conference::whereRaw('end_date >= CURDATE() + INTERVAL 1 DAY')
             ->whereNotNull('call_start_date')
@@ -65,6 +66,7 @@ class HomeController extends Controller
         return view('home')
             ->with('conferences', $conferences)
             ->with('home_page_message', $home_page_message->value)
+            ->with('mass_signing_enabled', $mass_signing_enabled->value)
             ->with('user_sessions', $user_sessions);
     }
 

@@ -47,6 +47,11 @@
                                                 <a href="{{ route('call_for_panelists', ['conference' => $conference->id] ) }}" class="btn align-self-end m-1 {{ $conference->call_active ? ' btn-primary':'btn-outline-secondary disabled' }}">
                                                     {{ __('Call for panelists') }}
                                                 </a>
+                                                @if($mass_signing_enabled)
+                                                    <a href="{{ route('call_for_signing', ['conference' => $conference->id] ) }}" class="btn align-self-end m-1 {{ $conference->call_active ? ' btn-info':'btn-outline-secondary disabled' }}">
+                                                        {{ __('Mass signing') }}
+                                                    </a>
+                                                @endif
                                             @else
                                                 The call is now closed.
                                             @endif

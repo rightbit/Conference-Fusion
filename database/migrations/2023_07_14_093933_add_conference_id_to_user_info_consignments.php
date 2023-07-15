@@ -16,6 +16,7 @@ return new class extends Migration
     {
         Schema::table('user_info_consignments', function (Blueprint $table) {
             $table->foreignIdFor(Conference::class)->nullable()->after('user_id')->constrained()->cascadeOnDelete();
+            $table->boolean('participating')->default('0')->after('user_id');
         });
     }
 
@@ -29,6 +30,7 @@ return new class extends Migration
         Schema::table('user_info_consignments', function (Blueprint $table) {
             $table->dropForeignIdFor(Conference::class);
             $table->dropColumn('conference_id');
+            $table->dropColumn('participating');
         });
     }
 };
