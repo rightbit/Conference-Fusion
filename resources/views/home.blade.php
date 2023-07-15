@@ -36,7 +36,10 @@
                                                     {{ $conference->end_date_display }}
                                             </span>
                                             <h5 class="card-title">{{ $conference->name }}</h5>
-                                            <p class="card-text">Call opens: {{  $conference->call_start_date_display }}</p>
+                                            <p class="card-text">
+                                                Call opens: {{  $conference->call_start_date_display }} <br />
+                                                Call closes: {{  $conference->call_end_date_display }}
+                                            </p>
                                             <p class="card-text">{{ $conference->description }}</p>
                                         </div>
                                         <div class="card-footer">

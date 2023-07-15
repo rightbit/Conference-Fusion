@@ -52,6 +52,7 @@ class HomeController extends Controller
             $conference->start_date_display = Carbon::parse($conference->start_date)->format('M j, Y');
             $conference->end_date_display = Carbon::parse($conference->end_date)->format('M j, Y');
             $conference->call_start_date_display = Carbon::parse($conference->call_start_date)->format('F j, Y');
+            $conference->call_end_date_display = Carbon::parse($conference->call_end_date)->format('F j, Y');
             $conference_sessions = SessionInterest::getUserSchedule(Auth::user()->id, $conference->id);
 
             if(count($conference_sessions) > 0) {
