@@ -140,7 +140,7 @@
                             <div class="invalid-feedback">
                                 Please fill out the comments field.
                             </div>
-                            <small class="text-muted">Tell us why you would make a good contributor to this panel.</small>
+                            <small class="text-muted">Tell us why you would make a good contributor to this panel. Please be as detailed as possible! </small>
                         </div>
 
                     </div>
