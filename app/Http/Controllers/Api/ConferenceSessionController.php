@@ -10,6 +10,7 @@ use App\Http\Resources\CallForPanelistResource;
 use App\Http\Resources\ConferenceSessionResource;
 use App\Http\Resources\SessionInterestResource;
 use App\Http\Resources\UserScheduledSessionInfoResource;
+use App\Models\Conference;
 use App\Models\ConferenceSchedule;
 use App\Models\ConferenceSession;
 use App\Models\SessionHistory;
@@ -127,34 +128,54 @@ class ConferenceSessionController extends Controller
         return new ConferenceSessionResource($conference_session);
     }
 
+    private function getConferenceIdFromSlug($slug)
+    {
+        $short_name = str_replace('-', ' ', $slug);
+        $conference_id = Conference::where('short_name', $short_name)->value('id');
+
+        if (empty($conference_id)) {
+            abort(500, 'Conference not found');
+        }
+
+        return $conference_id;
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @param  int  $conference_id
+     * @param  string  $conference_slug
      * @return \Illuminate\Http\Response
      */
-    public function userPresentationIndex(int $conference_id)
+    public function userPresentationIndex(string $conference_slug)
     {
+        $conference_id = $this->getConferenceIdFromSlug($conference_slug);
+
         $user_id = Auth::user()->id;
         $conference_sessions = SessionInterest::getUserPresentationInterests($user_id, $conference_id);
 
         return SessionInterestResource::collection($conference_sessions);
-    }
 
+    }
 
     /**
      * Display a listing of the resource.
      *
-     * @param  int  $conference_id
+     * @param  string  $conference_slug
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function userPanelIndex(int $conference_id, Request $request)
+    public function userPanelIndex(string $conference_slug, Request $request)
     {
-        $user_id = Auth::user()->id;
-        $conference_sessions = ConferenceSession::getUserPanelInterests($user_id, $conference_id, $request);
+        $conference_id = $this->getConferenceIdFromSlug($conference_slug);
 
-        return CallForPanelistResource::collection($conference_sessions);
+        $user_id = Auth::user()->id;
+        if($user_id) {
+            $conference_sessions = ConferenceSession::getUserPanelInterests($user_id, $conference_id, $request);
+            return CallForPanelistResource::collection($conference_sessions);
+        }
+
+        abort(403, 'Not authorized');
+
     }
 
     /**
@@ -168,7 +189,10 @@ class ConferenceSessionController extends Controller
         $duration = SiteConfig::where('key', 'default_session_duration')->first();
         $status = SessionStatus::where('status', 'User Suggested')->first();
 
+
         $conference_session = new ConferenceSession($request->all());
+        //Convert conference_id from slug
+        $conference_session->conference_id = $this->getConferenceIdFromSlug($request->conference_id);
         $conference_session->type_id = config('site.session_type_id.presentation');
         $conference_session->session_status_id = $request->session_status_id ?? $status->id;
         $conference_session->special_equipment = $request->special_equipment ?? null;

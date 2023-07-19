@@ -2,5 +2,5 @@
 
 @section('content')
     @php  /* @var $conference */  @endphp
-    <call-for-signing :conference-id="{{ $conference }}" />
+    <call-for-signing :conference-id="'{{ $conference }}'" />
 @endsection

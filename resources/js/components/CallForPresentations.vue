@@ -121,7 +121,6 @@ export default {
                 .then((response) => {
                     // this.totalSessions = response.data.meta.total;
                     this.conferenceSessions = response.data.data;
-                    console.log(this.conferenceSessions);
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not find your submissions`);

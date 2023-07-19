@@ -44,14 +44,14 @@
                                         </div>
                                         <div class="card-footer">
                                             @if($conference->call_active)
-                                                <a href="{{ route('call_for_presentations', ['conference' => $conference->id] ) }}" class="btn align-self-end m-1 {{ $conference->call_active ? 'btn-warning':'btn-outline-secondary disabled' }}" >
+                                                <a href="{{ route('call_for_presentations', ['conference' => $conference->slug] ) }}" class="btn align-self-end m-1 {{ $conference->call_active ? 'btn-warning':'btn-outline-secondary disabled' }}" >
                                                     {{ __('Call for presentations') }}
                                                 </a>
-                                                <a href="{{ route('call_for_panelists', ['conference' => $conference->id] ) }}" class="btn align-self-end m-1 {{ $conference->call_active ? ' btn-primary':'btn-outline-secondary disabled' }}">
+                                                <a href="{{ route('call_for_panelists', ['conference' => $conference->slug] ) }}" class="btn align-self-end m-1 {{ $conference->call_active ? ' btn-primary':'btn-outline-secondary disabled' }}">
                                                     {{ __('Call for panelists') }}
                                                 </a>
                                                 @if($mass_signing_enabled)
-                                                    <a href="{{ route('call_for_signing', ['conference' => $conference->id] ) }}" class="btn align-self-end m-1 {{ $conference->call_active ? ' btn-info':'btn-outline-secondary disabled' }}">
+                                                    <a href="{{ route('call_for_signing', ['conference' => $conference->slug] ) }}" class="btn align-self-end m-1 {{ $conference->call_active ? ' btn-info':'btn-outline-secondary disabled' }}">
                                                         {{ __('Mass signing') }}
                                                     </a>
                                                 @endif
