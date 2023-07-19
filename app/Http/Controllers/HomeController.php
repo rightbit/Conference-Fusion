@@ -42,7 +42,7 @@ class HomeController extends Controller
             ->orderBy('start_date')
             ->get();
 
-        $today = Carbon::today();
+        $today = Carbon::today(env('APP_TIMEZONE', 'UTC'));
 
         $user_sessions = [];
         foreach($conferences as &$conference) {
