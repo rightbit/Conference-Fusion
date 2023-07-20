@@ -105,13 +105,13 @@
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <label for="biography">Biography</label>
-                                <textarea id="biography" class="form-control" placeholder="Your biography (to publish publicly)" v-model="user.info.biography" ></textarea>
+                                <textarea rows="6" id="biography" class="form-control" placeholder="Your biography (to publish publicly)" v-model="user.info.biography" ></textarea>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <label for="notes">Info and notes</label>
-                                <textarea id="notes" class="form-control" placeholder="General notes for the staff about you (not public). Use this area to list accomplishments and other information about you not on your bio to help the committee know you better. Also, please include special accommodations and any potential conflicts or concerns"  v-model="user.info.notes" ></textarea>
+                                <textarea rows="6" id="notes" class="form-control" placeholder="General notes for the committee about you (not public). Use this area to list accomplishments and other information about you not on your bio to help the committee know you better. Also, please include special accommodations and any potential conflicts or concerns"  v-model="user.info.notes" ></textarea>
                             </div>
                         </div>
                         <div class="row g-2 mb-4">
