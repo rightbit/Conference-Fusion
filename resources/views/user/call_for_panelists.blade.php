@@ -2,5 +2,5 @@
 
 @section('content')
     @php  /* @var $conference */  @endphp
-    <call-for-panels :conference-id="'{{ $conference }}'" />
+    <call-for-panels :conference-id="'{{ $conference }}'" :user-id="{{ Auth::user()->id }}" />
 @endsection

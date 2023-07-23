@@ -28,7 +28,10 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="alert alert-warning d-flex" role="alert" v-if="sessionCounts.interest > 15">
+                            <i class="bi bi-exclamation-circle-fill me-2"></i>
+                            <div>Please limit your presentation submissions and panel interest to 30 or less. You are currently have {{ sessionCounts.interest }} submissions.</div>
+                        </div>
                         <table class="table table-striped table-sm fs-90">
                             <thead>
                             <tr>
@@ -71,6 +74,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="container">
+                        <div class="alert alert-warning d-flex" role="alert" v-if="sessionCounts.interest > 15">
+                            <i class="bi bi-exclamation-circle-fill me-2"></i>
+                            <div>Please limit your presentation submissions and panel interest to 30 or less. You are currently have {{ sessionCounts.interest }} submissions.</div>
+                        </div>
                         <h5>Title:</h5>
                         <p>{{ this.panelInfo.name }}</p>
 
@@ -150,7 +157,8 @@
                     <button type="button" v-if="interest.id" @click="deleteSession(interest)" class="btn btn-danger" style="margin-right:auto"><i class="bi bi-trash-fill"></i> Remove Interest</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button v-if="interest.id" type="submit" class="btn btn-primary">Update my interest</button>
-                    <button v-else type="submit" class="btn btn-primary">Submit my interest</button>
+                    <button v-else-if="sessionCounts.interest < 30" type="submit" class="btn btn-primary">Submit my interest</button>
+                    <button v-else type="submit" class="btn btn-secondary" disabled><i class="bi bi-exclamation-circle-fill"></i> Submit my interest</button>
                 </div>
             </div>
         </div>
@@ -163,7 +171,7 @@
 import dayjs from 'dayjs';
 
 export default {
-    props: ['conferenceId'],
+    props: ['conferenceId', 'userId'],
     data: function() {
         return {
             totalSessions: 0,
@@ -173,11 +181,17 @@ export default {
             tracks: {},
             filter: '',
             laravelData: {},
+            sessionCounts: {
+                interest: 0,
+                panelist: 0,
+                presenter: 0,
+            },
         }
     },
     mounted() {
-        this.loadSessions();
         this.loadTracks();
+        this.loadSessions();
+        this.getUserSessionTotals();
     },
     methods: {
         formatDate(dateString) {
@@ -194,8 +208,8 @@ export default {
                     this.$toast.error(`Could not load the tracks`);
                 });
         },
-        loadSessions: function (page = 1) {
-            axios.get(`/api/user-panel-list/${this.conferenceId}`, { params: { page: page, filter: this.filter, call_included: 1 }})
+        loadSessions: function (page = 1, filter = this.filter) {
+            axios.get(`/api/user-panel-list/${this.conferenceId}`, { params: { page: page, filter: filter, call_included: 1 }})
                 .then((response) => {
                     this.conferenceSessions = response.data.data;
                     this.totalSessions = response.data.meta.total;
@@ -203,6 +217,15 @@ export default {
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not load the panels for this conference`);
+                });
+        },
+        getUserSessionTotals: function() {
+            axios.get(`/api/user-session-totals/${this.userId}`)
+                .then((response) => {
+                    this.sessionCounts = response.data;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Error loading the session counts`);
                 });
         },
         setPanelInfo: function (panel, key) {
@@ -241,6 +264,7 @@ export default {
                         this.$toast.success(`Saved a new panel interest`);
                         this.interest = {};
                         this.$refs.Close.click();
+                        this.getUserSessionTotals();
 
                     })
                     .catch((error) => {
@@ -257,6 +281,7 @@ export default {
                         this.interest = {};
                         this.conferenceSessions[this.panelInfo.array_key].user_session_interest = null;
                         this.$refs.Close.click();
+                        this.getUserSessionTotals();
                     })
                     .catch((error) => {
                         this.$toast.error(`Could not delete panel interest`);
