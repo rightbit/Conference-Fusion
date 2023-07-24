@@ -133,6 +133,7 @@ export default {
                 '3': 'Educator',
                 '4': 'Expert',
                 '5': 'Fan',
+                '6': 'Other'
             }
         }
     },

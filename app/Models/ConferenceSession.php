@@ -98,6 +98,10 @@ class ConferenceSession extends Model
             ->with('session_interest');
         }
 
+        if($request->single_session && is_numeric($request->single_session)) {
+            $panels->where('id', '=', $request->single_session);
+        }
+
         if(is_numeric($request->filter)) {
             $panels->where('track_id', '=', $request->filter);
         }

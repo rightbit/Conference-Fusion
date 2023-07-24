@@ -5,7 +5,7 @@
                 <div class="text-end"><a href="/home"><i class="bi bi-arrow-left-circle"></i> Back home</a></div>
                 <div class="card mb-3">
                     <div class="card-header d-flex justify-content-between">
-                        <div class="h4 align-self-center mb-lg-0">Call for Panelists</div>
+                        <div class="h4 align-self-center mb-lg-0">Call for Panelists <span v-if="singleSession">- single session</span></div>
                     </div>
 
                     <div class="card-body">
@@ -13,7 +13,7 @@
                             <div>
                                 Found {{ totalSessions }} Panels
                             </div>
-                            <div>
+                            <div v-if="!singleSession">
                                 <div class="d-flex align-items-end input-group input-group-sm ">
                                     <div class="input-group-text bg-warning"><i class="bi bi-filter-right">&nbsp;</i> Filter Panels</div>
                                     <select class="form-select form-select-sm me-2" v-model="filter" v-on:change="loadSessions"  aria-label="select track filter">
@@ -56,7 +56,10 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="card-footer d-flex justify-content-center">
+                    <div v-if="singleSession" class="card-footer d-flex justify-content-center">
+                            <a :href="'/call-for-panelists/' + conferenceId" class="btn btn-primary"><i class="bi bi-arrow-counterclockwise"></i> View complete panel list</a>
+                    </div>
+                    <div v-else class="card-footer d-flex justify-content-center">
                         <Pagination :data="laravelData" :limit="3" :show-disabled="false" @pagination-change-page="loadSessions" />
                     </div>
                 </div>
@@ -122,6 +125,7 @@
                                 <option value="3">Educator</option>
                                 <option value="2">Expert</option>
                                 <option value="1">Fan</option>
+                                <option value="6">Other</option>
                             </select>
                             <div class="invalid-feedback">
                                 Please indicate your potential role.
@@ -171,11 +175,11 @@
 import dayjs from 'dayjs';
 
 export default {
-    props: ['conferenceId', 'userId'],
+    props: ['conferenceId', 'userId', 'singleSession'],
     data: function() {
         return {
             totalSessions: 0,
-            conferenceSessions: {},
+            conferenceSessions: [],
             interest: {},
             panelInfo: {},
             tracks: {},
@@ -209,15 +213,45 @@ export default {
                 });
         },
         loadSessions: function (page = 1, filter = this.filter) {
-            axios.get(`/api/user-panel-list/${this.conferenceId}`, { params: { page: page, filter: filter, call_included: 1 }})
-                .then((response) => {
-                    this.conferenceSessions = response.data.data;
-                    this.totalSessions = response.data.meta.total;
-                    this.laravelData = response.data;
+            if (this.singleSession) {
+                // Find a single session, add it to the array and pop up the modal
+                axios.get(`/api/user-panel-list/${this.conferenceId}`, {
+                    params: {
+                        page: page,
+                        single_session: this.singleSession,
+                        call_included: 1
+                    }
                 })
-                .catch((error) => {
-                    this.$toast.error(`Could not load the panels for this conference`);
-                });
+                    .then((response) => {
+                        this.conferenceSessions = response.data.data;
+                        this.totalSessions = response.data.meta.total;
+                        this.laravelData = response.data;
+                    })
+                    .catch((error) => {
+                        this.$toast.error(`Could not load the single session you requested`);
+                    });
+
+            } else {
+                axios.get(`/api/user-panel-list/${this.conferenceId}`, {
+                    params: {
+                        page: page,
+                        filter: filter,
+                        call_included: 1
+                    }
+                })
+                    .then((response) => {
+                        console.log(response.data.data);
+                        this.conferenceSessions = response.data.data;
+                        this.totalSessions = response.data.meta.total;
+                        this.laravelData = response.data;
+                    })
+                    .catch((error) => {
+                        this.$toast.error(`Could not load the panels for this conference`);
+                    });
+            }
+
+
+
         },
         getUserSessionTotals: function() {
             axios.get(`/api/user-session-totals/${this.userId}`)

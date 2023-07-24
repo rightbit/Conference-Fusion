@@ -191,6 +191,7 @@
                                     <option value="3">Educator</option>
                                     <option value="2">Expert</option>
                                     <option value="1">Fan</option>
+                                    <option value="6">Other</option>
                                 </select>
                                 <div class="invalid-feedback">
                                     Please indicate the potential role.

@@ -35,8 +35,12 @@ Route::middleware(['auth'])->group( function() {
     })->name('call_for_presentations');
 
     Route::get('/call-for-panelists/{conference}',  function($conference) {
-        return view('user.call_for_panelists', ['conference' => $conference]);
+        return view('user.call_for_panelists', ['conference' => $conference, 'singlesession' => 0]);
     })->name('call_for_panelists');
+
+    Route::get('/call-for-panelists/{conference}/panel/{singlesession}',  function($conference, $singlesession) {
+        return view('user.call_for_panelists', ['conference' => $conference, 'singlesession' => $singlesession]);
+    })->name('call_for_panelists_single_panel');
 
     Route::get('/c/{conference_slug}/session/{session_id}', function($conference_slug, $session_id) {
         return view('user.session_view', ['conference_slug' => $conference_slug, 'session_id' => $session_id]);
