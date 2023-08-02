@@ -24,13 +24,13 @@
                         <table class="table table-sm table-borderless table-responsive fs-90">
                             <thead class="border-bottom border-dark">
                                 <tr>
-                                    <th>Badge name</th>
-                                    <th class="ps-2">Name</th>
-                                    <th class="m-0 p-0 text-center fit">Interest level</th>
-                                    <th class="m-0 p-0 text-center fit">Experience level</th>
+                                    <th><button class="btn btn-warning btn-sm py-0 me-2" @click="toggleInterests"><i class="bi bi-person-fill-down"></i></button> Badge name</th>
+                                    <th class="m-0 py-0 px-2 fit">Interest level</th>
+                                    <th class="m-0 py-0 px-2 fit">Experience level</th>
+                                    <th class="m-0 py-0 px-2 fit">Staff Score</th>
                                     <th class="m-0 p-0 text-center">Staff notes</th>
                                     <th class="m-0 p-0 text-center">Will moderate</th>
-                                    <th class="m-0 p-0"></th>
+                                    <th class="text-end"><button class="btn btn-light btn-sm py-1 text-primary" @click="loadSessionInterest"><i class="bi bi-arrow-repeat"></i> Reload</button></th>
                                 </tr>
                             </thead>
                             <tbody v-for="(interest, index) in interestedUsers" class="border-bottom">
@@ -39,14 +39,15 @@
                                         <button class="btn btn-sm btn-secondary py-0 me-2" @click="this.interestToggle[interest.id] = !this.interestToggle[interest.id]">
                                             <i class="bi bi-person-lines-fill"></i>
                                         </button>
-                                        <a :href="'/admin/user-profile/' + interest.user.id" target="_blank">{{ interest.user_info.badge_name }}</a></td>
-                                    <td class="ps-2">{{ interest.user.first_name }} {{ interest.user.last_name }}</td>
+                                        <a :href="'/admin/user-profile/' + interest.user.id" target="_blank">{{ interest.user_info.badge_name }}</a> <span v-if="!sameName(interest)">({{ interest.user.first_name }} {{ interest.user.last_name }})</span></td>
+
                                     <td class="text-center fit px-2">
                                         <star-rating
                                             v-model:rating="interest.interest_level"
                                             :read-only="true"
                                             :show-rating="false"
                                             :star-size="18"
+                                            :active-color="'#dc7c00'"
                                             :border-color="'#000'"
                                             :border-width="1"
                                         />
@@ -57,8 +58,20 @@
                                             :read-only="true"
                                             :show-rating="false"
                                             :star-size="18"
+                                            :active-color="'#feb20a'"
                                             :border-color="'#000'"
                                             :border-width="1"
+                                        />
+                                    </td>
+                                    <td class="text-center fit px-2">
+                                        <star-rating
+                                            v-model:rating="interest.staff_score"
+                                            :show-rating="false"
+                                            :star-size="18"
+                                            :active-color="'#fedf05'"
+                                            :border-color="'#000'"
+                                            :border-width="1"
+                                            @update:rating="saveStaffScore(interest.staff_score, interest.id)"
                                         />
                                     </td>
                                     <td class="m-0 px-0 text-center">
@@ -183,6 +196,16 @@ export default {
             this.userInfoStaffNotes = interest.user_info.staff_notes;
             this.userSessionStaffNotes =  interest.staff_notes;
         },
+        saveStaffScore: function(staffScore, interestId) {
+            console.log(staffScore, interestId);
+            axios.put(`/api/admin/session-interest/${interestId}`,  { action: 'save_staff_score', staff_score: staffScore })
+                .then((response) => {
+                    this.$toast.success(`Staff score saved`);
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not save the staff score`);
+                })
+        },
         saveStaffNotes: function() {
             axios.put(`/api/admin/session-interest/${this.staffNotesInterestId}`,  { action: 'save_staff_notes', staff_notes: this.userSessionStaffNotes })
                 .then((response) => {
@@ -201,6 +224,18 @@ export default {
             this.staffNotesInterestId = null;
             this.userInfoStaffNotes = null;
             this.userSessionStaffNotes = null;
+        },
+        toggleInterests: function() {
+            for(const interest of this.interestedUsers) {
+                this.interestToggle[interest.id] = !this.interestToggle[interest.id];
+            }
+
+        },
+        sameName: function(interest) {
+            if (interest.user_info.badge_name == (interest.user.first_name + ' ' + interest.user.last_name)) {
+                return true;
+            }
+            return false;
         },
     }
 

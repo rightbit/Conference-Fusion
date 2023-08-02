@@ -46,6 +46,7 @@ class SessionInterestController extends Controller
                     $query->where('badge_name', 'LIKE',"%$request->keyword%");
                 });
             })
+            ->orderBy('staff_score', 'desc')
             ->orderBy('interest_level', 'desc');
 
         return SessionInterestResource::collection($session_interest_users->paginate(50));
@@ -148,7 +149,6 @@ class SessionInterestController extends Controller
                 abort(500, 'Error updating record');
             }
 
-
             $history_message = "Assigned moderator: {$sessionInterest->user_info->badge_name} to {$sessionInterest->conference_session->name}";
         }
 
@@ -156,6 +156,14 @@ class SessionInterestController extends Controller
             if(!$sessionInterest->update(['staff_notes' => $request->staff_notes])) {
                 abort(500, 'Error updating record');
             }
+        }
+
+        if($request->action == 'save_staff_score') {
+            if(!$sessionInterest->update(['staff_score' => $request->staff_score])) {
+                abort(500, 'Error updating record');
+            }
+
+            $history_message = "Gave staff score of {$request->staff_score} to {$sessionInterest->user_info->badge_name} for {$sessionInterest->conference_session->name}";
         }
 
         if(!empty($history_message)) {

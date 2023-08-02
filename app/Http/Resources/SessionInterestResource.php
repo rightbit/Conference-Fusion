@@ -17,9 +17,11 @@ class SessionInterestResource extends JsonResource
     public function toArray($request)
     {
         $staff_notes = null;
+        $staff_score = null;
         $user_staff_notes = null;
         if(Gate::allows('view_admin', Auth::user())){
             $staff_notes = $this->staff_notes;
+            $staff_score = $this->staff_score;
             $user_staff_notes = $this->user_info->staff_notes;
         }
 
@@ -32,6 +34,7 @@ class SessionInterestResource extends JsonResource
             'panel_role' => $this->panel_role,
             'notes' => $this->notes,
             'staff_notes' => $staff_notes, //Admin only
+            'staff_score' => $staff_score, //Admin only
             'will_moderate' => $this->will_moderate,
             'is_participant' => $this->is_participant,
             'is_moderator' => $this->is_moderator,
