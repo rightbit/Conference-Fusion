@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use mysql_xdevapi\Collection;
 
 class SessionInterest extends Model
 {
@@ -182,6 +183,24 @@ class SessionInterest extends Model
         }
 
         return $participant_list;
+
+    }
+
+    public static function getPotentialsListReport(int $conference_id, $type_id = 1, $sort = 'last_name', $desc = false)
+    {
+
+        $desc = filter_var($desc, FILTER_VALIDATE_BOOLEAN) ? 'ASC' : 'DESC';
+
+        return  DB::table('session_interests AS si')
+            ->select(['si.user_id', 'u.first_name', 'u.last_name', 'ui.badge_name', DB::raw('COUNT(si.user_id) as total')])
+            ->join('users AS u', 'si.user_id', '=', 'u.id')
+            ->join('user_infos AS ui', 'si.user_id', '=', 'ui.id')
+            ->join('conference_sessions AS cs', 'si.conference_session_id', '=', 'cs.id')
+            ->where('cs.conference_id', "=", $conference_id)
+            ->where('cs.type_id', "=", $type_id)
+            ->groupBy('si.user_id', 'u.last_name', 'u.first_name', 'u.last_name', 'ui.badge_name')
+            ->orderBy($sort, $desc)
+            ->get();
 
     }
 

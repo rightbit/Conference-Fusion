@@ -51,6 +51,21 @@ class ReportController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function potentialsList(int $conference_id, Request $request)
+    {
+        Log::debug($request);
+        $users = SessionInterest::getPotentialsListReport($conference_id, $request->type_id, $request->sort, $request->desc);
+        return new GenericReportResource($users);
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  int  $conference_id
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function sessionHistoryList(int $conference_id, Request $request)
     {
         $history = SessionHistory::with('user')

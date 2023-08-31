@@ -240,7 +240,6 @@ export default {
                     }
                 })
                     .then((response) => {
-                        console.log(response.data.data);
                         this.conferenceSessions = response.data.data;
                         this.totalSessions = response.data.meta.total;
                         this.laravelData = response.data;

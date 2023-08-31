@@ -197,7 +197,6 @@ export default {
             this.userSessionStaffNotes =  interest.staff_notes;
         },
         saveStaffScore: function(staffScore, interestId) {
-            console.log(staffScore, interestId);
             axios.put(`/api/admin/session-interest/${interestId}`,  { action: 'save_staff_score', staff_score: staffScore })
                 .then((response) => {
                     this.$toast.success(`Staff score saved`);
