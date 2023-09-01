@@ -189,12 +189,12 @@ class SessionInterest extends Model
     public static function getPotentialsListReport(int $conference_id, $type_id = 1, $sort = 'last_name', $desc = false)
     {
 
-        $desc = filter_var($desc, FILTER_VALIDATE_BOOLEAN) ? 'ASC' : 'DESC';
+        $desc = filter_var($desc, FILTER_VALIDATE_BOOLEAN) ? 'DESC' : 'ASC';
 
         return  DB::table('session_interests AS si')
             ->select(['si.user_id', 'u.first_name', 'u.last_name', 'ui.badge_name', DB::raw('COUNT(si.user_id) as total')])
             ->join('users AS u', 'si.user_id', '=', 'u.id')
-            ->join('user_infos AS ui', 'si.user_id', '=', 'ui.id')
+            ->join('user_infos AS ui', 'si.user_id', '=', 'ui.user_id')
             ->join('conference_sessions AS cs', 'si.conference_session_id', '=', 'cs.id')
             ->where('cs.conference_id', "=", $conference_id)
             ->where('cs.type_id', "=", $type_id)

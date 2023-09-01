@@ -53,7 +53,6 @@ class ReportController extends Controller
      */
     public function potentialsList(int $conference_id, Request $request)
     {
-        Log::debug($request);
         $users = SessionInterest::getPotentialsListReport($conference_id, $request->type_id, $request->sort, $request->desc);
         return new GenericReportResource($users);
 

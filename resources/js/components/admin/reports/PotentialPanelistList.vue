@@ -7,6 +7,12 @@
 <template>
     <div class="">
         <h2>Potential Participant List</h2>
+        <div class="float-end">
+            <select v-model="type_id" @change="loadReport" class="form-select">
+                <option value="1">Panelists</option>
+                <option value="2">Presenters</option>
+            </select>
+        </div>
         <h6>Alphabetical list of potential panelists</h6>
         {{ data.length }} panelists found
 
@@ -76,7 +82,7 @@ export default {
                 this.desc = false;
             }
             this.loadReport();
-        }
+        },
     },
 }
 </script>
