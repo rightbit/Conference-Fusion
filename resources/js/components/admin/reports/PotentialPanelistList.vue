@@ -13,8 +13,8 @@
                 <option value="2">Presenters</option>
             </select>
         </div>
-        <h6>Alphabetical list of potential panelists</h6>
-        {{ data.length }} panelists found
+        <h6>Sortable list of potential panelists/presenters</h6>
+        {{ data.length }} people found
 
         <table class="table table-scrollable table-free-width table-sm table-striped bg-white mt-2">
             <thead style="z-index: 500">

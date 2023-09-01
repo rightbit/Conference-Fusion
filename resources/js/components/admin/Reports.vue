@@ -43,7 +43,7 @@
                                 <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Participant reports</span> </a>
                             <ul class="collapse nav flex-column ms-2" id="submenuParticipant" data-bs-parent="#menu">
                                 <li>
-                                    <a href="/admin/reports/potential-panelist-list" id="participant-list-nav" class="nav-link px-0"> <span class="d-none d-sm-inline">Potential Panelists</span><span class="d-sm-none">PP</span></a>
+                                    <a href="/admin/reports/potential-panelist-list" id="potential-panelist-list-nav" class="nav-link px-0"> <span class="d-none d-sm-inline">Potential Panelists</span><span class="d-sm-none">PP</span></a>
                                 </li>
                                 <li>
                                     <a href="/admin/reports/participant-list" id="participant-list-nav" class="nav-link px-0"> <span class="d-none d-sm-inline">Participant schedules</span><span class="d-sm-none">PS</span></a>
