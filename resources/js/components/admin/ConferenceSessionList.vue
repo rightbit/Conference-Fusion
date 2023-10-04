@@ -48,7 +48,11 @@
                                 <th  class="w-30">Description</th>
                                 <th>Track</th>
                                 <th>Type</th>
-                                <th class="text-center">Scheduled</th>
+                                <th class="text-center">Status <i class="bi bi-info-circle-fill text-info"
+                                                                  data-bs-toggle="tooltip"
+                                                                  data-bs-placement="top"
+                                                                  title="Mouseover icon for definition"></i>
+                                </th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -59,12 +63,25 @@
                                 <td>{{ session.track }}</td>
                                 <td>{{ session.session_type.name }}</td>
                                 <td class="text-center">
+                                    <i v-if="session.status"
+                                       :class="this.statusIcons[session.status.id]"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       :title="session.status.status"
+                                    ></i>
                                     <i v-if="session.conference_schedule && session.conference_schedule.length > 0"
                                        class='bi bi-calendar-check-fill text-success'
                                        data-bs-toggle="tooltip"
                                        data-bs-placement="top"
                                        :title="formatDate(session.conference_schedule[0].date + ' ' + session.conference_schedule[0].time)"
                                     ></i>
+                                    <i v-if="session.conference_schedule && session.conference_schedule.length == 0 && session.status.id == 5"
+                                       class='bi bi-calendar2-x-fill text-danger'
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="Scheduled but not on calendar"
+                                    ></i>
+
                                 </td>
                                 <td><a class="btn btn-sm btn-outline-secondary" v-bind:href="this.sessionLink +'/'+ session.id"><i class="bi bi-pencil-square"></i></a></td>
                             </tr>
@@ -134,14 +151,25 @@ export default {
             },
             tracks: [],
             types: [],
+            statusIcons: [],
         }
     },
     mounted() {
+        this.populateStatusIcons();
         this.loadSessions();
         this.loadTracks();
         this.loadTypes();
     },
     methods: {
+        populateStatusIcons() {
+            this.statusIcons[1] = 'bi bi-lightbulb-fill text-warning me-1';
+            this.statusIcons[2] = 'bi bi-c-square-fill text-success me-1';
+            this.statusIcons[3] = 'bi bi-chat-left-dots text-success me-1';
+            this.statusIcons[4] = 'bi bi-person-fill-check text-success me-1';
+            this.statusIcons[5] = 'bi bi-check-circle text-success me-1';
+            this.statusIcons[6] = 'bi bi-sim-slash-fill text-danger me-1';
+            this.statusIcons[7] = 'bi bi-slash-circle text-danger me-1';
+        },
         formatDate(dateString) {
             if(!dateString) { return null }
             const date = dayjs(dateString);
@@ -181,6 +209,7 @@ export default {
                     this.totalSessions = response.data.meta.total;
                     this.conferenceSessions = response.data.data;
                     this.laravelData = response.data;
+                    console.log(this.conferenceSessions);
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not find the sessions`);
