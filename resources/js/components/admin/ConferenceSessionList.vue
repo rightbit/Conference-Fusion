@@ -140,6 +140,7 @@
 
 <script>
 import dayjs from "dayjs";
+import {Tooltip} from "bootstrap";
 
 export default {
     props: ['conferenceId', 'sessionLink'],
@@ -166,6 +167,9 @@ export default {
         }
     },
     mounted() {
+        new Tooltip(document.body, {
+            selector: "[data-bs-toggle='tooltip']",
+        }),
         this.populateStatusIcons();
         this.loadSessions();
         this.loadTracks();
