@@ -79,7 +79,7 @@ class ConferenceSession extends Model
     public static function getUserPanelInterests($user_id, $conference_id, $request)
     {
         $panels = self::where('conference_id', '=', $conference_id)
-                ->whereIn('session_status_id', [2,5]) // Ready for call and Scheduled
+                ->whereIn('session_status_id', [2,4,5]) // Ready for call and Scheduled
                 ->where('type_id', '=', 1) // Panel
                 ->with(['user_session_interest' => function ($query) use($user_id) {
                     $query->where('user_id', $user_id);

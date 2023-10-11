@@ -33,6 +33,17 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-if="false"> <!-- Use this as a key in in the future, if needed -->
+                            <i class='bi bi-lightbulb-fill text-warning me-1'></i> Planning<br/>
+                            <i class='bi bi-c-square-fill text-success me-1'></i> Ready for Call<br/>
+                            <i class='bi bi-chat-left-dots text-success me-1'></i> User Submitted (Presentations only)<br/>
+                            <i class='bi bi-person-fill-check text-success me-1'></i> Participants Assigned<br/>
+                            <i class='bi bi-check-circle text-success me-1'></i> Scheduled<br/>
+                            <i class='bi bi-sim-slash-fill text-danger me-1'></i> Not used<br/>
+                            <i class='bi bi-slash-circle text-danger me-1'></i> Canceled (after being on the schedule)<br/>
+                            <i class='bi bi-calendar-check-fill text-success'></i> On the calendar<br/>
+                            <i class='bi bi-calendar2-x-fill text-danger'></i> Scheduled, but not on the calendar!<br/>
+                        </div>
                         <div class="text-end">
                             <input type="checkbox" v-model="searchAllStatuses" class="form-check-input" id="statuses" v-on:change="loadSessions">
                             <label class="form-check-label ms-2" for="statuses">Include not used/canceled sessions </label>
