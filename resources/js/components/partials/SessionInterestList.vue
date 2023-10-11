@@ -90,10 +90,27 @@
                                 <tr>
                                     <td colspan="7" class="m-0 p-0 border border-top-0">
                                         <div class="d-flex flex-row d-flex justify-content-between ps-2" v-if="this.interestToggle[interest.id]">
-                                            <div class="p-2"><strong>Role:</strong><br />{{ this.role[interest.panel_role] }}</div>
+                                            <div class="p-2">
+                                                <strong>Role:</strong><br />{{ this.role[interest.panel_role] }}
+                                            </div>
                                             <div class="p-2 w-30"><strong>Session notes:</strong><br />{{ interest.notes }}</div>
                                             <div class="p-2 w-30"><strong>Participant bio:</strong><br />{{ interest.user_info.biography }}</div>
                                             <div class="p-2 w-30"><strong>Participant info:</strong><br />{{ interest.user_info.notes }}</div>
+                                            <div class="p-2">
+                                                <strong>Other sessions:</strong>
+                                                <br />
+                                                <button class="btn btn-sm btn-outline-secondary mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData(interest.user, 1, 'interests')">
+                                                    <i class="bi bi-eye-fill"></i> Interests
+                                                </button>
+                                                <br />
+                                                <button class="btn btn-sm btn-outline-secondary mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData(interest.user, 1, 'panelist')">
+                                                    <i class="bi bi-eye-fill"></i> Panelist
+                                                </button>
+                                                <br />
+                                                <button class="btn  btn-sm btn-outline-secondary mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData(interest.user, 1, 'presenter')">
+                                                    <i class="bi bi-eye-fill"></i> Presenter
+                                                </button>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -132,6 +149,37 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="user-session-data" aria-hidden="true">
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Session {{ this.modalSessionTitle }} </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped" v-if="this.modalSessionData.length > 0">
+                        <tbody>
+                        <tr v-for="sessionData in modalSessionData">
+                            <td v-if="this.viewAdmin">
+                                <a :href="'/admin/conference-session/' + sessionData.conference_session_id" class="btn btn-sm btn-outline-primary"><i class="bi bi-arrow-up-right-circle"></i></a>
+                            </td>
+                            <td>{{ sessionData.conference_session.name }}</td>
+                            <td class="border-start">{{ sessionData.conference_session.track_name }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div v-else class="text-center">
+                        <h5><i class="bi bi-exclamation-diamond"></i > No sessions found</h5>
+
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <Pagination :data="modalSessionlaravelData" :limit="3" :show-disabled="false" @pagination-change-page="getModalSessionData" />
+
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -153,6 +201,9 @@ export default {
             staffNotesInterestId: null,
             userInfoStaffNotes: null,
             userSessionStaffNotes: null,
+            modalSessionData: {},
+            modalSessionTitle: '',
+            modalSessionlaravelData: {},
             role: {
                 '1': 'Creator',
                 '2': 'Critic',
@@ -195,6 +246,18 @@ export default {
             this.staffNotesInterestId = interest.id;
             this.userInfoStaffNotes = interest.user_info.staff_notes;
             this.userSessionStaffNotes =  interest.staff_notes;
+        },
+        getModalSessionData: function(user, page = 1, cat = null) {
+            this.modalSessionTitle = cat ? cat : this.modalSessionTitle;
+            this.modalSessionData = {};
+            axios.get(`/api/user/${user.id}/sessions/${this.modalSessionTitle}`, { params: { page: page }})
+                .then((response) => {
+                    this.modalSessionData = response.data.data;
+                    this.modalSessionlaravelData = response.data;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not load the user's session info`);
+                });
         },
         saveStaffScore: function(staffScore, interestId) {
             axios.put(`/api/admin/session-interest/${interestId}`,  { action: 'save_staff_score', staff_score: staffScore })
