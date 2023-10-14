@@ -198,23 +198,24 @@ class ConferenceSchedule extends Model
 
             }
 
-            if(!$request->skip_checks) {
-                if ($p->user_id) {
-                    if(!empty($schedule_list[$current_session]['sublist'][$p->user_id])) {
-                        $schedule_list[$current_session]['errors']['duplicate_participants'] = "Duplicate entry for user {$p->user_id}";
-                    }
+
+            if ($p->user_id) {
+                // Don't redo entries if a session is in to different hours
+                // TODO Above - turn schedule date into an array or something in case it's booked twice on the schedule
+                if(empty($schedule_list[$current_session]['sublist'][$p->user_id])) {
 
                     $schedule_list[$current_session]['sublist'][$p->user_id] = [
-                        'user_id'       => $p->user_id,
-                        'badge_name'    => $p->badge_name,
-                        'is_moderator'  => $p->is_moderator,
+                        'user_id' => $p->user_id,
+                        'badge_name' => $p->badge_name,
+                        'is_moderator' => $p->is_moderator,
                     ];
-
-                } elseif (empty($schedule_list[$current_session]['errors']['zero_participants'])) {
-                    $schedule_list[$current_session]['errors']['blank_participants'] = 'A blank participant entry exists';
-
                 }
+
+            } elseif (empty($schedule_list[$current_session]['errors']['zero_participants'])) {
+                $schedule_list[$current_session]['errors']['blank_participants'] = 'A blank participant entry exists';
+
             }
+
 
         }
 
