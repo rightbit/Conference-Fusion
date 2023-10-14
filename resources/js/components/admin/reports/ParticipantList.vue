@@ -38,7 +38,7 @@
                 <td class="text-nowrap"><span v-if="d.share_email_permission">{{ d.email }}</span></td>
                 <td :class="[d.share_email_permission ? 'text-center':'text-center bg-danger']"><span :class="[d.share_email_permission ? '':'text-white fw-bold']">{{ d.share_email_permission ? "Y":"N" }}</span></td>
                 <td :class="[d.staff_notes ? 'text-center bg-warning':'']"><i v-if="d.staff_notes" class="bi-journal-bookmark-fill" ></i></td>
-                <td><button class="btn btn-link p-0" @click="reloadUser(d)"><i class="bi bi-arrow-repeat float-end"></i></button></td>
+                <td><button class="btn btn-link p-0" @click="loadReport"><i class="bi bi-arrow-repeat float-end"></i></button></td>
             </tr>
             <tr>
                 <td colspan="7">
@@ -121,9 +121,6 @@ export default {
         resetModal: function() {
             this.userErrors = {};
         },
-        reloadUser: function(user) {
-            this.$emit("queryParams", {0:{name: 'user_id', value: user.user_id}});
-        }
     },
 }
 </script>
