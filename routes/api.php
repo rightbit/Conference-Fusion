@@ -82,6 +82,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
     Route::apiResource('track-head', TrackHeadController::class);
     Route::apiResource('permissions', UserPermissionController::class)->middleware('can:admin');
 
+    Route::put('conference-session/{conference_session}/ignore_errors', [ConferenceSessionController::class, 'updateIgnoreErrors']);
+
     Route::group(['prefix' => 'report'], function() {
         Route::get('schedule-list/{conference_id}', [ReportController::class, 'scheduleList']);
         Route::get('participant-list/{conference_id}', [ReportController::class, 'participantList']);

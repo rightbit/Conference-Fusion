@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ConferenceSessionRequest;
 use App\Http\Requests\PanelInterestRequest;
 use App\Http\Requests\PresentationSessionRequest;
+use App\Http\Requests\SessionIgnoreErrorsRequest;
 use App\Http\Resources\CallForPanelistResource;
 use App\Http\Resources\ConferenceSessionResource;
 use App\Http\Resources\SessionInterestResource;
@@ -126,6 +127,22 @@ class ConferenceSessionController extends Controller
         $conference_session->attendance = $request->attendance;
         $conference_session->save();
         return new ConferenceSessionResource($conference_session);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\SessionIgnoreErrorsRequest  $request
+     * @param  \App\Models\ConferenceSession  $conference_session
+     * @return \Illuminate\Http\Response
+     */
+    public function updateIgnoreErrors(SessionIgnoreErrorsRequest $request, ConferenceSession $conference_session)
+    {
+
+        if ($conference_session->update($request->only(['ignore_errors']))) {
+            return response('success', 200);
+        }
+        abort(500, 'Cannot update ignore error status');
     }
 
     private function getConferenceIdFromSlug($slug)

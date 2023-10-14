@@ -16,7 +16,7 @@
         <table class="table table-scrollable table-free-width table-sm table-striped bg-white">
             <thead style="z-index: 500">
             <tr class="bg-secondary text-white">
-                <td class=""></td>
+                <td class=""><i class="bi bi-chevron-bar-down" @click="showScrollInto"></i></td>
                 <td class="ts-sc w-100">Session Name</td>
                 <td class="ts-sc text-center">Track</td>
                 <td class="ts-sc text-center">Type</td>
@@ -29,7 +29,8 @@
             <tbody v-for="d in data">
             <tr>
                 <td><button v-if="d.errors"
-                            class="btn btn-sm btn-danger"
+                            ref="errors"
+                            :class="['btn btn-sm', d.ignore_errors ? 'btn-warning':'btn-danger']"
                             data-bs-toggle="modal"
                             data-bs-target="#session-errors-modal"
                             @click="populateErrorModal(d)"
@@ -83,6 +84,8 @@
                     </ul>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal" @click="ignoreErrors(1)">Ignore</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="ignoreErrors(0)">Reset</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetModal">Close</button>
                 </div>
             </div>
@@ -93,6 +96,9 @@
 
 <script>
 import moment from 'moment';
+import { ref } from "vue";
+
+const errors = ref([]);
 
 export default {
     props: ['conferenceId'],
@@ -103,6 +109,8 @@ export default {
             trackId: 0,
             goodStatuses: [4,5],
             sessionErrors: {},
+            errorNumber: 1,
+
         }
     },
     emits: ['queryParams'],
@@ -132,6 +140,18 @@ export default {
 
 
         },
+        ignoreErrors: function(value) {
+            this.sessionErrors.ignore_errors = value;
+            axios.put(`/api/admin/conference-session/${this.sessionErrors.session_id}/ignore_errors`, {id: this.sessionErrors.session_id, ignore_errors: value})
+                .then((response) => {
+                    if (value == 1) {
+                        this.$toast.success(`Ignoring errors`);
+                    }
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not save the ignore errors setting`);
+                });
+        },
         formattedDate: function (date) {
             return moment(date).format('MM-DD');
         },
@@ -140,6 +160,15 @@ export default {
         },
         resetModal: function() {
             this.sessionErrors = {};
+        },
+        showScrollInto: function() {
+            // refs set with a v-for are returned as an array
+            errors.value[this.errorNumber].scrollIntoView({ behavior: "smooth" });
+            this.errorNumber += 1;
+        },
+        scrollToTop: function() {
+            this.errorNumber = 0;
+            window.scrollTo(0,0);
         },
     },
 }

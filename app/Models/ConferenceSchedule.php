@@ -127,7 +127,7 @@ class ConferenceSchedule extends Model
             ->join('session_types AS st', 'cs.type_id', '=', 'st.id')
             ->join('session_statuses AS ss', 'cs.session_status_id', '=', 'ss.id')
             ->select('cs.id AS session_id', 'cs.name AS session_name', 'ss.id AS status_id',
-                'cs.description', 'cs.staff_notes',
+                'cs.description', 'cs.staff_notes', 'cs.ignore_errors',
                 'ss.status AS status_name', 'csh.date', 'csh.time',
                 'ui.user_id', 'ui.badge_name', 'si.is_moderator', 'si.interest_level', 'si.experience_level',
                 'csh.room_id', 'r.name as room_name', 'r.capacity', 'r.has_av', 'cs.track_id', 't.name AS track_name',
@@ -155,6 +155,7 @@ class ConferenceSchedule extends Model
                     'session_name'      => $p->session_name,
                     'description'       => $p->description,
                     'staff_notes'       => $p->staff_notes,
+                    'ignore_errors'     => $p->ignore_errors,
                     'date'              => $p->date,
                     'time'              => $p->time,
                     'room_name'         => $p->room_name,

@@ -26,7 +26,8 @@ class ConferenceSession extends Model
         'conference_id',
         'track_id',
         'proposed_date',
-        'special_equipment'
+        'special_equipment',
+        'ignore_errors',
     ];
 
     public function conference() {
