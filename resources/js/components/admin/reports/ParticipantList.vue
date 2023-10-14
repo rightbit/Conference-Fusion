@@ -37,14 +37,19 @@
                 </td>
                 <td class="text-nowrap"><span v-if="d.share_email_permission">{{ d.email }}</span></td>
                 <td :class="[d.share_email_permission ? 'text-center':'text-center bg-danger']"><span :class="[d.share_email_permission ? '':'text-white fw-bold']">{{ d.share_email_permission ? "Y":"N" }}</span></td>
-                <td :class="[d.staff_notes ? 'text-center bg-warning':'']"><i v-if="d.staff_notes" class="bi-journal-bookmark-fill" ></i></td>
+                <td :class="[d.staff_notes ? 'text-center bg-warning':'']">
+                    <i v-if="d.staff_notes" class="bi-journal-bookmark-fill" data-bs-toggle="modal" data-bs-target="#user-notes-modal" @click="populateNotesModal(d, d.staff_notes)" ></i>
+                </td>
                 <td><button class="btn btn-link p-0" @click="loadReport"><i class="bi bi-arrow-repeat float-end"></i></button></td>
             </tr>
             <tr>
                 <td colspan="7">
                     <table class="table table-sm table-borderless table-striped w-100">
                         <tr v-for="session in d.sessions">
-                            <td class="text-end p-0"><i v-if="session.session_user_staff_notes" class="bi-journal-bookmark-fill text-warning" ></i><i v-if="session.is_moderator" class="bi bi-mic-fill"></i></td>
+                            <td class="text-end p-0">
+                                <i v-if="session.session_user_staff_notes" class="bi-journal-bookmark-fill text-warning" data-bs-toggle="modal"
+                                   data-bs-target="#user-notes-modal" @click="populateNotesModal(d, session.session_user_staff_notes)" ></i>
+                                <i v-if="session.is_moderator" class="bi bi-mic-fill"></i></td>
                             <td class="w-50">
                                 <a :href="`/admin/conference-session/${session.session_id}`" target="_blank">
                                     {{ session.session_name }}
@@ -73,9 +78,32 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetModal"></button>
                 </div>
                 <div class="modal-body">
-                    Session Errors:
+                    User Errors:
                     <ul>
                         <li v-for="error in userErrors.errors">{{ error }}</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="user-notes-modal" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <a :href="`/admin/user-profile/${userNotes.user_id}`" target="_blank" class="text-decoration-none text-body fw-bold">
+                            {{ userNotes.badge_name }} <i class="bi bi-box-arrow-up-right"></i>
+                        </a>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetModal"></button>
+                </div>
+                <div class="modal-body">
+                    Notes:
+                    <ul>
+                        <li>{{ userNotes.modalnote }}</li>
                     </ul>
                 </div>
                 <div class="modal-footer">
@@ -96,6 +124,7 @@ export default {
         return {
             data: {},
             userErrors: {},
+            userNotes: {},
         }
     },
     mounted() {
@@ -118,8 +147,13 @@ export default {
         populateErrorModal: function (user) {
             this.userErrors = user;
         },
+        populateNotesModal: function (user, note) {
+            this.userNotes = user;
+            this.userNotes.modalnote = note;
+        },
         resetModal: function() {
             this.userErrors = {};
+            this.userNotes = {};
         },
     },
 }
