@@ -257,7 +257,7 @@ class SessionInterestController extends Controller
                 $conference_id = session('selected_conference');
                 $query->where('conference_id', $conference_id);
                 $query->where('type_id', 2);
-                $query->whereNotIn('session_status_id', [4,5,6,7]);
+                $query->whereNotIn('session_status_id', [4,5]);
             });
 
         $session_interests = SessionInterest::where('user_id', $user_id)

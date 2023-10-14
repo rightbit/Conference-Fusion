@@ -159,7 +159,7 @@
         </div>
 
     </div>
-    <div  v-if="this.viewAdmin" class="modal fade" id="user-session-data" aria-hidden="true">
+    <div  v-if="this.viewAdmin" class="modal modal-lg fade" id="user-session-data" aria-hidden="true">
         <div class="modal-dialog" >
             <div class="modal-content">
                 <div class="modal-header">
@@ -174,6 +174,7 @@
                                     <a :href="'/admin/conference-session/' + sessionData.conference_session_id" class="btn btn-sm btn-outline-primary"><i class="bi bi-arrow-up-right-circle"></i></a>
                                 </td>
                                 <td>{{ sessionData.conference_session.name }}</td>
+                                <td>{{ sessionData.conference_session.type_name }}</td>
                                 <td class="border-start">{{ sessionData.conference_session.track_name }}</td>
                             </tr>
                         </tbody>

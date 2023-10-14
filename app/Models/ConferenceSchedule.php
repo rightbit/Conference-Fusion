@@ -142,7 +142,7 @@ class ConferenceSchedule extends Model
 
         $schedule_participants = $query->get();
 
-
+        Log::debug($schedule_participants);
         $schedule_list = [];
         $current_session = 0;
         $previous_session = 0;
