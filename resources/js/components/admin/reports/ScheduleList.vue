@@ -44,7 +44,7 @@
                 <td class="text-nowrap text-center">{{ d.track_name }}</td>
                 <td class="text-center">{{ d.session_type }}</td>
                 <td class="text-nowrap text-center">
-                    <span v-for="(dt, key) in d.date_time" class="me-1"><span v-if="key > 0">| </span>{{ formattedDate(dt) }}</span>
+                    {{ formattedDate(d.date_time[0]) }} <span v-if="d.date_time.length > 1">+{{ d.date_time.length - 1 }} </span>
                 </td>
                 <td class="text-nowrap  text-center">{{ d.room_name }} {{ d.capacity }} <i v-if="d.has_av" class="bi bi-person-video3"></i></td>
                 <td class="text-center"><i :class="[goodStatuses.includes(d.status_id) ? 'bi-check-square text-success':'bi-exclamation-triangle-fill text-warning']" ></i></td>
