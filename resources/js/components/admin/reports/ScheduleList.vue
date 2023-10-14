@@ -43,7 +43,9 @@
                 </td>
                 <td class="text-nowrap text-center">{{ d.track_name }}</td>
                 <td class="text-center">{{ d.session_type }}</td>
-                <td class="text-nowrap">{{ formattedDate(d.date) }} {{ d.time }}</td>
+                <td class="text-nowrap text-center">
+                    <span v-for="(dt, key) in d.date_time" class="me-1"><span v-if="key > 0">| </span>{{ formattedDate(dt) }}</span>
+                </td>
                 <td class="text-nowrap  text-center">{{ d.room_name }} {{ d.capacity }} <i v-if="d.has_av" class="bi bi-person-video3"></i></td>
                 <td class="text-center"><i :class="[goodStatuses.includes(d.status_id) ? 'bi-check-square text-success':'bi-exclamation-triangle-fill text-warning']" ></i></td>
                 <td class="text-center"><button class="btn btn-sm btn-link float-end" @click="loadReport"><b><i class="bi bi-arrow-repeat"></i></b></button></td>
@@ -153,7 +155,7 @@ export default {
                 });
         },
         formattedDate: function (date) {
-            return moment(date).format('MM-DD');
+            return moment(date).format('MM-DD HH:mm');
         },
         populateErrorModal: function (session) {
             this.sessionErrors = session;

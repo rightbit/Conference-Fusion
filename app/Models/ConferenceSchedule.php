@@ -142,11 +142,20 @@ class ConferenceSchedule extends Model
 
         $schedule_participants = $query->get();
 
-        Log::debug($schedule_participants);
         $schedule_list = [];
         $current_session = 0;
         $previous_session = 0;
         foreach($schedule_participants as $p) {
+
+            // Checks specific to the same session
+            if ($p->session_id == $current_session) {
+                // Check for two time entries
+                if (!in_array( "{$p->date} {$p->time}", $schedule_list[$current_session]['date_time'])) {
+                    $schedule_list[$current_session]['date_time'][] = "{$p->date} {$p->time}";
+                }
+            }
+
+            // Checks for new sessions
             if($p->session_id != $current_session) {
                 $previous_session = $current_session;
                 $current_session = $p->session_id;
@@ -156,8 +165,7 @@ class ConferenceSchedule extends Model
                     'description'       => $p->description,
                     'staff_notes'       => $p->staff_notes,
                     'ignore_errors'     => $p->ignore_errors,
-                    'date'              => $p->date,
-                    'time'              => $p->time,
+                    'date_time'         => ["{$p->date} {$p->time}"],
                     'room_name'         => $p->room_name,
                     'capacity'          => $p->capacity,
                     'has_av'            => $p->has_av,
@@ -197,6 +205,7 @@ class ConferenceSchedule extends Model
                 }
 
             }
+
 
 
             if ($p->user_id) {
