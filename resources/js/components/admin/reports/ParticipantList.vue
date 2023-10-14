@@ -55,7 +55,7 @@
                                     {{ session.session_name }}
                                 </a>
                             </td>
-                            <td class="text-nowrap w-auto">{{ formattedDate(session.date) }} {{ session.time}}</td>
+                            <td class="text-nowrap w-auto">{{ formattedDate(session.date) }} {{ session.time }}<span v-if="session.multiple_hours">+{{ session.multiple_hours }}</span></td>
                             <td class="text-nowrap w-auto">{{ session.room_name }} ({{ session.capacity }}<i v-if="session.has_av" class="bi bi-person-video3"></i>)</td>
                             <td class="text-nowrap w-auto">{{ session.session_type}}</td>
                             <td class="text-nowrap w-auto text-end">{{ session.track_name}}</td>

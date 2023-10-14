@@ -105,7 +105,6 @@ class SessionInterest extends Model
 
         $schedule_participants = $query->get();
 
-
         $participant_list = [];
         $current_user = 0;
         $previous_user = 0;
@@ -138,22 +137,26 @@ class SessionInterest extends Model
                 ];
             }
 
-
-            $participant_list[$current_user]['sessions'][$p->session_id] = [
-                'session_id'            => $p->session_id,
-                'session_name'          => $p->session_name,
-                'session_user_staff_notes'   => $p->session_user_staff_notes,
-                'is_moderator'          => $p->is_moderator,
-                'date'                  => $p->date,
-                'time'                  => $p->time,
-                'room_name'             => $p->room_name,
-                'capacity'              => $p->capacity,
-                'has_av'                => $p->has_av,
-                'track_id'              => $p->track_id,
-                'track_name'            => $p->track_name,
-                'session_type_id'       => $p->session_type_id,
-                'session_type'          => $p->session_type,
-            ];
+            if(empty($participant_list[$current_user]['sessions'][$p->session_id])) {
+                $participant_list[$current_user]['sessions'][$p->session_id] = [
+                    'session_id' => $p->session_id,
+                    'session_name' => $p->session_name,
+                    'session_user_staff_notes' => $p->session_user_staff_notes,
+                    'is_moderator' => $p->is_moderator,
+                    'date' => $p->date,
+                    'time' => $p->time,
+                    'room_name' => $p->room_name,
+                    'capacity' => $p->capacity,
+                    'has_av' => $p->has_av,
+                    'track_id' => $p->track_id,
+                    'track_name' => $p->track_name,
+                    'session_type_id' => $p->session_type_id,
+                    'session_type' => $p->session_type,
+                    'multiple_hours' => 0,
+                ];
+            } else {
+                $participant_list[$current_user]['sessions'][$p->session_id]['multiple_hours']++;
+            }
 
             //Check for errors
             $current_session_timestamp = strtotime($p->date . " " . $p->time);
