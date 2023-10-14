@@ -16,7 +16,7 @@
         <table class="table table-scrollable table-free-width table-sm table-striped bg-white">
             <thead style="z-index: 500">
             <tr class="bg-secondary text-white">
-                <td class=""><i class="bi bi-chevron-bar-down" @click="showScrollInto"></i></td>
+                <td class="ts-sc"><button class="btn btn-sm btn-link" @click="scrollToTop"><i class="bi bi-chevron-bar-up"></i></button></td>
                 <td class="ts-sc w-100">Session Name</td>
                 <td class="ts-sc text-center">Track</td>
                 <td class="ts-sc text-center">Type</td>
