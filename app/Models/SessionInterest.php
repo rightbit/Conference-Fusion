@@ -209,19 +209,21 @@ class SessionInterest extends Model
 
     public static function getNonParticipantListReport(int $conference_id): ?array
     {
-        $non_participants = DB::select(DB::raw('
+        $non_participants = DB::select('
                                 SELECT DISTINCT si.user_id, u.first_name, u.last_name, ui.badge_name, COALESCE(ui.contact_email, u.email) as email
                                 FROM session_interests si
                                 JOIN users u ON si.user_id = u.id
                                 JOIN user_infos ui ON si.user_id = ui.user_id
+                                JOIN conference_sessions cs on si.conference_session_id = cs.id
                                 WHERE si.user_id NOT IN
-                                    (SELECT DISTINCT user_id
-                                        FROM session_interests si
-                                        JOIN conference_schedules cs
-                                        ON si.conference_session_id = cs.conference_session_id
-                                        AND si.is_participant = 1
-                                        AND cs.conference_id = :conference_id)
-                                '), ['conference_id' => $conference_id]);
+                                    (SELECT DISTINCT si2.user_id
+                                        FROM session_interests si2
+                                        JOIN conference_schedules csh
+                                        ON si2.conference_session_id = csh.conference_session_id
+                                        AND si2.is_participant = 1
+                                        AND csh.conference_id = :conference_id)
+                                AND cs.conference_id = :conference_id2
+                                ', ['conference_id' => $conference_id, 'conference_id2' => $conference_id]);
 
         return $non_participants;
 
