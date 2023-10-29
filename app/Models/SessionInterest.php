@@ -223,6 +223,7 @@ class SessionInterest extends Model
                                         AND si2.is_participant = 1
                                         AND csh.conference_id = :conference_id)
                                 AND cs.conference_id = :conference_id2
+                                AND cs.notes NOT LIKE "Added by%"
                                 ', ['conference_id' => $conference_id, 'conference_id2' => $conference_id]);
 
         return $non_participants;
