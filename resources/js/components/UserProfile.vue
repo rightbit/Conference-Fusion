@@ -21,6 +21,8 @@
                                     {{ permission_name }}
                                 </label>
                             </div>
+                            <button v-if="false" class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#user-token-modal">Get API Token</button>
+
                         </div>
                         <div v-if="this.viewAdmin" class="w-100">
                             <hr />
@@ -148,7 +150,6 @@
                         <div class="d-flex justify-content-between align-items-center experience"><span class="h4">Participant Info</span></div>
                         <partials-user-info-data v-if="finished_loading" :category="'participant'" :user-info="user.info.participant_data" @changeInfoData="updateInfoData" />
                     </div>
-
                 </div>
             </form>
             <partials-user-profile-image-modal :user-id="this.userId" @changeImage="reloadProfileImage" />
@@ -191,6 +192,21 @@
             </div>
         </div>
     </div>
+    <div  v-if="this.viewAdmin" class="modal modal-lg fade" id="user-token-modal" aria-hidden="true">
+      <div class="modal-dialog" >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">User API token</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Remember you won't get to see this token again. Please copy and save it immediately
+            <button @click="getUserToken" class="btn btn-primary btn-sm" type="button">Get New API Token</button>
+            <input type="text" v-if="userToken" class="form-control mt-2" :value="userToken" />
+          </div>
+        </div>
+      </div>
+    </div>
 </template>
 
 
@@ -213,6 +229,7 @@ export default {
             permissionsDisabled: true,
             userPermissions: {},
             userPermissionsValue: {},
+            userToken: '',
             sessionCounts: {
                 interest: 0,
                 panelist: 0,
@@ -366,7 +383,17 @@ export default {
                     })
             }
 
+        },
+        getUserToken: function() {
+            axios.get(`/api/user-token/${this.userId}`)
+                .then((response) => {
+                    this.userToken = response.data.accessToken;
+                })
+                .catch((error) => {
+                    this.$toast.error(`Could not fetch the user token`);
+                });
         }
+
     }
 
 }

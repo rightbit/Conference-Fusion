@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
-use function PHPUnit\Framework\throwException;
 
 class UserController extends Controller
 {
@@ -143,6 +142,10 @@ class UserController extends Controller
     public function uploadProfileImage(User $user, Request $request)
     {
 
+        if(!Gate::allows('view_admin', Auth::user()) && !Gate::allows('edit_users', $user->id)){
+            abort(403, 'Not authorized');
+        }
+
         $this->validate($request, [
             'file' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
@@ -166,6 +169,30 @@ class UserController extends Controller
         } catch (\Exception $e) {
             abort(500, 'Please complete your profile first.');
         }
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\User     $user
+     * @return \Illuminate\Http\Response
+     */
+    public function createToken(User $user)
+    {
+        if(!Gate::allows('view_admin', Auth::user()) && !Gate::allows('edit_users', $user->id)){
+            abort(403, 'Not authorized');
+        }
+
+        $authToken = $user->tokens()->first();
+
+        //TODO - this is to test an app conection and needs a better management system
+        if($authToken) {
+            return response()->json(['accessToken' => 'A Token was already created and cannot be created again. Contact an administrator.']);
+        }
+        $authToken = $user->createToken('auth-token')->plainTextToken;
+
+        return response()->json(['accessToken' => $authToken]);
 
     }
 

@@ -15,6 +15,7 @@ import AdminScheduleBoard from "./components/admin/ScheduleBoard";
 import AdminScheduleBoardPlain from "./components/admin/ScheduleBoardPlain";
 import AdminTrackList from "./components/admin/TrackList";
 import AdminUserList from "./components/admin/UserList";
+import AdminVolunteerList from "./components/admin/VolunteerList";
 import AdminConferenceSessionList from "./components/admin/ConferenceSessionList";
 import AdminConferenceSession from "./components/admin/ConferenceSession";
 
@@ -55,6 +56,7 @@ app.component('admin-schedule-board', AdminScheduleBoard)
 app.component('admin-schedule-board-plain', AdminScheduleBoardPlain)
 app.component('admin-track-list', AdminTrackList)
 app.component('admin-user-list', AdminUserList)
+app.component('admin-volunteer-list', AdminVolunteerList)
 
 app.component('call-for-panels', CallForPanels)
 app.component('call-for-presentations', CallForPresentations)

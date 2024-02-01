@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ConferenceController;
 use App\Http\Controllers\Api\ConferenceScheduleController;
 use App\Http\Controllers\Api\ConferenceSessionController;
+use App\Http\Controllers\Api\PublicScheduleController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SessionInterestController;
 use App\Http\Controllers\Api\SessionSpecialEquipmentController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Api\UserInfoConsignmentController;
 use App\Http\Controllers\Api\UserInfoDataCategoryController;
 use App\Http\Controllers\Api\UserPermissionController;
 use App\Http\Controllers\Api\RoomController;
+use App\Http\Controllers\Api\VolunteerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,6 +37,10 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
+
+Route::get('public-schedule', [PublicScheduleController::class, 'index']);
+
+
 Route::middleware(['auth:sanctum'])->group( function() {
     Route::get('track-list', [TrackController::class, 'index']);
     Route::get('session-equipment-list', [SessionSpecialEquipmentController::class, 'index']);
@@ -52,6 +58,7 @@ Route::middleware(['auth:sanctum'])->group( function() {
     Route::get('user-session-totals/{user_id}', [SessionInterestController::class, 'userSessionTotals']);
 
     Route::post('profile-image/{user}', [UserController::class, 'uploadProfileImage']);
+    Route::get('user-token/{user}', [UserController::class, 'createToken']);
     Route::post('presentations/submit', [ConferenceSessionController::class, 'storePresentation']);
     Route::delete('presentations/{id}', [ConferenceSessionController::class, 'destroyPresentation']);
     Route::post('panels/interest/submit', [ConferenceSessionController::class, 'storePanelInterest']);
@@ -65,6 +72,8 @@ Route::middleware(['auth:sanctum'])->group( function() {
     });
 
     Route::apiResource('session-user-comment', SessionUserCommentController::class);
+
+
 
 });
 
@@ -80,14 +89,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
     Route::apiResource('room', RoomController::class);
     Route::apiResource('track', TrackController::class);
     Route::apiResource('track-head', TrackHeadController::class);
+    Route::apiResource('volunteer', VolunteerController::class);
     Route::apiResource('permissions', UserPermissionController::class)->middleware('can:admin');
 
     Route::put('conference-session/{conference_session}/ignore_errors', [ConferenceSessionController::class, 'updateIgnoreErrors']);
 
     Route::group(['prefix' => 'report'], function() {
         Route::get('schedule-list/{conference_id}', [ReportController::class, 'scheduleList']);
-        Route::get('participant-list/{conference_id}', [ReportController::class, 'participantList']);
         Route::get('potential-panelist-list/{conference_id}', [ReportController::class, 'potentialsList']);
+        Route::get('participant-list/{conference_id}', [ReportController::class, 'participantList']);
         Route::get('session-history-list/{conference_id}', [ReportController::class, 'sessionHistoryList']);
     });
 
