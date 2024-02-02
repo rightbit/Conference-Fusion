@@ -73,6 +73,8 @@ Route::middleware(['auth:sanctum'])->group( function() {
 
     Route::apiResource('session-user-comment', SessionUserCommentController::class);
 
+    Route::post('public-schedule/{uuid}', [PublicScheduleController::class, 'storeSchedule']);
+
 
 
 });

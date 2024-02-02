@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PublicScheduleResource;
 use App\Models\Conference;
 use App\Models\ConferenceSchedule;
+use App\Models\PublicUsersSchedule;
+use App\Models\SiteConfig;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -31,10 +33,18 @@ class PublicScheduleController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * @param  string  $uuid
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function storeSchedule(Request $request, string $uuid)
     {
-        //
+        $default_conference_id = SiteConfig::where('key', 'default_conference_id')->first();
+        $public_user_schedule = PublicUsersSchedule::firstOrCreate(['uuid' => $uuid, 'conference_id' => $default_conference_id->value]);
+        $public_user_schedule->conference_id = $default_conference_id->value;
+        $public_user_schedule->schedule = json_encode($request->all());
+        $public_user_schedule->save();
+        return response('success', 200);
     }
 
     /**
