@@ -21,7 +21,7 @@
                                     {{ permission_name }}
                                 </label>
                             </div>
-                            <button v-if="false" class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#user-token-modal">Get API Token</button>
+                            <button v-if="true" class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#user-token-modal">Get API Token</button>
 
                         </div>
                         <div v-if="this.viewAdmin" class="w-100">
