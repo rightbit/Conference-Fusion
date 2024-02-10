@@ -276,8 +276,8 @@ class ConferenceSchedule extends Model
                             $query->where('conference_id', $default_conference_id->value);
                         });
                     })
-                    ->join('user_infos', 'users.id', '=', 'user_infos.user_id' )
-                    ->orderBy('user_infos.badge_name')
+//                    ->join('user_infos', 'users.id', '=', 'user_infos.user_id' )
+//                    ->orderBy('user_infos.badge_name')
                     ->get();
 
         $schedule['presenters'] = PublicScheduleParticipantResource::collection($participants);
