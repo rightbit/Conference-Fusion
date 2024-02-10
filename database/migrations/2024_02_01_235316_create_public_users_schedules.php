@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Conference;
+use App\Models\ConferenceSchedule;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,8 +15,8 @@ return new class extends Migration
         Schema::create('public_users_schedules', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->foreignIdFor(Conference::class)->nullable()->constrained()->nullOnDelete();
-            $table->json('schedule')->nullable();
+            $table->foreignIdFor(ConferenceSchedule::class)->nullable()->constrained()->nullOnDelete();
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }

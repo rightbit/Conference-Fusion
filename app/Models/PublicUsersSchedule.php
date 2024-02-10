@@ -11,6 +11,7 @@ class PublicUsersSchedule extends Model
 
     protected $fillable = [
         'uuid',
-        'schedule',
+        'conference_schedule_id',
+        'email',
     ];
 }

@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PublicScheduleResource;
-use App\Models\Conference;
+use App\Http\Requests\PublicUserScheduleRequest;
 use App\Models\ConferenceSchedule;
 use App\Models\PublicUsersSchedule;
-use App\Models\SiteConfig;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -34,16 +32,19 @@ class PublicScheduleController extends Controller
     /**
      * Store a newly created resource in storage.
      * @param  string  $uuid
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\PublicUserScheduleRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function storeSchedule(Request $request, string $uuid)
+    public function storeSchedule(PublicUserScheduleRequest $request, string $uuid)
     {
-        $default_conference_id = SiteConfig::where('key', 'default_conference_id')->first();
-        $public_user_schedule = PublicUsersSchedule::firstOrCreate(['uuid' => $uuid, 'conference_id' => $default_conference_id->value]);
-        $public_user_schedule->conference_id = $default_conference_id->value;
-        $public_user_schedule->schedule = json_encode($request->all());
-        $public_user_schedule->save();
+        Log::debug($request);
+        // Create an entry if the user has starred an event in the app. If the event has become unstarred, delete
+        if ($request->get('starred')) {
+            $public_user_schedule = PublicUsersSchedule::firstOrCreate(['uuid' => $uuid, 'conference_schedule_id' => $request->event_id]);
+        } else {
+            $public_user_schedule = PublicUsersSchedule::where(['uuid' => $uuid, 'conference_schedule_id' => $request->event_id])->delete();
+        }
+
         return response('success', 200);
     }
 
