@@ -65,7 +65,7 @@ class ConferenceSchedule extends Model
         if ($room_id){
             $rooms = Room::find($room_id);
         } else {
-            $rooms = Room::orderBy('display_order')->orderBy('name')->get();
+            $rooms = Room::where('conference_id', $conference_id)->orderBy('display_order')->orderBy('name')->get();
         }
 
         $time_range = Conference::find($conference_id);
