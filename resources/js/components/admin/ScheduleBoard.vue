@@ -61,7 +61,7 @@
                                         <i class="bi bi-plus-circle "></i> Add
                                     </button>
                                 </div>
-                                <div v-if="room.track_name" class="card-footer lh-1 text-center bg-info bg-gradient">
+                                <div v-if="room.track_name" class="card-footer lh-1 text-center bg-gradient" :style="[room.track_color ? 'background-color:'+room.track_color : 'background-color:#0dcaf0']">
                                     <div class="">
                                         <small><b>{{ room.track_name }}</b></small>
                                     </div>
@@ -138,8 +138,8 @@ export default {
     },
     mounted() {
         this.loadScheduleBoard();
-        this.loadTypes();
         this.loadTracks();
+        this.loadTypes();
         this.calcScheduleDates(this.conferenceStartDate, this.conferenceEndDate);
     },
     methods: {
@@ -153,6 +153,7 @@ export default {
             })
             .then((response) => {
                 this.schedule = response.data.data;
+                console.log(this.schedule);
             })
             .catch((error) => {
                 this.$toast.error(`Could not find the schedule`);
@@ -296,6 +297,7 @@ export default {
                 time: this.sessionTime,
                 track_id: this.trackId ? this.trackId : null,
                 track_name: this.trackId ? this.getItemNameById(this.tracks, this.trackId) : 0,
+                track_color: this.trackId ? this.getItemColorById(this.tracks, this.trackId) : null,
             }
         },
         getItemNameById: function(data, id) {
@@ -303,6 +305,12 @@ export default {
                 function(data) { if( data.id == id) return data.name }
             );
             return item[0].name;
+        },
+        getItemColorById: function(data, id) {
+          let item = data.filter(
+              function(data) { if( data.id == id) return data.color_code }
+          );
+          return item[0].color_code;
         },
         truncate: function (text, length, suffix) {
             if (text && text.length > length) {

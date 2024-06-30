@@ -85,6 +85,7 @@ class TrackController extends Controller
     public function update(TrackRequest $request, Track $track)
     {
         $track->name = $request->name;
+        $track->color_code = $request->color_code;
         $track->show_on_call = (bool) $request->show_on_call;
         $track->save();
         return $track;

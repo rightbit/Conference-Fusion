@@ -17,6 +17,7 @@ class Track extends Model
     protected $fillable = [
         'name',
         'display_order',
+        'color_code',
     ];
 
     public function track_heads()

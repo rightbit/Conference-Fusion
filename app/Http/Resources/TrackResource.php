@@ -19,6 +19,7 @@ class TrackResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'show_on_call' => $this->show_on_call,
+            'color_code' => $this->color_code,
             'track_heads' => TrackUserResource::collection($this->conference_track_heads),
         ];
     }

@@ -105,6 +105,7 @@ class ConferenceSchedule extends Model
                         "session_name" => $session_info->session->name,
                         "track_id" =>  $session_info->track->id,
                         "track_name" =>  $session_info->track->name,
+                        "track_color" =>  $session_info->track->color_code,
                         "room_id" =>  $session_info->room->id,
                         "date" =>  $session_info->date,
                         "time" =>  $session_info->time,

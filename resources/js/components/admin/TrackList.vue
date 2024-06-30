@@ -12,6 +12,7 @@
                             <tr>
                                 <th class="w-25 ps-2">Name</th>
                                 <th class="">Include in the call?</th>
+                                <th class="m-0 p-0">Color Code</th>
                                 <th class="">Track Heads ({{ this.conferenceName }})</th>
                                 <th class="m-0 p-0"></th>
                                 <th class="m-0 p-0"></th>
@@ -26,6 +27,7 @@
                                         <option value="0">No</option>
                                     </select>
                                 </td>
+                                <td><input type="color" v-model="track.color_code"></td>
                                 <td>
                                     <span v-for="(track_head) in track.track_heads" class="badge bg-secondary me-1">
                                        <button type="button" class="btn btn-sm p-0 text-white" @click="deleteTrackHead(track_head)">
@@ -119,6 +121,7 @@
                 new_info: {
                     name: '',
                     show_on_call: '',
+                    color_code: '',
                 },
                 selectedTrack: 0,
                 searchUsers: {},
@@ -144,6 +147,10 @@
                     .then((response) => {
                         this.$toast.success(`New track added`);
                         this.loadTracks();
+                        this.new_info.name = '';
+                        this.new_info.show_on_call = '';
+                        this.new_info.color_code = '';
+
                     })
                     .catch((error) => {
                         this.$toast.error(`Could not save the track`);
