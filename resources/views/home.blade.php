@@ -55,11 +55,7 @@
                                                         {{ __('Mass signing') }}
                                                     </a>
                                                 @endif
-                                                {{-- Hack for 2024, remove this or replace with dynamic 'feature panel' --}}
-                                                <a href="{{ route('call_for_panelists_single_panel', ['conference' => $conference->slug, 'singlesession' => 616] ) }}" class="btn align-self-end m-1 {{ $conference->call_active ? ' btn-danger':'btn-outline-secondary disabled' }}">
-                                                    {{ __('Arium Worldbuilding Event') }}
-                                                </a>
-                                                {{-- Remove hack --}}
+
                                             @else
                                                 The call is now closed.
                                             @endif

@@ -10,14 +10,16 @@
                     </div>
                     <div class="card-body" id="addinfo">
                         <form id="signing" class="row g-3 align-items-center" @submit.prevent="updateUserInfoConsignment">
-                            <div class="col-md-9">
-                                I would like to participate in the mass signing event Friday night.
-                            </div>
-                            <div class="col-md-3">
-                                <select id="partipating" class="form-select" v-model.number="userInfoConsignment.participating">
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
+                            <div class="d-flex flex-wrap">
+                              <div>
+                                <label class="me-2">I would like to participate in the mass signing event Friday night:</label>
+                              </div>
+                              <div class="w-auto">
+                                <select id="partipating" class="form-select form-select-sm" v-model.number="userInfoConsignment.participating">
+                                  <option value="0">No</option>
+                                  <option value="1">Yes</option>
                                 </select>
+                              </div>
                             </div>
                             <div class="col-12 mb-3">
                                 If you would like to request a book partner to possibly carry your books, please enter the information below. (Optional)
