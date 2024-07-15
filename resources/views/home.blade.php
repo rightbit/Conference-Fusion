@@ -57,7 +57,7 @@
                                                 @endif
 
                                             @else
-                                                The call is now closed.
+                                                {{ __('The call is currently closed.') }}
                                             @endif
                                         </div>
                                     </div>
