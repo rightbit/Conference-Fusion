@@ -29,6 +29,10 @@ class DatabaseSeeder extends Seeder
             $this->call(SiteConfigSeeder::class);
             $this->command->info('Site configs seeded...');
 
+            //Create schedule warnings
+            $this->call(ScheduleWarningsSeeder::class);
+            $this->command->info('Schedule warnings seeded...');
+
             //Create conference
             $this->call(ConferenceSeeder::class);
             $this->command->info('Default conference seeded...');

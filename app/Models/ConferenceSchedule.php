@@ -151,6 +151,8 @@ class ConferenceSchedule extends Model
 
         $schedule_participants = $query->get();
 
+        $schedule_warnings = ScheduleWarnings::key_value_pairs();
+
         $schedule_list = [];
         $current_session = 0;
         $previous_session = 0;
@@ -191,25 +193,25 @@ class ConferenceSchedule extends Model
 
                 if(!$request->skip_checks) {
                     //Check for problems
-                    if(!in_array($p->status_id, [4,5])) {
+                    if(!in_array($p->status_id, [4,5]) && !empty($schedule_warnings['check_status'])) {
                         $schedule_list[$current_session]['errors']['status'] = 'Session status not ready for scheduling';
                     }
 
-                    if(!$p->user_id) {
+                    if(!$p->user_id && !empty($schedule_warnings['zero_participants'])) {
                         $schedule_list[$current_session]['errors']['zero_participants'] = 'No participants assigned';
                     }
 
                     $previous_session_participants = !empty($schedule_list[$previous_session]['sublist']) ? count($schedule_list[$previous_session]['sublist']) : 0;
 
-                    if($previous_session && $schedule_list[$previous_session]['session_type_id'] == '1' && in_array($previous_session_participants, [1,2])) {
-                        $schedule_list[$previous_session]['errors']['small_panel'] = 'Less than three people on this panel';
+                    if($previous_session && $schedule_list[$previous_session]['session_type_id'] == '1' && !empty($schedule_warnings['min_panelists']) && $previous_session_participants < $schedule_warnings['min_panelists']) {
+                        $schedule_list[$previous_session]['errors']['small_panel'] = "Less than {$schedule_warnings['min_panelists']} people on this panel";
                     }
 
-                    if($previous_session && $schedule_list[$previous_session]['session_type_id'] == '1' && $previous_session_participants > 6) {
-                        $schedule_list[$previous_session]['errors']['large_panel'] = 'More than six people on this session';
+                    if($previous_session && $schedule_list[$previous_session]['session_type_id'] == '1' && !empty($schedule_warnings['max_panelists']) && $previous_session_participants > $schedule_warnings['max_panelists']) {
+                        $schedule_list[$previous_session]['errors']['large_panel'] = "More than {$schedule_warnings['max_panelists']} people on this session";
                     }
 
-                    if($p->session_type_id == '1' && !$p->is_moderator) {
+                    if($p->session_type_id == '1' && !$p->is_moderator && !empty($schedule_warnings['require_moderator'])) {
                         $schedule_list[$current_session]['errors']['no_moderator'] = 'No moderator on panel';
                     }
                 }
