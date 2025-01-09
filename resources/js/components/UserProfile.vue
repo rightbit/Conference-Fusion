@@ -33,9 +33,12 @@
                             <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData(1, 'panelist')">
                                 <i class="bi bi-eye-fill"></i> Panelist: {{ sessionCounts.panelist }}
                             </button>
-                            <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData(1, 'presenter')">
-                                <i class="bi bi-eye-fill"></i> Presenter: {{ sessionCounts.presenter }}
-                            </button>
+                          <button class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData(1, 'presenter')">
+                            <i class="bi bi-eye-fill"></i> Presenter: {{ sessionCounts.presenter }}
+                          </button>
+                          <button  v-if=" sessionCounts.other > 0" class="btn btn-outline-secondary w-100 mb-2 text-start" type="button" data-bs-toggle="modal" data-bs-target="#user-session-data" @click="getModalSessionData(1, 'other')">
+                            <i class="bi bi-eye-fill"></i> Other: {{ sessionCounts.other }}
+                          </button>
                             <hr />
                             <h5>Staff notes <span class="text-secondary">(private)</span></h5>
                             <textarea class="form-control" v-model="user.info.staff_notes" rows="4"></textarea>
@@ -234,6 +237,7 @@ export default {
                 interest: 0,
                 panelist: 0,
                 presenter: 0,
+                other: 0,
             },
             modalSessionData: {},
             modalSessionTitle: '',

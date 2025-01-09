@@ -85,3 +85,18 @@
 .card-title::first-letter {
     text-transform:capitalize;
 }
+
+
+/* social image module */
+.social-overlay {
+    position: relative;
+    z-index: 100;
+}
+
+.social-profile {
+    position: absolute;
+    top: 65px;
+    left: 440px;
+    width: 200px;
+    z-index: 0;
+}

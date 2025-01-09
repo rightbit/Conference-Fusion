@@ -234,6 +234,16 @@ class SessionInterestController extends Controller
             })
             ->count();
 
+        $session_totals['other'] = SessionInterest::where('user_id', $user_id)
+            ->where('is_participant', 1)
+            ->whereHas('conference_session', function ($query) {
+                $conference_id = session('selected_conference');
+                $query->where('conference_id', $conference_id);
+                $query->whereNotIn('type_id', [1,2]);
+                $query->whereIn('session_status_id', [4,5]);
+            })
+            ->count();
+
         return $session_totals;
 
 
@@ -318,6 +328,32 @@ class SessionInterestController extends Controller
                 $conference_id = session('selected_conference');
                 $query->where('conference_id', $conference_id);
                 $query->where('type_id', 2);
+                $query->whereIn('session_status_id', [4,5]);
+            });
+
+        return  SessionInterestResource::collection($session_interests->paginate(25));
+
+
+    }
+
+    /**
+     * Get a list of presentations for a user.
+     *
+     * @param  int  $user_id
+     * @return \Illuminate\Http\Response
+     */
+    public function userSessionsOther(int $user_id)
+    {
+        if(!Gate::allows('view_admin', Auth::user()) && !Gate::allows('edit_users', $user_id)){
+            abort(403, 'Not authorized');
+        }
+
+        $session_interests = SessionInterest::where('user_id', $user_id)
+            ->where('is_participant', 1)
+            ->whereHas('conference_session', function ($query) {
+                $conference_id = session('selected_conference');
+                $query->where('conference_id', $conference_id);
+                $query->whereNotIn('type_id', [1,2]);
                 $query->whereIn('session_status_id', [4,5]);
             });
 

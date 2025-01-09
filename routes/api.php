@@ -52,6 +52,7 @@ Route::middleware(['auth:sanctum'])->group( function() {
     Route::get('user/{user_id}/sessions/interests', [SessionInterestController::class, 'userSessionsInterests']);
     Route::get('user/{user_id}/sessions/panelist', [SessionInterestController::class, 'userSessionsPanelist']);
     Route::get('user/{user_id}/sessions/presenter', [SessionInterestController::class, 'userSessionsPresenter']);
+    Route::get('user/{user_id}/sessions/other', [SessionInterestController::class, 'userSessionsOther']);
 
     Route::get('user-presentation-list/{conference_id}', [ConferenceSessionController::class, 'userPresentationIndex']);
     Route::get('user-panel-list/{conference_name}', [ConferenceSessionController::class, 'userPanelIndex']);
