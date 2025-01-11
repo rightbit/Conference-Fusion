@@ -67,8 +67,8 @@ class HomeController extends Controller
 
         return view('home')
             ->with('conferences', $conferences)
-            ->with('home_page_message', $home_page_message->value)
-            ->with('mass_signing_enabled', $mass_signing_enabled->value)
+            ->with('home_page_message', $home_page_message->value ?? '')
+            ->with('mass_signing_enabled', $mass_signing_enabled->value ?? 0)
             ->with('user_sessions', $user_sessions);
     }
 

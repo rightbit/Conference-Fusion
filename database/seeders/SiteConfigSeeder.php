@@ -64,5 +64,12 @@ class SiteConfigSeeder extends Seeder
             'description' => 'Add a message displayed on the session page (Leave 0 for no message)',
             'last_updated_user_id' => 1,
         ]);
+
+        SiteConfig::create([
+            'key' => 'book_signing_module',
+            'value' => '0',
+            'description' => '	Include book signing event in the call',
+            'last_updated_user_id' => 1,
+        ]);
     }
 }
