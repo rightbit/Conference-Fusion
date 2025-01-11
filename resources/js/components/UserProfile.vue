@@ -95,7 +95,10 @@
                         </div>
                         <div class="row g-2 mb-3">
                             <div class="col-md-12">
-                               <a href="/password/reset">Change my password</a>
+                              <i class="bi bi-key-fill"></i>
+                              <button v-if="user.id && user.id != 0 && user.info.id !== null" type="button" class="btn btn-link ps-1" data-bs-toggle="modal" data-bs-target="#updatePasswordModal">
+                                Change password
+                              </button>
                             </div>
                         </div>
                         <div class="row g-2 mb-3">
@@ -156,6 +159,7 @@
                 </div>
             </form>
             <partials-user-profile-image-modal :user-id="this.userId" @changeImage="reloadProfileImage" />
+            <partials-user-update-password-modal :user-id="this.userId" />
         </div>
         <div v-else class="p-5 text-center">
             <h1>Error 404</h1>

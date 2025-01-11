@@ -31,6 +31,7 @@ import PartialsSessionParticipantsList from "./components/partials/SessionPartic
 import PartialsSessionStatusOptions from "./components/partials/SessionStatusOptions";
 import PartialsUserInfoData from "./components/partials/UserInfoData";
 import PartialsUserProfileImageModal from "./components/partials/UserProfileImageModal";
+import PartialsUserUpdatePasswordModal from "./components/partials/UserUpdatePasswordModal";
 
 
 //Optional Modules
@@ -70,6 +71,7 @@ app.component('partials-session-participants-list', PartialsSessionParticipantsL
 app.component('partials-session-status-options', PartialsSessionStatusOptions)
 app.component('partials-user-info-data', PartialsUserInfoData)
 app.component('partials-user-profile-image-modal', PartialsUserProfileImageModal)
+app.component('partials-user-update-password-modal', PartialsUserUpdatePasswordModal)
 
 
 //Optional Modules

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -131,6 +132,29 @@ class UserController extends Controller
         //
     }
 
+
+    /**
+     * Update the user profile image.
+     *
+     * @param  \App\Models\User     $user
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePassword(User $user, Request $request)
+    {
+        Log::debug('user', [$request]);
+        if(!Gate::allows('edit_users', $user->id)){
+            abort(403, 'Not authorized');
+        }
+
+        $this->validate($request, [
+            'password' => 'required|string|min:6',
+        ]);
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+    }
 
     /**
      * Update the user profile image.

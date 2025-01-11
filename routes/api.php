@@ -68,6 +68,7 @@ Route::middleware(['auth:sanctum'])->group( function() {
 
     Route::group(['prefix' => 'profile'], function () {
         Route::apiResource('user', UserController::class);
+        Route::post('user/password/{user}',[UserController::class, 'updatePassword']);
         Route::apiResource('user-info-data', UserInfoDataCategoryController::class);
         Route::apiResource('user-info-consignment', UserInfoConsignmentController::class);
     });
