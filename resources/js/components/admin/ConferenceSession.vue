@@ -155,8 +155,7 @@
 
                                 <label for="interest_level">Level of interest</label>
                                 <select class="form-select" v-model="interest.interest_level" id="interest_level" required>
-                                    <option value="" disabled hidden></option>
-                                    <option value="5">Extremely Interested</option>
+                                    <option value="5" selected>Extremely Interested</option>
                                     <option value="4">Very Interested</option>
                                     <option value="3">Interested</option>
                                     <option value="2">Somewhat Interested</option>
@@ -170,8 +169,7 @@
                             <div class="mb-3">
                                 <label for="experience_level">Level of experience</label>
                                 <select class="form-select" v-model="interest.experience_level" id="experience_level" required>
-                                    <option value="" disabled hidden></option>
-                                    <option value="5">Expert Knowledge</option>
+                                    <option value="5" selected>Expert Knowledge</option>
                                     <option value="4">Extremely Knowledgeable</option>
                                     <option value="3">Very Knowledgeable</option>
                                     <option value="2">Somewhat Knowledgeable</option>
@@ -185,8 +183,7 @@
                             <div class="mb-3">
                                 <label for="panel_role">Role on this panel</label>
                                 <select class="form-select" v-model="interest.panel_role" id="panel_role" required>
-                                    <option value="" disabled hidden></option>
-                                    <option value="5">Creator</option>
+                                    <option value="5" selected>Creator</option>
                                     <option value="4">Critic</option>
                                     <option value="3">Educator</option>
                                     <option value="2">Expert</option>
@@ -201,8 +198,7 @@
                             <div class="mb-3">
                                 <label for="will_moderate">Interest in moderating</label>
                                 <select class="form-select" v-model="interest.will_moderate" id="will_moderate" required>
-                                    <option value="" disabled hidden></option>
-                                    <option value="1">Yes</option>
+                                    <option value="1" selected>Yes</option>
                                     <option value="0">No</option>
                                 </select>
                                 <div class="invalid-feedback">
@@ -213,8 +209,7 @@
                             <div class="mb-3">
                                 <label for="will_moderate">Add as a participant?</label>
                                 <select class="form-select" v-model="interest.is_participant" id="is_participant" required>
-                                    <option value="" disabled hidden></option>
-                                    <option value="1">Yes</option>
+                                    <option value="1" selected>Yes</option>
                                     <option value="0">No</option>
                                 </select>
                                 <div class="invalid-feedback">
@@ -252,7 +247,13 @@
                 foundSession: true,
                 participantListKey: 0,
                 interestListKey: 0,
-                interest: {},
+                interest: {
+                  interest_level: 5,
+                  experience_level: 5,
+                  is_participant: 1,
+                  will_moderate: 1,
+                  panel_role: 5,
+                },
                 searchUsers: {},
                 totalUsers: 0,
                 keyword: '',
