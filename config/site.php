@@ -6,6 +6,7 @@ return [
     'permission_names' => [
         'admin' => 'Super admin',
         'view_admin'  => 'View admin area',
+        'edit_conference' => 'Edit conference info',
         'edit_schedules' => 'Edit conference schedule',
         'edit_sessions' => 'Edit session info',
         'edit_users' => 'Edit users',

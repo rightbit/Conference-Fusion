@@ -35,6 +35,10 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasPermission('view_admin');
         });
 
+        Gate::define('edit_conference', function(User $user) {
+            return $user->hasPermission('edit_conference');
+        });
+
         Gate::define('edit_schedules', function(User $user) {
             return $user->hasPermission('edit_schedules');
         });

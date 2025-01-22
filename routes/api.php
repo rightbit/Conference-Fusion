@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AnnouncementController;
 use App\Http\Controllers\Api\ConferenceController;
 use App\Http\Controllers\Api\ConferenceScheduleController;
 use App\Http\Controllers\Api\ConferenceSessionController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Api\SessionStatusController;
 use App\Http\Controllers\Api\SessionTypeController;
 use App\Http\Controllers\Api\SessionUserCommentController;
 use App\Http\Controllers\Api\SiteConfigController;
+use App\Http\Controllers\Api\SponsorController;
 use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\TrackHeadController;
 use App\Http\Controllers\Api\UserController;
@@ -82,6 +84,7 @@ Route::middleware(['auth:sanctum'])->group( function() {
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function () {
+    Route::apiResource('announcement', AnnouncementController::class);
     Route::apiResource('conference', ConferenceController::class);
     Route::apiResource('conference-session', ConferenceSessionController::class);
     Route::apiResource('conference-schedule', ConferenceScheduleController::class);
@@ -90,6 +93,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
     Route::apiResource('session-status', SessionStatusController::class);
     Route::apiResource('session-special-equipment', SessionSpecialEquipmentController::class);
     Route::apiResource('session-type', SessionTypeController::class);
+    Route::apiResource('sponsor', SponsorController::class);
     Route::apiResource('room', RoomController::class);
     Route::apiResource('track', TrackController::class);
     Route::apiResource('track-head', TrackHeadController::class);

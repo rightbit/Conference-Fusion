@@ -6,6 +6,7 @@ import { createApp } from 'vue'
 import Toaster from "@meforma/vue-toaster";
 import LaravelVuePagination from 'laravel-vue-pagination';
 
+import AdminAnnouncementList from "./components/admin/AnnouncementList";
 import AdminConferenceList from "./components/admin/ConferenceList";
 import AdminConferenceInfo from "./components/admin/ConferenceInfo";
 import AdminConfiguration from './components/admin/Configuration'
@@ -13,6 +14,7 @@ import AdminReports from "./components/admin/Reports";
 import AdminRoomList from "./components/admin/RoomList";
 import AdminScheduleBoard from "./components/admin/ScheduleBoard";
 import AdminScheduleBoardPlain from "./components/admin/ScheduleBoardPlain";
+import AdminSponsorList from "./components/admin/SponsorList";
 import AdminTrackList from "./components/admin/TrackList";
 import AdminUserList from "./components/admin/UserList";
 import AdminVolunteerList from "./components/admin/VolunteerList";
@@ -46,6 +48,7 @@ app.use(Toaster, {
 
 // Components
 app.component('Pagination', LaravelVuePagination)
+app.component('admin-announcement-list', AdminAnnouncementList)
 app.component('admin-conference-session-list', AdminConferenceSessionList)
 app.component('admin-conference-session', AdminConferenceSession)
 app.component('admin-conference-info', AdminConferenceInfo)
@@ -55,6 +58,7 @@ app.component('admin-room-list', AdminRoomList)
 app.component('admin-reports', AdminReports)
 app.component('admin-schedule-board', AdminScheduleBoard)
 app.component('admin-schedule-board-plain', AdminScheduleBoardPlain)
+app.component('admin-sponsor-list', AdminSponsorList)
 app.component('admin-track-list', AdminTrackList)
 app.component('admin-user-list', AdminUserList)
 app.component('admin-volunteer-list', AdminVolunteerList)

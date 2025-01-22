@@ -62,6 +62,8 @@
                                     <li><a class="dropdown-item" href="{{ route('admin_volunteer_list') }}">{{ __('Volunteers') }}</a></li>
                                     <li><a class="dropdown-item" href="{{ route('admin_conference_session_list') }}">{{ __('Sessions') }}</a></li>
                                     <li><a class="dropdown-item" href="{{ route('admin_schedule_board') }}">{{ __('Schedule') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin_announcement_list') }}">{{ __('Announcements') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin_sponsor_list') }}">{{ __('Sponsors') }}</a></li>
                                     <li><a class="dropdown-item" href="{{ route('admin_reports') }}">{{ __('Reports') }}</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li class="ps-2"><b>Settings</b></li>
