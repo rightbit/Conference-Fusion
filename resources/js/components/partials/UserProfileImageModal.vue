@@ -7,6 +7,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <p>We recommend a square image, and at least 300px wide.</p>
                     <div class="d-flex align-items-center justify-content-center text-center">
                         <label class="btn btn-success" for="profileFile">Select file</label>
                         <input type="file" id="profileFile" class="visually-hidden" accept="image/png, image/jpeg" v-on:change="selectFile" />

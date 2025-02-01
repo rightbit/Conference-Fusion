@@ -10,6 +10,7 @@ use App\Models\ConferenceSchedule;
 use App\Models\ConferenceSession;
 use App\Models\SessionInterest;
 use App\Models\SiteConfig;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -55,6 +56,7 @@ class HomeController extends Controller
             $conference->call_start_date_display = Carbon::parse($conference->call_start_date)->format('F j, Y');
             $conference->call_end_date_display = Carbon::parse($conference->call_end_date)->format('F j, Y');
             $conference_sessions = SessionInterest::getUserSchedule(Auth::user()->id, $conference->id);
+            $user = User::find(Auth::user()->id);
 
             if(count($conference_sessions) > 0) {
                 $user_sessions[] = [
@@ -66,6 +68,7 @@ class HomeController extends Controller
         //TODO Add list of upcoming sessions, requested and approved.
 
         return view('home')
+            ->with('user', $user)
             ->with('conferences', $conferences)
             ->with('home_page_message', $home_page_message->value ?? '')
             ->with('mass_signing_enabled', $mass_signing_enabled->value ?? 0)
