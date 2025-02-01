@@ -3,6 +3,7 @@
 use App\Http\Controllers\CreateUserController;
 use App\Http\Controllers\ExportController;
 use App\Models\SiteConfig;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -104,4 +105,26 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','can:view_admin']], f
     })->name('user_profile');
     // More Admin routes
 
+    // Clear application cache:
+    Route::get('/clear-cache', function() {
+        Artisan::call('cache:clear');
+        return 'Cache has been cleared';
+    });
+    //Clear route cache:
+    Route::get('/route-cache', function() {
+        Artisan::call('route:cache');
+        return 'Routes cache has been cleared';
+    });
+
+    //Clear config cache:
+    Route::get('/config-cache', function() {
+        Artisan::call('config:cache');
+        return 'Config cache has been cleared';
+    });
+
+    // Clear view cache:
+    Route::get('/view-clear', function() {
+        Artisan::call('view:clear');
+        return 'View cache has been cleared';
+    });
 });
