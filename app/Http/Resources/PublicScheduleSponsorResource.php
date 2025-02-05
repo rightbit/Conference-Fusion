@@ -18,7 +18,7 @@ class PublicScheduleSponsorResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description ?? '',
-            'imageUrl' => $this->sponsor_image ? env('APP_URL') . $this->sponsor_image : '',
+            'image1Url' => $this->sponsor_image ? env('APP_URL') . $this->sponsor_image : '',
             'thumbnailUrl' => $this->sponsor_image ? env('APP_URL') . $this->sponsor_image : '',
             'website' => $this->link ?? '',
         ];
