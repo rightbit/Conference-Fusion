@@ -18,8 +18,8 @@ class PublicScheduleParticipantResource extends JsonResource
             'id' => $this->id,
             'firstName' => $this->info->badge_name,
             'lastName' => '',
-            'biography' => $this->info->biography,
-            'website' => $this->info->website,
+            'biography' => $this->info->biography ?? '',
+            'website' => $this->info->website ?? '',
             'image1Url' =>  !empty($this->info->profile_image) ? env('APP_URL') . $this->info->profile_image : '',
         ];
     }
