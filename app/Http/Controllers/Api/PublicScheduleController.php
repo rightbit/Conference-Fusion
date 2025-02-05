@@ -37,7 +37,7 @@ class PublicScheduleController extends Controller
      */
     public function storeSchedule(PublicUserScheduleRequest $request, string $uuid)
     {
-        Log::debug($request);
+        //Log::debug($request);
         // Create an entry if the user has starred an event in the app. If the event has become unstarred, delete
         if ($request->get('starred')) {
             $public_user_schedule = PublicUsersSchedule::firstOrCreate(['uuid' => $uuid, 'conference_schedule_id' => $request->event_id]);
