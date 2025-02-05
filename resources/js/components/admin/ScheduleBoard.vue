@@ -1,51 +1,80 @@
 <style>
-/* You can easily set a different style for each split of your days. */
-.vuecal__cell-split.dad {background-color: rgba(221, 238, 255, 0.5);}
-.vuecal__cell-split.mom {background-color: rgba(255, 232, 251, 0.5);}
-.vuecal__cell-split.kid1 {background-color: rgba(221, 255, 239, 0.5);}
-.vuecal__cell-split.kid2 {background-color: rgba(255, 250, 196, 0.5);}
-.vuecal__cell-split.kid3 {background-color: rgba(255, 206, 178, 0.5);}
-.vuecal__cell-split .split-label {color: rgba(0, 0, 0, 0.1);font-size: 26px;}
+.swap-buttons {
+  display: none; /* Hide button */
+  opacity: 75%;
+}
 
-/* Different color for different event types. */
-.vuecal__event.leisure {background-color: rgba(253, 156, 66, 0.9);border: 1px solid rgb(233, 136, 46);color: #fff;}
-.vuecal__event.health {background-color: rgba(164, 230, 210, 0.9);border: 1px solid rgb(144, 210, 190);}
-.vuecal__event.sport {background-color: rgba(255, 102, 102, 0.9);border: 1px solid rgb(235, 82, 82);color: #fff;}
-.vuecal__event-time {display: none;align-items: center;}
-.vuecal__event-content {font-size: .8em;}
+.card:hover .swap-buttons {
+  display: block; /* On :hover of div show button */
+}
 </style>
+
+
 <template>
   <div class="container">
+    <div class="table-scrollable-container">
+      <h4 class="position-sticky" style="left:0px;">
+        <label for="date-select" class="me-3 mt-2">Schedule Board</label>
+        <select id="date-select" class="form-select form-select-sm w-auto d-inline" v-model="boardDate" @change="loadScheduleBoard">
+          <option v-for="day in scheduleDates" :value="day">{{ day }}</option>
+        </select>
+        <button class="btn btn-sm btn-link" @click="loadScheduleBoard"><b><i class="bi bi-arrow-repeat"></i> Reload</b></button>
+      </h4>
+      <table class="table table-scrollable table-striped bg-white">
+        <thead class="bg-secondary text-white">
+        <tr  class="d-flex align-content-stretch">
+          <td class="bg-secondary text-white">Time</td>
+          <td v-for="room in this.schedule.rooms" class="text-center ts-sc">
+            <div class="mb-0 p-0">
+              {{ room.name }}
+            </div>
+            <div class="mt-0 p-0">
+              <small>Capacity: {{ room.capacity }} <i v-if="room.has_av" class="bi bi-person-video3"></i></small>
+            </div>
+          </td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(rooms, time) in this.schedule.timeslots" class="d-flex align-content-stretch">
+          <td class="bg-secondary text-white">{{ time }}</td>
+          <td v-for="(room, room_name) in rooms" class="p-1">
+            <div class="card h-100">
+              <div v-if="room.session_name" class="swap-buttons h-100 w-100 text-center" style="position:absolute; top:33%; z-index: 100">
+                <button class="btn btn-sm btn-secondary me-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#session-schedule-modal"
+                        @click="populateSessionModal(time, room_name)">
+                  <i class="bi bi-pencil-fill"></i>
+                </button>
+                <a :href="'/admin/conference-session/'+room.session_id" class="btn btn-sm btn-primary" target="_blank">
+                  <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+              </div>
+              <div v-if="room.session_name" class="card-body lh-1 p-2">
+                <small>{{ room.session_name }}</small>
+              </div>
+              <div v-else class="card-body text-center">
+                <button class="btn btn-sm btn-outline-secondary text-nowrap"
+                        data-bs-toggle="modal"
+                        data-bs-target="#session-schedule-modal"
+                        @click="populateSessionModal(time, room_name)">
+                  <i class="bi bi-plus-circle "></i> Add
+                </button>
+              </div>
+              <div v-if="room.track_name" class="card-footer lh-1 text-center bg-gradient" :style="[room.track_color ? 'background-color:'+room.track_color : 'background-color:#0dcaf0']">
+                <div class="">
+                  <small><b>{{ room.track_name }}</b></small>
+                </div>
 
-      <button @click="minCellWidth = minCellWidth ? 0 : 400">
-        {{ minCellWidth ? 'min cell width: 400px' : 'Add min cell width' }}
-      </button>
-      <button @click="minSplitWidth = minSplitWidth ? 0 : 200">
-        {{ minSplitWidth ? 'min split width: 200px' : 'Add min split width' }}
-      </button>
-      <button @click="stickySplitLabels = !stickySplitLabels">
-        Sticky Split Labels
-      </button>
-      <button @click="splitDays[1].hide = !splitDays[1].hide">
-        Show/Hide Dad
-      </button>
+              </div>
 
-      <vue-cal
-          selected-date="2025-02-12"
-          :time-from="8 * 60"
-          :time-to="20 * 60"
-          :time-step="30"
-          :disable-views="['years', 'year', 'month', 'week']"
-          editable-events
-          :events="events"
-          :split-days="splitDays"
-          :snapToTime=15
-          :sticky-split-labels="stickySplitLabels"
-          :min-cell-width="minCellWidth"
-          :min-split-width="minSplitWidth"
-      >
-      </vue-cal>
+            </div>
 
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="text-end"><a href="/admin/schedule-board-plain">Printable plain schedule</a></div>
   </div>
   <div class="modal" id="session-schedule-modal" >
@@ -85,58 +114,10 @@
 
 
 <script>
-import VueCal from 'vue-cal'
-import 'vue-cal/dist/vuecal.css'
-
 export default {
-  components: { VueCal },
   props: ['conferenceId', 'conferenceName', 'conferenceStartDate', 'conferenceEndDate', 'canEdit'],
   data: function() {
     return {
-      stickySplitLabels: false,
-      minCellWidth: 0,
-      minSplitWidth: 200,
-      splitDays: [
-        // The id property is added automatically if none (starting from 1), but you can set a custom one.
-        // If you need to toggle the splits, you must set the id explicitly.
-        { id: 1, class: 'mom', label: 'Mom' },
-        { id: 2, class: 'dad', label: 'Dad', hide: false },
-        { id: 3, class: 'kid1', label: 'Kid 1' },
-        { id: 4, class: 'kid2', label: 'Kid 2' },
-        { id: 5, class: 'kid3', label: 'Kid 3' },
-        { id: 6, class: 'kid3', label: 'Kid 3' },
-        { id: 7, class: 'kid3', label: 'Kid 3' },
-        { id: 8, class: 'kid3', label: 'Kid 3' },
-        { id: 9, class: 'kid3', label: 'Kid 3' },
-        { id: 10, class: 'kid3', label: 'Kid 3' }
-      ],
-      events: [
-        {
-          start: '2025-02-12 10:00',
-          end: '2025-02-12 11:00',
-          title: 'Writing',
-          content: '<i class="icon material-icons">A really long Title goes here for the name of the panel. Probably longer than this even</i>',
-          class: 'health',
-          split: 1, // Has to match the id of the split you have set (or integers if none).
-        },
-        {
-          start: '2018-11-19 18:30',
-          end: '2018-11-19 19:15',
-          title: 'Dentist appointment',
-          content: '<i class="icon material-icons">local_hospital</i>',
-          class: 'health',
-          split: 2
-        },
-        {
-          start: '2018-11-20 18:30',
-          end: '2018-11-20 20:30',
-          title: 'Crossfit',
-          content: '<i class="icon material-icons">fitness_center</i>',
-          class: 'sport',
-          split: 1
-        },
-
-      ],
       schedule: {},
       room_session: {},
       tracks: {},
