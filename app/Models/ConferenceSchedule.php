@@ -301,7 +301,7 @@ class ConferenceSchedule extends Model
         $sponsors = ConferenceSponsor::orderBy('display_order', 'ASC')
             ->orderBy('name', 'ASC')
             ->where('conference_id', $default_conference_id->value)->get();
-        //$schedule['sponsors'] = PublicScheduleSponsorResource::collection($sponsors);
+        $schedule['sponsors'] = PublicScheduleSponsorResource::collection($sponsors);
 
         return $schedule;
     }
