@@ -256,8 +256,8 @@ class ConferenceSchedule extends Model
         $schedule['tracks'] = $tracks;
 
         // TODO make rooms respect the conference_id
-        //$rooms = Room::select('id', 'name')->where('conference_id',$default_conference_id->value )->get();
-        $rooms = Room::select('id', 'name')->get();
+        $rooms = Room::select('id', 'name')->where('conference_id',$default_conference_id->value )->get();
+        //$rooms = Room::select('id', 'name')->get();
         $schedule['locations'] = $rooms;
 
         $events = ConferenceSchedule::with('session')
