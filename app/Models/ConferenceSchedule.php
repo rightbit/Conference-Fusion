@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Http\Resources\PublicScheduleEventParticipantResource;
 use App\Http\Resources\PublicScheduleParticipantResource;
 use App\Http\Resources\PublicScheduleResource;
+use App\Http\Resources\PublicScheduleSponsorResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -296,6 +297,11 @@ class ConferenceSchedule extends Model
             ->get();
 
         $schedule['eventPresenters'] = PublicScheduleEventParticipantResource::collection($event_presenters);
+
+        $sponsors = ConferenceSponsor::orderBy('display_order', 'ASC')
+            ->orderBy('name', 'ASC')
+            ->where('conference_id', $default_conference_id->value)->get();
+        $schedule['sponsors'] = PublicScheduleSponsorResource::collection($sponsors);
 
         return $schedule;
     }

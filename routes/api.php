@@ -84,6 +84,9 @@ Route::middleware(['auth:sanctum'])->group( function() {
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function () {
+
+    Route::post('sponsor-image/{sponsor}', [SponsorController::class, 'uploadImage']);
+
     Route::apiResource('announcement', AnnouncementController::class);
     Route::apiResource('conference', ConferenceController::class);
     Route::apiResource('conference-session', ConferenceSessionController::class);
@@ -101,6 +104,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
     Route::apiResource('permissions', UserPermissionController::class)->middleware('can:admin');
 
     Route::put('conference-session/{conference_session}/ignore_errors', [ConferenceSessionController::class, 'updateIgnoreErrors']);
+
 
     Route::group(['prefix' => 'report'], function() {
         Route::get('schedule-list/{conference_id}', [ReportController::class, 'scheduleList']);

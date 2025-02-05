@@ -15,17 +15,22 @@
             <table class="table table-sm fs-90">
               <thead>
               <tr>
-                <th class="ps-2">Name</th>
-                <th class="w-33">Description</th>
-                <th>Link</th>
-                <th>Display Order</th>
+                <th class="ps-2 w-25">Name</th>
+                <th class="w-25">Description</th>
+                <th class="w-auto">Image</th>
+                <th class="w-25">Link</th>
+                <th style="width:5%">Display Order</th>
                 <th v-if="this.canEdit"></th>
               </tr>
               </thead>
               <tbody>
               <tr scope="row" v-for="sponsor in sponsors">
                 <td class="ps-2"><input type="text" class="form-control form-control-sm" v-model="sponsor.name" :disabled="!this.canEdit" required /></td>
-                <td><input type="text" class="form-control form-control-sm" v-model="sponsor.description" :disabled="!this.canEdit" /></td>
+                <td><textarea class="form-control form-control-sm" v-model="sponsor.description" :disabled="!this.canEdit"></textarea></td>
+                <td>
+                  <img v-if="sponsor.sponsor_image" :src="sponsor.sponsor_image" style="width: 75px" data-bs-toggle="modal" data-bs-target="#upload-image-modal" v-on:click="setModalSponsor(sponsor)">
+                  <button v-else type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#upload-image-modal" v-on:click="setModalSponsor(sponsor)" >Upload Image</button>
+                </td>
                 <td><input type="text" class="form-control form-control-sm" v-model="sponsor.link" :disabled="!this.canEdit" /></td>
                 <td><input type="text" class="form-control form-control-sm" v-model="sponsor.display_order" :disabled="!this.canEdit" /></td>
                 <td v-if="this.canEdit">
@@ -72,6 +77,27 @@
       </div>
     </div>
   </div>
+  <div class="modal" id="upload-image-modal" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Update sponsor image</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" v-on:click="clearImageForm"></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex align-items-center justify-content-center text-center">
+            <label class="btn btn-success" for="sponsorImageFile">Select file</label>
+            <input type="file" id="sponsorImageFile" class="visually-hidden" accept="image/png, image/jpeg" v-on:change="selectFile" />
+            <input type="text" id="sponsorImageFileName" class="form-control ms-1" style="width:50%" disabled v-model="sponsorImageName" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" v-on:click="clearImageForm">Cancel</button>
+          <button type="button" class="btn btn-primary" v-on:click="submitFile" data-bs-dismiss="modal">Upload image</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 export default {
@@ -82,11 +108,14 @@ export default {
             totalSponsors: '0',
             keyword: '',
             laravelData: {},
+            modalSponsor: {},
+            sponsorImage: '',
+            sponsorImageName: '',
             new_sponsor: {
                 name: '',
                 descritpion: '',
                 link: '',
-                display_order: '',
+                display_order: '99',
                 logo: '',
             },
         }
@@ -144,6 +173,42 @@ export default {
               .catch((error) => {
                 this.$toast.error(`Could not update the sponsor`);
               });
+        },
+        selectFile: function(event) {
+          var imageHandler = event.target.files[0];
+          if( imageHandler.type === 'image/jpeg' || imageHandler.type === 'image/png') {
+            this.sponsorImage = imageHandler;
+            this.sponsorImageName = imageHandler.name;
+            return null;
+          }
+          this.$toast.error(`Please upload only a jpg or png file`);
+        },
+        submitFile: function() {
+          let formData = new FormData();
+          formData.append('file', this.sponsorImage);
+          axios.post(`/api/admin/sponsor-image/${this.modalSponsor.id}`, formData,
+              {
+                headers: {
+                  'Content-Type': 'multipart/form-data'
+                }
+              })
+              .then((response) => {
+                this.modalSponsor = {};
+                this.clearImageForm();
+                this.loadSponsors();
+                this.$toast.success(`The sponsor image was successfully updated`);
+              })
+              .catch((error) => {
+                this.$toast.error(`Could not save sponsor image<br />` + error.response.data.message);
+              });
+        },
+        clearImageForm  : function() {
+          this.sponsorImage = '';
+          this.sponsorImageName = '';
+        },
+        setModalSponsor: function(sponsor) {
+          this.modalSponsor = sponsor;
+          console.log(this.modalSponsor);
         },
     }
 }
