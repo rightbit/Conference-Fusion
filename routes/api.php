@@ -41,6 +41,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('public-schedule', [PublicScheduleController::class, 'index']);
+Route::get('public-schedule-test', [PublicScheduleController::class, 'indexTest']);
 
 
 Route::middleware(['auth:sanctum'])->group( function() {

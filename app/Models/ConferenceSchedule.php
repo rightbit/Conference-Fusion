@@ -306,4 +306,66 @@ class ConferenceSchedule extends Model
         return $schedule;
     }
 
+    public static function publicScheduleTest()
+    {
+
+        $default_conference_id = SiteConfig::where('key', 'default_conference_id')->first();
+        $conference = Conference::where('id', $default_conference_id->value)->first();
+
+        $schedule['conferenceName'] = $conference->short_name;
+
+        $tracks = Track::select('id','name')->where('administrative', '0')->get();
+        $schedule['tracks'] = $tracks;
+
+        // TODO make rooms respect the conference_id
+        $rooms = Room::select('id', 'name')->where('conference_id',$default_conference_id->value )->get();
+        //$rooms = Room::select('id', 'name')->get();
+        $schedule['locations'] = $rooms;
+
+        $events = ConferenceSchedule::with('session')
+            ->where('conference_id', $default_conference_id->value)
+            ->whereHas('track', function($query) {
+                $query->where('administrative', 0);
+            })
+            ->get();
+        $eventResource = PublicScheduleResource::collection($events);
+        $schedule['events'] = $eventResource;
+
+
+        $participants = User::whereHas('session_interest', function($query) use ($default_conference_id) {
+            $query->where('is_participant', 1);
+            $query->whereHas('conference_session', function($query) use($default_conference_id) {
+                $query->where('session_status_id', '5');
+                $query->where('conference_id', $default_conference_id->value);
+            });
+            $query->whereHas('conference_schedule', function($query) use($default_conference_id) {
+                $query->where('conference_id', $default_conference_id->value);
+            });
+        })
+            ->get();
+
+        $schedule['presenters'] = PublicScheduleParticipantResource::collection($participants);
+
+        $event_presenters =  DB::table('users as u')
+            ->join('session_interests AS si', function($join) {
+                $join->on( 'u.id', '=', 'si.user_id')
+                    ->where('si.is_participant', '=', '1');
+            })
+            ->join('conference_schedules AS csh', 'si.conference_session_id', '=', 'csh.conference_session_id')
+            ->select('u.id as user_id', 'csh.id AS event_id', 'si.is_moderator')
+            ->where('csh.conference_id', '=',  $default_conference_id->value)
+            ->orderBy('u.id')
+            ->get();
+
+        $schedule['eventPresenters'] = PublicScheduleEventParticipantResource::collection($event_presenters);
+
+        $sponsors = ConferenceSponsor::orderBy('display_order', 'ASC')
+            ->orderBy('name', 'ASC')
+            ->where('conference_id', $default_conference_id->value)->get();
+        $schedule['sponsors'] = PublicScheduleSponsorResource::collection($sponsors);
+
+        return $schedule;
+    }
+
+
 }

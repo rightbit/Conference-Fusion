@@ -22,6 +22,16 @@ class PublicScheduleController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function indexTest()
+    {
+
+        $schedule = ConferenceSchedule::publicScheduleTest();
+        return $schedule;
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
