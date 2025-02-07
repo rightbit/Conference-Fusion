@@ -116,7 +116,6 @@ export default {
                 descritpion: '',
                 link: '',
                 display_order: '99',
-                logo: '',
             },
         }
     },
@@ -148,8 +147,8 @@ export default {
                     this.loadSponsors();
                     this.new_sponsor.name = '';
                     this.new_sponsor.website = '';
+                    this.new_sponsor.description = '';
                     this.new_sponsor.display_order = '';
-                    this.new_sponsor.logo = '';
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not add the sponsor`);

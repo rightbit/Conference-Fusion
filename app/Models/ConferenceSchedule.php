@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Resources\PublicScheduleAnnouncementResource;
 use App\Http\Resources\PublicScheduleEventParticipantResource;
 use App\Http\Resources\PublicScheduleParticipantResource;
 use App\Http\Resources\PublicScheduleResource;
@@ -363,6 +364,12 @@ class ConferenceSchedule extends Model
             ->orderBy('name', 'ASC')
             ->where('conference_id', $default_conference_id->value)->get();
         $schedule['sponsors'] = PublicScheduleSponsorResource::collection($sponsors);
+
+        $announcements = ConferenceAnnouncement::orderBy('pinned', 'DESC')
+            ->orderBy('display_date', 'DESC')
+            ->where('conference_id', $default_conference_id->value)->get();
+        //TODO figure out the display_date time zone issues
+        $schedule['announcements'] = PublicScheduleAnnouncementResource::collection($announcements);
 
         return $schedule;
     }
