@@ -116,7 +116,7 @@ class ExportController extends Controller
             "Expires"             => "0"
         );
 
-        $columns = array('Name', 'Date & Time', 'Room', 'Capacity', 'Has AV', 'Track', 'Type', 'Description', 'Staff Notes', 'Participants', 'Attendance');
+        $columns = array('Name', 'Date & Time', 'Room', 'Capacity', 'Has AV', 'Track', 'Type', 'Description', 'Staff Notes', 'Special Equipment', 'Participants', 'Attendance');
         $callback = function() use($sessions, $columns) {
             $file = fopen('php://output', 'w');
             fputcsv($file, $columns);
@@ -140,7 +140,7 @@ class ExportController extends Controller
                 fputcsv($file, [
                     $session['session_name'], implode(" | ", $session['date_time']), $session['room_name'],
                     $session['capacity'], $session['has_av'], $session['track_name'], $session['session_type'],
-                    $session['description'], $session['staff_notes'], $participant_list, $session['attendance']
+                    $session['description'], $session['staff_notes'], $session['special_equipment'], $participant_list, $session['attendance']
                 ]);
             }
 
