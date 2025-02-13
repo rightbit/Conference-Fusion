@@ -41,9 +41,12 @@ class ConferenceSchedule extends Model
         ]);
     }
 
-    public function session_interests()
+    public function participants()
     {
-        return $this->hasMany( SessionInterest::class, 'conference_session_id', 'conference_session_id');
+        return $this->hasMany(SessionInterest::class, 'conference_session_id', 'conference_session_id')
+            ->where('session_interests.is_participant', 1)
+            ->join('user_infos', 'session_interests.user_id', '=', 'user_infos.user_id')
+            ->select('user_infos.user_id', 'user_infos.badge_name');
     }
 
     public function track()

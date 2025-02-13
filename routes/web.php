@@ -23,6 +23,9 @@ Route::get('/terms-and-policies', function() {
         return (view()->exists('custom.terms')) ? view('custom.terms') : view('terms');
 })->name('terms');
 
+Route::get('/rating/{conference_schedule}', [App\Http\Controllers\ConferenceScheduleRatingController::class, 'form'])->name('rating-form');
+Route::post('/rating', [App\Http\Controllers\ConferenceScheduleRatingController::class, 'saveForm'])->name('save-rating');
+
 Auth::routes();
 
 //Logged in group
