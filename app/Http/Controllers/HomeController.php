@@ -38,7 +38,7 @@ class HomeController extends Controller
         $home_page_message = SiteConfig::where('key', 'message_home_page')->first();
         $mass_signing_enabled = SiteConfig::where('key', 'book_signing_module')->first();
 
-        $conferences = Conference::whereRaw('end_date >= CURDATE() + INTERVAL 1 DAY')
+        $conferences = Conference::whereRaw('end_date >= CURDATE() + INTERVAL 2 DAY')
             ->whereNotNull('call_start_date')
             ->orderBy('start_date')
             ->get();
@@ -56,7 +56,7 @@ class HomeController extends Controller
             $conference->call_start_date_display = Carbon::parse($conference->call_start_date)->format('F j, Y');
             $conference->call_end_date_display = Carbon::parse($conference->call_end_date)->format('F j, Y');
             $conference_sessions = SessionInterest::getUserSchedule(Auth::user()->id, $conference->id);
-            $user = User::find(Auth::user()->id);
+
 
             if(count($conference_sessions) > 0) {
                 $user_sessions[] = [
@@ -65,6 +65,7 @@ class HomeController extends Controller
                 ];
             }
         }
+        $user = User::find(Auth::user()->id);
         //TODO Add list of upcoming sessions, requested and approved.
 
         return view('home')
