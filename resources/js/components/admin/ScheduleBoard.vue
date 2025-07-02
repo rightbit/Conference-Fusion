@@ -36,7 +36,7 @@
         </thead>
         <tbody>
         <tr v-for="(rooms, time) in this.schedule.timeslots" class="d-flex align-content-stretch">
-          <td class="bg-secondary text-white">{{ time }}</td>
+          <td class="bg-secondary text-white text-center">{{ formatTime(time) }}</td>
           <td v-for="(room, room_name) in rooms" class="p-1">
             <div class="card h-100">
               <div v-if="room.session_name" class="swap-buttons h-100 w-100 text-center" style="position:absolute; top:33%; z-index: 100">
@@ -115,6 +115,7 @@
 
 <script>
 import dayjs from "dayjs";
+import moment from "moment";
 
 export default {
   props: ['conferenceId', 'conferenceName', 'conferenceStartDate', 'conferenceEndDate', 'canEdit'],
@@ -325,6 +326,12 @@ export default {
       if(!dateString) { return null }
       const date = dayjs(dateString);
       return date.format('ddd, MMM DD');
+    },
+    formatTime(timeString) {
+        if (!timeString) { return null; }
+        const time = moment(timeString, 'HH:mm', true); // Parse with strict mode
+        if (!time.isValid()) { return 'Invalid Time'; }
+        return time.format('ha'); // Format to 1pm
     },
 
   },
