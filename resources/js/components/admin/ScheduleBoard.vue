@@ -16,7 +16,7 @@
       <h4 class="position-sticky" style="left:0px;">
         <label for="date-select" class="me-3 mt-2">Schedule Board</label>
         <select id="date-select" class="form-select form-select-sm w-auto d-inline" v-model="boardDate" @change="loadScheduleBoard">
-          <option v-for="day in scheduleDates" :value="day">{{ day }}</option>
+          <option v-for="day in scheduleDates" :value="day">{{ formatDay(day) }}</option>
         </select>
         <button class="btn btn-sm btn-link" @click="loadScheduleBoard"><b><i class="bi bi-arrow-repeat"></i> Reload</b></button>
       </h4>
@@ -114,6 +114,8 @@
 
 
 <script>
+import dayjs from "dayjs";
+
 export default {
   props: ['conferenceId', 'conferenceName', 'conferenceStartDate', 'conferenceEndDate', 'canEdit'],
   data: function() {
@@ -317,6 +319,12 @@ export default {
       } else {
         return text;
       }
+    },
+
+    formatDay(dateString) {
+      if(!dateString) { return null }
+      const date = dayjs(dateString);
+      return date.format('ddd, MMM DD');
     },
 
   },
