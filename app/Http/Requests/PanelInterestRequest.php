@@ -38,7 +38,6 @@ class PanelInterestRequest extends FormRequest
             'interest_level' => 'required|integer',
             'experience_level' => 'required|integer',
             'panel_role' => 'required|integer',
-            'notes' => 'required',
             'will_moderate' => 'required|integer',
         ];
     }

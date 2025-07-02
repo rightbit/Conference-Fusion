@@ -20,19 +20,20 @@
                                 <input type="text" v-model="new_session.name" class="form-control" id="name" placeholder="Title" required>
                             </div>
                             <div class="col-md-6">
-                                <textarea  v-model="new_session.description" class="form-control" id="description" placeholder="Description (required for the conference program)"></textarea>
+                                <textarea  v-model="new_session.description" class="form-control" id="description" placeholder="Description (Required for the conference program)"></textarea>
                             </div>
                             <div class="col-md-6">
-                                <textarea  v-model="new_session.participant_notes" class="form-control" id="participant_notes" placeholder="Other notes about you or the presentation to give to the staff (optional, but recommended)"></textarea>
-
-                            </div>
-                            <div class="col-md-6 offset-md-6">
                                 <select id="special_equipment" v-model="new_session.special_equipment" class="form-select" aria-label="select special equipment">
-                                    <option value="" disabled hidden selected>Special Equipment Requests (optional)</option>
+                                    <option value="" disabled hidden selected>Special equipment requests (optional)</option>
                                     <option v-for="equipment in equipments" v-bind:value="equipment.equipment">{{ equipment.equipment }}</option>
-                                    <option value="Other">Other (specify above)</option>
+                                    <option value="Other">White board</option>
+                                    <option value="Other">Other (specify below)</option>
                                     <option value="">None</option>
                                 </select>
+                            </div>
+                            <div class="col">
+                              <textarea  v-model="new_session.participant_notes" class="form-control" id="participant_notes" placeholder="Presentation outline and other notes (Highly recommended)"  rows="4"></textarea>
+
                             </div>
                             <div class="col-md-12 text-end">
                                 <button type="submit" class="btn btn-primary " ><i class="bi bi-arrow-up-circle me-2"></i>Submit</button>

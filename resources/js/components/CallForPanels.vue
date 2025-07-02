@@ -147,7 +147,7 @@
                         <div class="mb-3">
                             <label for="comments" class="form-label">Comments and notes about this panel</label>
 
-                            <textarea class="form-control" v-model="interest.notes" id="comments" rows="3" required></textarea>
+                            <textarea class="form-control" v-model="interest.notes" id="comments" rows="3"></textarea>
                             <div class="invalid-feedback">
                                 Please fill out the comments field.
                             </div>
@@ -180,7 +180,14 @@ export default {
         return {
             totalSessions: 0,
             conferenceSessions: [],
-            interest: {},
+            interest: {
+                interest_level: '4',
+                experience_level: '4',
+                panel_role: '5',
+                will_moderate: '1',
+                notes: '',
+                conference_session_id: 0,
+            },
             panelInfo: {},
             tracks: {},
             filter: '',
@@ -267,7 +274,14 @@ export default {
             if(panel.user_session_interest) {
                 this.interest = panel.user_session_interest;
             } else {
-                this.interest = {};
+                this.interest = {
+                  interest_level: '4',
+                  experience_level: '4',
+                  panel_role: '5',
+                  will_moderate: '1',
+                  notes: '',
+                  conference_session_id: 0,
+                };
             }
         },
         addUpdateInterest: function() {
