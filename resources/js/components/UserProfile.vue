@@ -123,10 +123,10 @@
                             </div>
                         </div>
                         <div class="row g-2 mb-4">
-                            <div class="col-md-12">
-                                <label for="website">Website</label>
-                                <input type="text" class="form-control" id="website" placeholder="Public website url" v-model="user.info.website">
-                            </div>
+                          <div class="col-md-12">
+                            <label for="website">Website</label>
+                            <input type="text" class="form-control" id="website" placeholder="Public website url" v-model="user.info.website">
+                          </div>
                         </div>
 
                         <div class="mt-4 form-group" v-if="!user.info.agree_to_terms">
@@ -155,6 +155,11 @@
                     <div class="row mt-3 g-2 form-group">
                         <div class="d-flex justify-content-between align-items-center experience"><span class="h4">Participant Info</span></div>
                         <partials-user-info-data v-if="finished_loading" :category="'participant'" :user-info="user.info.participant_data" @changeInfoData="updateInfoData" />
+                    </div>
+                    <div class="row mt-3 g-2 form-group">
+                        <a :href="'/mass-signing/' + conferenceSlug" class="btn align-self-end m-1 btn-warning">
+                          Author/Artist Mass signing
+                        </a>
                     </div>
                 </div>
             </form>
@@ -220,7 +225,7 @@
 <script>
 import { Tooltip } from "bootstrap";
 export default {
-    props: ['userId', 'currentUser', 'superAdmin', 'viewAdmin', 'permissions', 'conferenceId'],
+    props: ['userId', 'currentUser', 'superAdmin', 'viewAdmin', 'permissions', 'conferenceId', 'conferenceSlug'],
     data: function() {
         return {
             user: {

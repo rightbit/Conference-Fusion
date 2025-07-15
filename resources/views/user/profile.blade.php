@@ -18,5 +18,6 @@
         :view-admin="{{ $viewAdmin }}"
         :permissions="{{ json_encode(config('site.permission_names')) }}"
         :conference-id="'{{ $session_conference['id'] }}'"
+        :conference-slug="'{{ str_replace(" ", "-", $session_conference['short_name']) }}'"
     />
 @endsection
