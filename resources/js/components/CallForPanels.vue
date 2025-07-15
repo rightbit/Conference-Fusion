@@ -39,7 +39,7 @@
                                 <th class="ps-2 text-center">Track</th>
                                 <th class="ps-2 text-center"> Day/Time </th>
                                 <th class="ps-2">Name</th>
-                                <th>Description</th>
+                                <th class="w-50">Description</th>
                             </tr>
                             </thead>
                             <tbody>

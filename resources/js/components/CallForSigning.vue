@@ -113,7 +113,7 @@ export default {
             } else {
                 axios.post('/api/profile/user-info-consignment', this.userInfoConsignment )
                     .then((response) => {
-                        //this.userInfoConsignment = response.data.data;
+                        this.userInfoConsignment = response.data.data;
                         this.$toast.success(`Saved your mass signing preferences`);
                     })
                     .catch((error) => {

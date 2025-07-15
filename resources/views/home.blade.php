@@ -52,7 +52,7 @@
                                                 </a>
                                                 @if($mass_signing_enabled)
                                                     <a href="{{ route('call_for_signing', ['conference' => $conference->slug] ) }}" class="btn align-self-end m-1 {{ $conference->call_active ? ' btn-info':'btn-outline-secondary disabled' }}">
-                                                        {{ __('Mass signing') }}
+                                                        {{ __('Author/Artist Mass signing') }}
                                                     </a>
                                                 @endif
 
