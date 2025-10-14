@@ -46,7 +46,7 @@ class ConferenceSessionResource extends JsonResource
             'special_equipment' => $this->special_equipment,
             'conference_schedule' => $this->conference_schedule,
             'participants_shortlist' =>  $participants,
-            'participants' => $this->session_participants,
+//            'participants' => $this->session_participants,
 
         ];
     }
