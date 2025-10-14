@@ -21,6 +21,9 @@ class ConferenceSessionResource extends JsonResource
             $staff_notes = $this->staff_notes;
         }
 
+        $participants = !empty($this->session_participants[0]) ? $this->session_participants[0]->user_info->badge_name : '';
+        $participants .= !empty($this->session_participants[1]) ? ' +' . count($this->session_participants) - 1 : '';
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -42,6 +45,8 @@ class ConferenceSessionResource extends JsonResource
             'proposed_date' => $this->proposed_date,
             'special_equipment' => $this->special_equipment,
             'conference_schedule' => $this->conference_schedule,
+            'participants_shortlist' =>  $participants,
+            'participants' => $this->session_participants,
 
         ];
     }

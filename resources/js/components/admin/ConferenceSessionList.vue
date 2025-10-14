@@ -57,6 +57,7 @@
                             <tr>
                                 <th class="ps-2 w-30">Name</th>
                                 <th  class="w-30">Description</th>
+                                <th>Participants</th>
                                 <th>Track</th>
                                 <th>Type</th>
                                 <th class="text-center">Status <i class="bi bi-info-circle-fill text-info"
@@ -71,6 +72,7 @@
                             <tr scope="row" v-for="session in conferenceSessions">
                                 <td class="ps-2">{{ session.name }}</td>
                                 <td>{{ truncate(session.description , 50, '...') }}</td>
+                                <td>{{ session.participants_shortlist }}</td>
                                 <td>{{ session.track }}</td>
                                 <td>{{ session.session_type.name }}</td>
                                 <td class="text-center">
