@@ -65,7 +65,7 @@
                             @endforeach
                         @endif
                     </div>
-                    @if (false || !empty($user_sessions))
+                    @if (false && !empty($user_sessions))
                         <h2 class="mt-2">{{ __('Your schedule') }}</h2>
                         <div class="py-4 border-bottom">
                             @foreach($user_sessions as $session)
