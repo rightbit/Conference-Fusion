@@ -2,7 +2,7 @@
   <div class="text-center pt-5">
     <div id="presenter-promo">
       <div class="badge-name">
-        M. Todd Gallowglas
+        {{ badgeName }}
       </div>
       <img class="profile-image" :src="profileImage" />
       <img class="conference-image"  :src="conferenceImage" />
