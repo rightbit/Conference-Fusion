@@ -18,9 +18,15 @@ class UserInfo extends Model
         'user_id',
         'badge_name',
         'contact_email',
+        'website',
+        'biography',
         'notes',
+        'participant_data',
+        'personal_data',
+        'social_data',
         'staff_notes',
         'share_email_permission',
+        'recording_permission',
         'agree_to_terms',
     ];
 
