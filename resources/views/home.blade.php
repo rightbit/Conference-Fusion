@@ -65,7 +65,7 @@
                             @endforeach
                         @endif
                     </div>
-                    @if (false && !empty($user_sessions))
+                    @if (!empty($user_sessions))
                         <h2 class="mt-2">{{ __('Your schedule') }}</h2>
                         <div class="py-4 border-bottom">
                             @foreach($user_sessions as $session)
@@ -86,7 +86,7 @@
                             <partials-presenter-promo
                                     :badge-name="'{{ addslashes($user->info->badge_name) }}'"
                                     :profile-image="'{{ str_replace('-thumb', '', $user->info->profile_image) }}'"
-                                    :conference-image="'{{ asset('/images/presenter-promos/' . $session_conference['short_name'] . '-square.jpg') }}'"
+                                    :conference-image="'{{ asset('/images/presenter-promos/' . $session_conference['short_name'] . '-presenter-promo.jpg') }}'"
                             />
                         </div>
                     @endif
