@@ -131,3 +131,16 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','can:view_admin']], f
         return 'View cache has been cleared';
     });
 });
+
+
+//DELETE ME
+Route::get('/import-users', function () {
+    return view('import');
+})->name('import.users.form');
+Route::post('/import-users', [App\Http\Controllers\Api\UserController::class, 'importUsers'])->name('import.users');
+
+//DELETE ME
+Route::get('/import-sessions', function () {
+    return view('importsessions');
+})->name('import.sessions.form');
+Route::post('/import-sessions', [App\Http\Controllers\Api\ConferenceSessionController::class, 'importSessions'])->name('import.sessions');

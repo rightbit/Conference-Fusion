@@ -357,4 +357,51 @@ class ConferenceSessionController extends Controller
 
     }
 
+    //DELETE ME
+    public function importSessions(Request $request)
+    {
+        set_time_limit(1000);
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt'
+        ]);
+        $file = $request->file('csv_file');
+        $handle = fopen($file->getPathname(), 'r');
+        fgetcsv($handle, 1000, ',');
+        while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+            $conference_session = ConferenceSession::create([
+                'name' => $data[0],
+                'description' => $data[4] ?? '',
+                'type_id' => $data[1] ?? 3,
+                'session_status_id' => 5,
+                'conference_id' => 1,
+                'track_id' => $data[3],
+            ]);
+
+            if(!empty($data[2])) {
+                $participants = explode('|', $data[2]);
+                foreach($participants as $participant) {
+                        $session_interest = new SessionInterest();
+                        $session_interest->conference_session_id = $conference_session->id;
+                        $session_interest->user_id = $participant;
+                        $session_interest->is_participant = '1'; //Participants are participants by default
+                        $session_interest->save();
+                }
+            }
+
+            $date_time = explode(' ', $data[6]);
+            ConferenceSchedule::create([
+                'conference_session_id' => $conference_session->id,
+                'conference_id' => 1,
+                'room_id' => $data[5],
+                'track_id' => $data[3],
+                'date' => $date_time[0],
+                'time' => $date_time[1],
+            ]);
+
+        }
+        fclose($handle);
+
+        return redirect()->back()->with('success', 'Users imported successfully!');
+    }
+
 }
