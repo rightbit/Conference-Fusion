@@ -268,6 +268,9 @@ class ConferenceSchedule extends Model
 
         $events = ConferenceSchedule::with('session')
                 ->where('conference_id', $default_conference_id->value)
+                ->whereHas('session', function($query) {
+                    $query->where('session_status_id', '5');
+                })
                 ->whereHas('track', function($query) {
                     $query->where('administrative', 0);
                 })
