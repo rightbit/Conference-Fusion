@@ -296,8 +296,10 @@ class ConferenceSchedule extends Model
                     ->where('si.is_participant', '=', '1');
             })
             ->join('conference_schedules AS csh', 'si.conference_session_id', '=', 'csh.conference_session_id')
+            ->join('tracks AS t', 'csh.track_id', '=', 't.id')
             ->select('u.id as user_id', 'csh.id AS event_id', 'si.is_moderator')
             ->where('csh.conference_id', '=',  $default_conference_id->value)
+            ->where('t.administrative', '=', '0')
             ->orderBy('u.id')
             ->get();
 
