@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VolunteerResource;
 use App\Models\Volunteer;
+use App\Http\Requests\VolunteerRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -45,7 +46,23 @@ class VolunteerController extends Controller
      */
     public function store(VolunteerRequest $request)
     {
-        $volunteer = new Volunteer($request->all());
+        $user_id = $request->input('user_id');
+        $type = $request->input('type');
+        $conference_id = session('selected_conference');
+
+        // Check for existing volunteer
+        $existing = Volunteer::where('user_id', $user_id)
+            ->where('conference_id', $conference_id)
+            ->first();
+        if ($existing) {
+            return response()->json(['message' => 'User is already a volunteer for this conference.'], 422);
+        }
+
+        $volunteer = new Volunteer([
+            'user_id' => $user_id,
+            'conference_id' => $conference_id,
+            'type' => $type,
+        ]);
         $volunteer->save();
         return new VolunteerResource($volunteer);
     }

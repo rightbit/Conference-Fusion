@@ -103,9 +103,19 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','can:view_admin']], f
     Route::view('sponsor-list', 'admin.sponsor_list')->name('admin_sponsor_list');
     Route::view('user-list', 'admin.user_list')->name('admin_user_list');
     Route::view('volunteer-list', 'admin.volunteer_list')->name('admin_volunteer_list');
+    Route::view('volunteer-schedule', 'admin.volunteer_schedule')->name('admin_volunteer_schedule');
     Route::get('user-profile/{id}', function($id) {
         return view('user.profile', ['id' => $id]);
     })->name('user_profile');
+
+    // Session import routes
+    Route::get('import-session', [App\Http\Controllers\ImportSessionController::class, 'form'])
+        ->middleware('can:edit_sessions')
+        ->name('admin_import_session');
+    Route::post('import-session', [App\Http\Controllers\ImportSessionController::class, 'store'])
+        ->middleware('can:edit_sessions')
+        ->name('admin_post_import_session');
+
     // More Admin routes
 
     // Clear application cache:

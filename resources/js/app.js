@@ -20,6 +20,7 @@ import AdminUserList from "./components/admin/UserList";
 import AdminVolunteerList from "./components/admin/VolunteerList";
 import AdminConferenceSessionList from "./components/admin/ConferenceSessionList";
 import AdminConferenceSession from "./components/admin/ConferenceSession";
+import AdminVolunteerScheduleBoard from "./components/admin/VolunteerScheduleBoard";
 
 import CallForPanels from "./components/CallForPanels";
 import CallForPresentations from "./components/CallForPresentations";
@@ -63,6 +64,7 @@ app.component('admin-sponsor-list', AdminSponsorList)
 app.component('admin-track-list', AdminTrackList)
 app.component('admin-user-list', AdminUserList)
 app.component('admin-volunteer-list', AdminVolunteerList)
+app.component('admin-volunteer-schedule-board', AdminVolunteerScheduleBoard)
 
 app.component('call-for-panels', CallForPanels)
 app.component('call-for-presentations', CallForPresentations)
@@ -87,4 +89,3 @@ app.component('call-for-signing', CallForSigning)
 
 // Mounts
 app.mount('#app')
-

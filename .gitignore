@@ -1,4 +1,5 @@
 /node_modules
+/public/dev-admin.php
 /public/hot
 /public/images/profile/*
 /public/storage

@@ -5,7 +5,10 @@
                 <div class="card mb-3">
                     <div class="card-header d-flex justify-content-between">
                         <div class="h4 align-self-center mb-lg-0">Sessions List</div>
-                        <a class="btn btn-primary" :href="this.sessionLink +'/0'"><i class="bi bi-plus-circle"></i> Add new</a>
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-primary" :href="this.sessionLink +'/0'"><i class="bi bi-plus-circle"></i> Add new</a>
+                            <a class="btn btn-secondary-outline" href="/admin/import-session"><i class="bi bi-upload"></i> Import Sessions</a>
+                        </div>
                     </div>
 
                     <div class="card-body">

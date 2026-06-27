@@ -11,6 +11,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3">
                             <div>
+                                <a class="btn btn-outline-primary mb-2" href="/admin/volunteer-schedule">Volunteer Schedule</a>
                                 Found {{ totalVolunteers }} Volunteers
                             </div>
                             <div class="w-50">
@@ -49,7 +50,6 @@
         </div>
     </div>
     <div class="modal" id="addVolunteerModal" >
-      <form id="interestForm" class="needs-validation row" novalidate @submit.prevent="">
         <div class="modal-dialog modal-lg" style="min-width: 25%;">
           <div class="modal-content">
             <div class="modal-header">
@@ -67,16 +67,12 @@
                   <a :href="'/admin/user-profile/'+user.id" target="_blank">#{{ user.id }}</a> {{ user.first_name }} {{ user.last_name }} ({{ user.info.badge_name }})
                 </div>
               </div>
-
-
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button v-if="true" type="submit" class="btn btn-primary">Add User</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
-      </form>
     </div>
 </template>
 
@@ -122,7 +118,24 @@
             },
             selectUser: function(user) {
               this.newVolunteer.user_id = user.id;
-              this.newVolunteer.type = '';
+              this.newVolunteer.type = 'committee';
+              // Submit to API
+              axios.post('/api/admin/volunteer', this.newVolunteer)
+                .then((response) => {
+                  this.$toast.success('Volunteer added!');
+                  this.loadVolunteers();
+                  this.searchUsers = [];
+                  this.addVolunteerKeyword = '';
+                  // Optionally close modal
+                  if (this.$refs.Close) this.$refs.Close.click();
+                })
+                .catch((error) => {
+                  if (error.response && error.response.status === 422) {
+                    this.$toast.error('This user is already a volunteer or invalid data.');
+                  } else {
+                    this.$toast.error('Could not add volunteer.');
+                  }
+                });
             },
         }
     }

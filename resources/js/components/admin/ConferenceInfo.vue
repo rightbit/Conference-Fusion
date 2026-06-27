@@ -119,6 +119,7 @@
                                 <div class="h4 align-self-center mb-lg-0">Tools</div>
                             </div>
                             <div class="card-body d-flex">
+                                <a class="btn btn-primary me-2" href="/admin/import-session" ><i class="bi bi-upload"></i> Import sessions</a>
                                 <button class="btn btn-primary me-2" @click="syncProposedStartTimes" ><i class="bi bi-calendar-week"></i> Sync call start times</button>
                                 <button class="btn btn-primary me-2" @click="syncScheduledStatus" ><i class="bi bi-calendar-check"></i> Set session scheduled status</button>
                             </div>
