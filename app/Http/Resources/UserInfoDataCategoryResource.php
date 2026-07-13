@@ -30,6 +30,7 @@ class UserInfoDataCategoryResource extends JsonResource
             'options' => $this->options,
             'options_array' => $options_array,
             'required' => $this->required,
+            'order' => $this->order,
         ];
     }
 }

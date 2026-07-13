@@ -28,7 +28,8 @@ class UserInfoDataCategoryRequest extends FormRequest
         return [
             'type' => 'required',
             'name' => "required|unique:user_info_data_categories,name,{$this->input('id')},id|alpha_dash",
-            'required' => 'boolean|nullable'
+            'required' => 'boolean|nullable',
+            'order' => 'integer|min:0|nullable',
         ];
     }
 }

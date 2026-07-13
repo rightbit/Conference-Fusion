@@ -44,6 +44,7 @@
                                 <th>Key Label</th>
                                 <th>Key Options (Optional, comma seperated list)</th>
                                 <th>Require an answer</th>
+                                <th>Order</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -56,6 +57,7 @@
                                     <label class="form-check-label" :for="'required-'+cat_info.id">
                                         Required
                                     </label></td>
+                                <td><input type="number" min="0" step="1" class="form-control form-control-sm" style="width: 50px;" v-model.number="cat_info.order" :disabled="disabled" /></td>
                                 <td>
                                     <button class="btn btn-sm btn-outline-secondary me-2 my-1" @click="getInfoData(cat_info)">Reset</button>
                                     <button class="btn btn-sm btn-dark" :disabled="disabled" @click="putInfoData(cat_info)">Save</button>
@@ -86,7 +88,7 @@
                             <div class="col-md-3">
                                 <input type="text" v-model="new_info.label" class="form-control" id="inputOptions" placeholder="Profile form label">
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <input type="text" v-model="new_info.options" class="form-control" id="inputOptions" placeholder="Options (optional, comma separated)">
                             </div>
                             <div class="col-md-1">
@@ -96,6 +98,9 @@
                                         Required
                                     </label>
                                 </div>
+                            </div>
+                            <div class="col-md-1">
+                                <input type="number" min="0" step="1" v-model.number="new_info.order" class="form-control" style="width: 4ch;" id="inputOrder" placeholder="Order">
                             </div>
                             <div class="col-md-2 text-center">
                                 <button type="submit" class="btn btn-primary btn-sm">Add new</button>
@@ -124,6 +129,7 @@ export default {
                 label: '',
                 options: '',
                 required: null,
+                order: 0,
             },
             disabled: 1,
             locked: 1,
@@ -174,6 +180,7 @@ export default {
                     cat_info.label = r.label;
                     cat_info.options = r.options;
                     cat_info.required = r.required;
+                    cat_info.order = r.order;
                     this.$toast.warning(`The ${cat_info.name} info was successfully reset`);
                 })
                 .catch((error) => {
@@ -191,13 +198,14 @@ export default {
         },
         addInfoData: function() {
             axios.post(`/api/profile/user-info-data`, this.new_info)
-                .then((response) => {a
+                .then((response) => {
                     this.$toast.success(`The ${this.new_info.name} info was successfully added`);
                     this.loadInfoData(this.new_info.type)
                     this.new_info.name = '';
                     this.new_info.label = '';
                     this.new_info.options = '';
                     this.new_info.required = null;
+                    this.new_info.order = 0;
                     this.new_info.type = '';
                 })
                 .catch((error) => {

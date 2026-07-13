@@ -22,12 +22,14 @@ class UserInfoDataCategoryController extends Controller
      */
     public function index(Request $request)
     {
+        $query = UserInfoDataCategory::query()->orderBy('order')->orderBy('id');
+
         if($request->cat)
         {
-            return UserInfoDataCategoryResource::collection(UserInfoDataCategory::where('type', $request->cat)->get());
+            return UserInfoDataCategoryResource::collection($query->where('type', $request->cat)->get());
         }
 
-        return UserInfoDataCategoryResource::collection(UserInfoDataCategory::all());
+        return UserInfoDataCategoryResource::collection($query->get());
     }
 
     /**
@@ -90,6 +92,7 @@ class UserInfoDataCategoryController extends Controller
             $user_info_datum->label = $request->label;
             $user_info_datum->options = $request->options;
             $user_info_datum->required = (bool) $request->required;
+            $user_info_datum->order = $request->input('order', $user_info_datum->order);
             $user_info_datum->save();
             return $user_info_datum;
         }

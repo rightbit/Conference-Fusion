@@ -14,6 +14,12 @@ class UserInfoDataCategory extends Model
         'name',
         'label',
         'options',
-        'required'
+        'required',
+        'order',
+    ];
+
+    protected $casts = [
+        'required' => 'boolean',
+        'order' => 'integer',
     ];
 }
