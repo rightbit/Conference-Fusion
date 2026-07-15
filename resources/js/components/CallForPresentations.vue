@@ -28,10 +28,12 @@
                                 <i class="bi bi-info-circle text-primary flex-shrink-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Presentation: a single presenter on a topic, Workshop: include the time needed for the workshop, Panel: include names of who would be on the panel"></i>
                             </div>
                             <div class="col-md-6">
-                                <textarea  v-model="new_session.description" class="form-control" id="description" maxlength="255" placeholder="Short Description (Required for the conference program)"></textarea>
+                                <textarea  v-model="new_session.description" class="form-control" id="description" maxlength="500" placeholder="Short Description (Required for the conference program)"></textarea>
+                                <div class="form-text text-end">{{ (new_session.description || '').length }}/500</div>
                             </div>
                             <div class="col-md-6">
-                                <textarea  v-model="new_session.special_equipment" class="form-control" id="special_equipment" placeholder="Special Equipment: projector, audio playback, whiteboard, etc..."></textarea>
+                                <textarea  v-model="new_session.special_equipment" class="form-control" id="special_equipment" maxlength="255" placeholder="Special Equipment: projector, audio playback, whiteboard, etc..."></textarea>
+                                <div class="form-text text-end">{{ (new_session.special_equipment || '').length }}/255</div>
                             </div>
                             <div class="col">
                               <textarea  v-model="new_session.participant_notes" class="form-control" id="participant_notes" placeholder="Outline and other notes (Required for consideration)"  rows="4"></textarea>
@@ -55,6 +57,7 @@
                             <tr>
                                 <th class="ps-2">Name</th>
                                 <th>Track</th>
+                                <th>Type</th>
                                 <th>Description</th>
                                 <th class="m-0 p-0"></th>
                             </tr>
@@ -63,6 +66,7 @@
                             <tr scope="row" v-for="presentation in conferenceSessions">
                                 <td class="ps-2">{{ presentation.conference_session.name }}</td>
                                 <td class="ps-2">{{ presentation.conference_session.track_name }}</td>
+                                <td class="ps-2">{{ presentation.conference_session.type_name }}</td>
                                 <td>{{ presentation.conference_session.description }}</td>
                                 <td class="m-0 pe-1"><button class="btn btn-danger btn-sm" @click="deleteSession(presentation)"><i class="bi bi-trash-fill"></i></button></td>
                             </tr>
@@ -103,7 +107,7 @@ export default {
     },
     methods: {
         loadTracks: function () {
-            axios.get('/api/track-list')
+            axios.get('/api/track-list?call_included=1')
                 .then((response) => {
                     this.tracks = response.data.data;
                 })
