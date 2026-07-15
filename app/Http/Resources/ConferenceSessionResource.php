@@ -44,7 +44,12 @@ class ConferenceSessionResource extends JsonResource
             'attendance' => $this->attendance,
             'proposed_date' => $this->proposed_date,
             'special_equipment' => $this->special_equipment,
-            'conference_schedule' => $this->conference_schedule,
+            'conference_schedule' => $this->conference_schedule->map(function ($schedule) {
+                $schedule_data = $schedule->toArray();
+                $schedule_data['room_name'] = $schedule->room->name;
+
+                return $schedule_data;
+            }),
             'participants_shortlist' =>  $participants,
 //            'participants' => $this->session_participants,
 

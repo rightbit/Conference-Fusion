@@ -8,7 +8,7 @@
                         <h2 class="text-right">Session info</h2>
                             <div v-if="session.conference_schedule.length" class="d-flex justify-content-start p-2">
                                 <div class="h4 align-self-center mb-lg-0">Scheduled Times:</div>
-                                <a v-for="schedule in session.conference_schedule" class="btn btn-outline-dark ms-2" href="/admin/schedule-board" target="_blank"><i class="bi bi-calendar-check"></i> {{ schedule.date }} {{ schedule.time }}</a>
+                                <a v-for="schedule in session.conference_schedule" class="btn btn-outline-dark ms-2" :href="`/admin/schedule-board?date=${encodeURIComponent(schedule.date)}`" target="_blank"><i class="bi bi-calendar-check"></i> {{ schedule.room_name }} {{ formatDay(schedule.date) }} {{ formatTime(schedule.time) }}</a>
                             </div>
                         <h5 v-if="false">Like this session idea? Vote: <i class="bi bi-hand-thumbs-up-fill text-primary"></i><i class="bi bi-hand-thumbs-down text-secondary"></i> +0(0)</h5>
                     </div>
@@ -103,7 +103,7 @@
             <div class="container mb-2" v-if="session.id">
                 <div class="d-flex justify-content-start p-2">
                     <div class="h4 align-self-center mb-lg-0">Scheduled Times:</div>
-                    <a v-for="schedule in session.conference_schedule" class="btn btn-outline-dark ms-2" href="/admin/schedule-board" target="_blank"><i class="bi bi-calendar-check"></i> {{ schedule.date }} {{ schedule.time }}</a>
+                    <a v-for="schedule in session.conference_schedule" class="btn btn-outline-dark ms-2" :href="`/admin/schedule-board?date=${encodeURIComponent(schedule.date)}`" target="_blank"><i class="bi bi-calendar-check"></i> {{ schedule.room_name }} {{ formatDay(schedule.date) }} {{ formatTime(schedule.time) }}</a>
                 </div>
             </div>
             <div class="container mb-2" v-if="session.id">
@@ -232,6 +232,9 @@
 
 
 <script>
+    import dayjs from "dayjs";
+    import moment from "moment/moment";
+
     export default {
         props: ['sessionId', 'conferenceId', 'sessionListLink', 'defaultSessionDuration'],
         data: function() {
@@ -396,6 +399,17 @@
             },
             reloadParticipantList: function() {
                 this.participantListKey += 1;
+            },
+            formatDay(dateString) {
+                if(!dateString) { return null }
+                const date = dayjs(dateString);
+                return date.format('ddd, MM/DD');
+            },
+            formatTime(timeString) {
+                if (!timeString) { return null; }
+                const time = moment(timeString, 'HH:mm', true); // Parse with strict mode
+                if (!time.isValid()) { return 'Invalid Time'; }
+                return time.format('ha'); // Format to 1pm
             },
         }
 

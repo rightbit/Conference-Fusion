@@ -133,19 +133,28 @@ export default {
       roomName: '',
       typeId: '',
       sessionTime: '',
-      boardDate: this.conferenceStartDate,
+      boardDate: null,
       scheduleDates: [],
       editSession: 0,
 
     }
   },
   mounted() {
+    this.boardDate = this.getInitialBoardDate();
     this.loadScheduleBoard();
     this.loadTracks();
     this.loadTypes();
     this.calcScheduleDates(this.conferenceStartDate, this.conferenceEndDate);
   },
   methods: {
+    getInitialBoardDate: function () {
+      const queryDate = new URLSearchParams(window.location.search).get('date');
+      if (queryDate && moment(queryDate, 'YYYY-MM-DD', true).isValid()) {
+        return queryDate;
+      }
+
+      return this.conferenceStartDate;
+    },
     loadScheduleBoard: function () {
       let date = this.boardDate;
       axios.get('/api/admin/conference-schedule', {
