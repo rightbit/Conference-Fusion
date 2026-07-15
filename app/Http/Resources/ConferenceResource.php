@@ -24,6 +24,7 @@ class ConferenceResource extends JsonResource
             'time_zone' => $this->time_zone,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
+            'calendar_default_date' => $this->calendar_default_date,
             'session_start_time' => $this->session_start_time,
             'session_end_time' => $this->session_end_time,
             'call_start_date' => $this->call_start_date,

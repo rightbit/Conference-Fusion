@@ -31,6 +31,7 @@ class ConferenceRequest extends FormRequest
             'time_zone' => 'required',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
+            'calendar_default_date' => 'nullable|date',
             'session_start_time' => 'required',
             'session_end_time' => 'required',
             'call_start_date ' => 'date',

@@ -95,6 +95,7 @@ class ConferenceController extends Controller
             $conference->time_zone = $request->time_zone;
             $conference->start_date = $request->start_date;
             $conference->end_date = $request->end_date;
+            $conference->calendar_default_date = $request->calendar_default_date;
             $conference->session_start_time  = $request->session_start_time ;
             $conference->session_end_time = $request->session_end_time;
             $conference->call_start_date = $request->call_start_date;

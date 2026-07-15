@@ -19,6 +19,7 @@
         :conference-name="'{{ $session_conference['short_name'] }}'"
         :conference-start-date="'{{ $session_conference['start_date'] }}'"
         :conference-end-date="'{{ $session_conference['end_date'] }}'"
+        :conference-calendar-default-date="'{{ $session_conference['calendar_default_date'] }}'"
         :can-edit="{{ $canEdit }}"
     />
 @endsection

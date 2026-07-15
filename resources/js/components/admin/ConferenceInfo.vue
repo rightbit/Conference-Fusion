@@ -95,11 +95,15 @@
                                 </div>
                             </div>
                             <div class="row g-2 mb-3">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label for="scheduleStartDate">Schedule Calendar Default Date</label>
+                                    <input type="date" class="form-control" id="callStartDate" v-model="conference.calendar_default_date" required>
+                                </div>
+                                <div class="col-md-4">
                                     <label for="callStartDate">Call for papers / panelists start date</label>
                                     <input type="date" class="form-control" id="callStartDate" v-model="conference.call_start_date" required>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="callEndDate">Call for papers / panelists end date</label>
                                     <input type="date" class="form-control" id="callEndDate" v-model="conference.call_end_date " required>
                                 </div>
@@ -154,6 +158,7 @@
                         time_zone: '',
                         start_date: '',
                         end_date: '',
+                        calendar_default_date: '',
                         session_start_time: '',
                         session_end_time: '',
                         call_start_date: '',

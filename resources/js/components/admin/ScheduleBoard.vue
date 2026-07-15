@@ -118,7 +118,7 @@ import dayjs from "dayjs";
 import moment from "moment";
 
 export default {
-  props: ['conferenceId', 'conferenceName', 'conferenceStartDate', 'conferenceEndDate', 'canEdit'],
+  props: ['conferenceId', 'conferenceName', 'conferenceStartDate', 'conferenceEndDate', 'conferenceCalendarDefaultDate', 'canEdit'],
   data: function() {
     return {
       schedule: {},
@@ -151,6 +151,10 @@ export default {
       const queryDate = new URLSearchParams(window.location.search).get('date');
       if (queryDate && moment(queryDate, 'YYYY-MM-DD', true).isValid()) {
         return queryDate;
+      }
+
+      if (this.conferenceCalendarDefaultDate && moment(this.conferenceCalendarDefaultDate, 'YYYY-MM-DD', true).isValid()) {
+        return this.conferenceCalendarDefaultDate;
       }
 
       return this.conferenceStartDate;

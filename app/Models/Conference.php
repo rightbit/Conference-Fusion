@@ -18,6 +18,7 @@ class Conference extends Model
         'time_zone',
         'start_date',
         'end_date',
+        'calendar_default_date',
         'session_start_time',
         'session_end_time',
         'call_start_date',

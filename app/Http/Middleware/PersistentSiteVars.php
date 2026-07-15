@@ -65,7 +65,8 @@ class PersistentSiteVars
                 'name' => $selected_conference_info->name,
                 'short_name' => $selected_conference_info->short_name,
                 'start_date' =>  $selected_conference_info->start_date,
-                'end_date' =>  $selected_conference_info->end_date
+                'end_date' =>  $selected_conference_info->end_date,
+                'calendar_default_date' =>  $selected_conference_info->calendar_default_date,
             ];
             $conferences = Conference::orderBy('start_date')->take(10)->get();
             foreach($conferences as $conference){
