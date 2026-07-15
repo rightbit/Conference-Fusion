@@ -44,9 +44,9 @@
                             </thead>
                             <tbody>
                             <tr scope="row" v-for="(panel, key) in conferenceSessions">
-                                <td class="ps-2">
-                                    <button v-if="panel.user_session_interest" class="btn btn-warning btn-sm" v-on:click="setPanelInfo(panel, key)" data-bs-toggle="modal" data-bs-target="#panelInterestModal"><i class="bi bi-star-fill"></i> Edit</button>
-                                    <button v-else class="btn btn-outline-success btn-sm" v-on:click="setPanelInfo(panel, key)" data-bs-toggle="modal" data-bs-target="#panelInterestModal"><i class="bi bi-bookmark-plus-fill"></i> Add</button>
+                                <td class="ps-2 text-nowrap">
+                                    <button v-if="panel.user_session_interest" class="btn btn-warning btn-sm text-nowrap" v-on:click="setPanelInfo(panel, key)" data-bs-toggle="modal" data-bs-target="#panelInterestModal"><i class="bi bi-star-fill"></i> Edit</button>
+                                    <button v-else class="btn btn-outline-success btn-sm text-nowrap" v-on:click="setPanelInfo(panel, key)" data-bs-toggle="modal" data-bs-target="#panelInterestModal"><i class="bi bi-bookmark-plus-fill"></i> Apply</button>
                                 </td>
                                 <td class="ps-2 text-center"><span class="badge bg-secondary">{{ panel.track }}</span></td>
                                 <td class="ps-2 text-center" v-html="formatDate(panel.proposed_date)"></td>
@@ -86,6 +86,9 @@
 
                         <h5>Description:</h5>
                         <p style="white-space: pre-line">{{ this.panelInfo.description }}</p>
+
+                        <h5 v-if="this.panelInfo.participant_notes ">Notes:</h5>
+                        <p style="white-space: pre-line" v-if="this.panelInfo.participant_notes">{{ this.panelInfo.participant_notes }}</p>
                         <div class="mb-3">
                             <label for="interest_level">My level of interest</label>
                             <select class="form-select" v-model="interest.interest_level" id="interest_level" required>
@@ -130,7 +133,7 @@
                             <div class="invalid-feedback">
                                 Please indicate your potential role.
                             </div>
-                            <small class="text-muted">In what type of role would you contribute?</small>
+                            <small class="text-muted">What point of view would you bring to this panel?</small>
                         </div>
                         <div class="mb-3">
                             <label for="will_moderate">Interest in moderating</label>
@@ -142,7 +145,7 @@
                             <div class="invalid-feedback">
                                 Please indicate your interest in moderating.
                             </div>
-                            <small class="text-muted">Are you willing to moderate this panel?</small>
+                            <small class="text-muted">Are you willing to moderate this panel? Moderators should be familiar with the topic, but do not need to be experts. Moderators will be asked to attend a moderator training meeting before the conference.</small>
                         </div>
                         <div class="mb-3">
                             <label for="comments" class="form-label">Comments and notes about this panel</label>
@@ -345,4 +348,3 @@ export default {
     }
 }
 </script>
-
