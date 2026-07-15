@@ -53,7 +53,7 @@ class SessionInterest extends Model
                         $query->where('conference_id', '=', $conference_id);
                     })
                     ->whereHas('conference_session', function($query) {
-                        $query->where('type_id', '=', config('site.session_type_id.presentation'));
+                        $query->where('session_status_id', '=', 3);
                     })
                     ->with('user','conference_session')
                     ->get();

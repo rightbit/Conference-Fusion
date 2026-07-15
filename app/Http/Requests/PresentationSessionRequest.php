@@ -27,6 +27,7 @@ class PresentationSessionRequest extends FormRequest
         return [
             'name' => 'required',
             'conference_id' => 'required',
+            'session_type' => 'integer|required',
             'session_status_id' => 'integer',
             'track_id' => 'integer|nullable',
             'description' => 'required'

@@ -5,34 +5,36 @@
                 <div class="text-end"><a href="/home"><i class="bi bi-arrow-left-circle"></i> Back home</a></div>
                 <div class="card mb-3">
                     <div class="card-header d-flex justify-content-between">
-                        <div class="h4 align-self-center mb-lg-0">Submit a new presentation</div>
+                        <div class="h4 align-self-center mb-lg-0">Submit a new presentation / workshop / panel idea</div>
 
                     </div>
                     <div class="card-body" id="addinfo">
                         <form id="newsession" class="row g-3 align-items-center" @submit.prevent="addSession">
+                            <div class="col-md-6">
+                                <input type="text" v-model="new_session.name" class="form-control" id="name" placeholder="Title" required>
+                            </div>
                             <div class="col-md-3">
                                 <select id="inputCategory" v-model="new_session.track_id" class="form-select" aria-label="select category" required>
                                     <option value="" disabled hidden selected>Choose a track</option>
                                     <option v-for="track in tracks" v-bind:value="track.id">{{ track.name }}</option>
                                 </select>
                             </div>
-                            <div class="col-md-9">
-                                <input type="text" v-model="new_session.name" class="form-control" id="name" placeholder="Title" required>
-                            </div>
-                            <div class="col-md-6">
-                                <textarea  v-model="new_session.description" class="form-control" id="description" placeholder="Description (Required for the conference program)"></textarea>
-                            </div>
-                            <div class="col-md-6">
-                                <select id="special_equipment" v-model="new_session.special_equipment" class="form-select" aria-label="select special equipment">
-                                    <option value="" disabled hidden selected>Special equipment requests (optional)</option>
-                                    <option v-for="equipment in equipments" v-bind:value="equipment.equipment">{{ equipment.equipment }}</option>
-                                    <option value="Other">White board</option>
-                                    <option value="Other">Other (specify below)</option>
-                                    <option value="">None</option>
+                            <div class="col-md-3 d-flex align-items-center gap-2">
+                                <select id="inputCategory" v-model="new_session.session_type" class="form-select" aria-label="select category" required>
+                                    <option value="2">Presentation</option>
+                                    <option value="4">Workshop</option>
+                                    <option value="1">Panel</option>
                                 </select>
+                                <i class="bi bi-info-circle text-primary flex-shrink-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Presentation: a single presenter on a topic, Workshop: include the time needed for the workshop, Panel: include names of who would be on the panel"></i>
+                            </div>
+                            <div class="col-md-6">
+                                <textarea  v-model="new_session.description" class="form-control" id="description" maxlength="255" placeholder="Short Description (Required for the conference program)"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <textarea  v-model="new_session.special_equipment" class="form-control" id="special_equipment" placeholder="Special Equipment: projector, audio playback, whiteboard, etc..."></textarea>
                             </div>
                             <div class="col">
-                              <textarea  v-model="new_session.participant_notes" class="form-control" id="participant_notes" placeholder="Presentation outline and other notes (Highly recommended)"  rows="4"></textarea>
+                              <textarea  v-model="new_session.participant_notes" class="form-control" id="participant_notes" placeholder="Outline and other notes (Required for consideration)"  rows="4"></textarea>
 
                             </div>
                             <div class="col-md-12 text-end">
@@ -88,6 +90,7 @@ export default {
                 name: '',
                 description: '',
                 participant_notes: '',
+                session_type: 2,
             },
             tracks: [],
             equipments: [],
@@ -106,15 +109,6 @@ export default {
                 })
                 .catch((error) => {
                     this.$toast.error(`Could not load the tracks`);
-                });
-        },
-        loadEquipment: function () {
-            axios.get('/api/session-equipment-list')
-                .then((response) => {
-                    this.equipments = response.data.data;
-                })
-                .catch((error) => {
-                    this.$toast.error(`Could not load the special equipment`);
                 });
         },
         loadSessions: function () {
@@ -159,4 +153,3 @@ export default {
     }
 }
 </script>
-

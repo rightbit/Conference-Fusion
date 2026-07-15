@@ -210,8 +210,8 @@ class ConferenceSessionController extends Controller
         $conference_session = new ConferenceSession($request->all());
         //Convert conference_id from slug
         $conference_session->conference_id = $this->getConferenceIdFromSlug($request->conference_id);
-        $conference_session->type_id = config('site.session_type_id.presentation');
         $conference_session->session_status_id = $request->session_status_id ?? $status->id;
+        $conference_session->type_id = $request->session_type ??  config('site.session_type_id.presentation');
         $conference_session->special_equipment = $request->special_equipment ?? null;
         $conference_session->duration_minutes = $request->duration ?? $duration->value;
         $conference_session->save();
