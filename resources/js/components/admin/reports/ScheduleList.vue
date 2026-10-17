@@ -54,7 +54,7 @@
                 <td class="text-nowrap text-center">
                     {{ formattedDate(d.date_time[0]) }} <span v-if="d.date_time.length > 1">+{{ d.date_time.length - 1 }} </span>
                 </td>
-                <td class="text-nowrap  text-center">{{ d.room_name }} {{ d.capacity }} <i v-if="d.has_av" class="bi bi-person-video3"></i></td>
+                <td class="text-nowrap  text-center">{{ d.room_name }}<span v-if="d.room_number != null && d.room_number !== ''"> ({{ d.room_number }})</span> {{ d.capacity }} <i v-if="d.has_av" class="bi bi-person-video3"></i></td>
                 <td class="text-center"><i :class="[goodStatuses.includes(d.status_id) ? 'bi-check-square text-success':'bi-exclamation-triangle-fill text-warning']" ></i></td>
                 <td class="text-center"><button class="btn btn-sm btn-link float-end" @click="loadReport"><b><i class="bi bi-arrow-repeat"></i></b></button></td>
             </tr>
