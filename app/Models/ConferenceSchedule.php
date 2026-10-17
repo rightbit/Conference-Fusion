@@ -91,6 +91,7 @@ class ConferenceSchedule extends Model
             $schedule_resource['rooms'][$room->name] = [
                 "id" => $room->id,
                 "name" => $room->name,
+                "room_number" => $room->room_number,
                 "capacity" => $room->capacity,
                 "has_av" => $room->has_av,
                 "notes" => $room->notes,
@@ -144,7 +145,7 @@ class ConferenceSchedule extends Model
                 'cs.description', 'cs.staff_notes', 'cs.special_equipment', 'cs.ignore_errors', 'cs.attendance',
                 'ss.status AS status_name', 'csh.date', 'csh.time',
                 'ui.user_id', 'ui.badge_name', 'si.is_moderator', 'si.interest_level', 'si.experience_level',
-                'csh.room_id', 'r.name as room_name', 'r.capacity', 'r.has_av', 'cs.track_id', 't.name AS track_name',
+                'csh.room_id', 'r.name as room_name', 'r.room_number', 'r.capacity', 'r.has_av', 'cs.track_id', 't.name AS track_name',
                 'st.id AS session_type_id', 'st.name AS session_type')
             ->where('csh.conference_id', '=', $conference_id)
             ->orderBy('cs.name')
@@ -185,6 +186,7 @@ class ConferenceSchedule extends Model
                     'ignore_errors'     => $p->ignore_errors,
                     'date_time'         => ["{$p->date} {$p->time}"],
                     'room_name'         => $p->room_name,
+                    'room_number'       => $p->room_number,
                     'capacity'          => $p->capacity,
                     'has_av'            => $p->has_av,
                     'track_id'          => $p->track_id,

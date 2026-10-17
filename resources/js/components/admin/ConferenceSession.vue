@@ -6,7 +6,7 @@
                 <div class="py-2">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <a :href="returnToList" class="d-inline-block mb-2"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to sessions</a>
+                            <a :href="returnToList" class="d-inline-block mb-2"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to all sessions</a>
                             <h2 class="text-right">Session info</h2>
                         </div>
                             <div v-if="session.conference_schedule.length" class="d-flex justify-content-start p-2">
