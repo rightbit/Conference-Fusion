@@ -73,37 +73,46 @@ class SchedulePublicationTest extends TestCase
         $this->getJson('/api/admin/tools/sync-scheduled-status/'.$this->conference->id)->assertNotFound();
     }
 
-    public function test_unpublished_endpoints_hide_events_and_presenters_but_keep_metadata(): void
+    public function test_unpublished_public_endpoint_hides_events_and_presenters_but_keeps_metadata(): void
     {
         $this->addScheduleFixtures();
-        foreach (['public-schedule', 'public-schedule-test'] as $route) {
-            $this->getJson('/api/'.$route)->assertOk()
-                ->assertJsonPath('schedulePublished', false)
-                ->assertJsonPath('conferenceName', 'TestCon')
-                ->assertJsonPath('events', [])->assertJsonPath('presenters', [])
-                ->assertJsonPath('eventPresenters', [])
-                ->assertJsonCount(1, 'sponsors')->assertJsonCount(1, 'announcements');
-        }
+        $this->getJson('/api/public-schedule')->assertOk()
+            ->assertJsonPath('schedulePublished', false)
+            ->assertJsonPath('conferenceName', 'TestCon')
+            ->assertJsonPath('events', [])->assertJsonPath('presenters', [])
+            ->assertJsonPath('eventPresenters', [])
+            ->assertJsonCount(1, 'sponsors')->assertJsonCount(1, 'announcements');
     }
 
-    public function test_published_endpoints_include_only_visible_events_and_their_presenters(): void
+    public function test_published_public_endpoint_includes_only_visible_events_and_their_presenters(): void
     {
         $fixtures = $this->addScheduleFixtures();
         $this->actingAs($this->admin)->patchJson($this->publicationUrl(), ['schedule_published' => true])->assertOk();
 
-        foreach (['public-schedule', 'public-schedule-test'] as $route) {
-            $this->getJson('/api/'.$route)->assertOk()
-                ->assertJsonPath('schedulePublished', true)
-                ->assertJsonCount(1, 'events')->assertJsonCount(1, 'presenters')->assertJsonCount(1, 'eventPresenters')
-                ->assertJsonPath('events.0.id', $fixtures['event'])
-                ->assertJsonPath('presenters.0.id', $fixtures['presenter'])
-                ->assertJsonPath('eventPresenters.0.eventId', $fixtures['event'])
-                ->assertJsonPath('eventPresenters.0.presenterId', $fixtures['presenter']);
-        }
+        $this->getJson('/api/public-schedule')->assertOk()
+            ->assertJsonPath('schedulePublished', true)
+            ->assertJsonCount(1, 'events')->assertJsonCount(1, 'presenters')->assertJsonCount(1, 'eventPresenters')
+            ->assertJsonPath('events.0.id', $fixtures['event'])
+            ->assertJsonPath('presenters.0.id', $fixtures['presenter'])
+            ->assertJsonPath('eventPresenters.0.eventId', $fixtures['event'])
+            ->assertJsonPath('eventPresenters.0.presenterId', $fixtures['presenter']);
 
         $this->patchJson($this->publicationUrl(), ['schedule_published' => false])->assertOk();
         $this->getJson('/api/public-schedule')->assertJsonPath('events', [])->assertJsonPath('presenters', [])
             ->assertJsonPath('eventPresenters', []);
+    }
+
+    public function test_draft_endpoint_returns_all_public_track_entries_regardless_of_publication(): void
+    {
+        $this->addScheduleFixtures();
+        foreach ([false, true, false] as $published) {
+            $this->conference->schedule_published = $published;
+            $this->conference->save();
+            $this->getJson('/api/public-schedule-test')->assertOk()
+                ->assertJsonPath('schedulePublished', $published)
+                ->assertJsonCount(2, 'events')->assertJsonCount(2, 'presenters')
+                ->assertJsonCount(2, 'eventPresenters');
+        }
     }
 
     public function test_conference_creation_and_ordinary_edits_cannot_change_publication(): void

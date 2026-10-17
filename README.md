@@ -46,10 +46,11 @@ when the publication migration runs. Apply schema updates with `php artisan migr
 An admin can publish or unpublish a conference from its Conference Info page.
 This does not change session statuses or the internal planning schedule.
 
-Both `/api/public-schedule` and `/api/public-schedule-test` use the default
-conference's publication setting. Unpublished schedules return empty `events`,
-`presenters`, and `eventPresenters` arrays while retaining metadata, sponsors,
-and announcements. The test endpoint is not an unpublished schedule preview.
+`/api/public-schedule` uses the default conference's publication setting.
+Unpublished schedules return empty `events`, `presenters`, and `eventPresenters`
+arrays while retaining metadata, sponsors, and announcements.
+`/api/public-schedule-test` is an ungated draft preview: it returns all schedule
+entries on non-administrative tracks, regardless of session status or publication.
 Once published, scheduled sessions with public schedule entries are returned,
 and subsequent edits become public on the next fetch. Already-open clients
 must reload to see publication changes.

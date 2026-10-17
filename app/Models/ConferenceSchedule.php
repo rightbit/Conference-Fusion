@@ -250,7 +250,7 @@ class ConferenceSchedule extends Model
 
     }
 
-    public static function publicSchedule()
+    private static function buildPublicSchedule(bool $preview)
     {
         $conferenceId = SiteConfig::where('key', 'default_conference_id')->value('value');
         $conference = Conference::findOrFail($conferenceId);
@@ -273,17 +273,19 @@ class ConferenceSchedule extends Model
             ),
         ];
 
-        if (!$conference->schedule_published) {
+        if (!$preview && !$conference->schedule_published) {
             return $schedule;
         }
 
         $events = self::with(['session.session_type', 'session.session_participants', 'room'])
             ->where('conference_id', $conference->id)
-            ->whereHas('session', function ($query) use ($conference) {
-                $query->where('conference_id', $conference->id)
-                    ->whereHas('status', function ($query) {
+            ->whereHas('session', function ($query) use ($conference, $preview) {
+                $query->where('conference_id', $conference->id);
+                if (!$preview) {
+                    $query->whereHas('status', function ($query) {
                         $query->where('status', 'Scheduled');
                     });
+                }
             })
             ->whereHas('track', function ($query) {
                 $query->where('administrative', 0);
@@ -309,9 +311,14 @@ class ConferenceSchedule extends Model
         return $schedule;
     }
 
+    public static function publicSchedule()
+    {
+        return self::buildPublicSchedule(false);
+    }
+
     public static function publicScheduleTest()
     {
-        // This unauthenticated endpoint must enforce the same publication rules.
-        return self::publicSchedule();
+        // Draft preview includes all non-administrative scheduled entries.
+        return self::buildPublicSchedule(true);
     }
 }
