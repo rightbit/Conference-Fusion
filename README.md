@@ -25,6 +25,45 @@ This is just placeholder readme until the app reaches a full beta. If you are in
 - Run `php artisan serve`
 - Run `npm run dev`
 
+### To Run Locally with Laravel Sail
+Start Docker Desktop, then run these commands from the project directory.
+On a fresh checkout, copy `.env.example` to `.env` and install the locked PHP
+dependencies using PHP 8.3:
+
+```sh
+cp .env.example .env
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$PWD:/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php83-composer:latest \
+    composer install --no-interaction --prefer-dist
+./vendor/bin/sail up -d
+./vendor/bin/sail artisan key:generate
+./vendor/bin/sail artisan migrate
+./vendor/bin/sail artisan db:seed
+./vendor/bin/sail npm install
+./vendor/bin/sail npm run dev
+./vendor/bin/sail artisan storage:link
+```
+
+Only generate the key and seed the database on initial setup. Confirm the seed
+prompt to create the initial conference and default administrator.
+
+Open http://localhost. The environment example uses `DB_HOST=mysql` to reach the
+Sail database container. If ports 80 or 3306 are already in use, set `APP_PORT`
+and/or `FORWARD_DB_PORT` in `.env` before starting Sail; when changing `APP_PORT`,
+also update `APP_URL` to include that port. Keep `DB_PORT=3306` for communication
+between containers.
+
+For subsequent starts, run `./vendor/bin/sail up -d`; stop the containers with
+`./vendor/bin/sail down`. This project uses Laravel Mix, so `npm run dev` builds
+assets once; use `./vendor/bin/sail npm run watch` when editing frontend assets.
+Sail is for local development, not a production deployment. The default database
+and administrator passwords must not be used on a public server. Email requires
+configuring a reachable mail server; the compose configuration does not include
+MailHog.
+
 ### Login
 Default User: admin@example.com
 

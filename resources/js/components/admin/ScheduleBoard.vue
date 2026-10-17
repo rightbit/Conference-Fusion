@@ -26,7 +26,7 @@
           <td class="bg-secondary text-white">Time</td>
           <td v-for="room in this.schedule.rooms" class="text-center ts-sc">
             <div class="mb-0 p-0">
-              {{ room.name }}
+              {{ room.name }}<span v-if="room.room_number != null && room.room_number !== ''"> ({{ room.room_number }})</span>
             </div>
             <div class="mt-0 p-0">
               <small>Capacity: {{ room.capacity }} <i v-if="room.has_av" class="bi bi-person-video3"></i></small>
