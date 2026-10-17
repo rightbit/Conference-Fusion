@@ -122,15 +122,17 @@
                             <div class="card-header d-flex justify-content-between">
                                 <div class="h4 align-self-center mb-lg-0">Tools</div>
                             </div>
-                            <div class="card-body d-flex">
-                                <a class="btn btn-primary me-2" href="/admin/import-session" ><i class="bi bi-upload"></i> Import sessions</a>
-                                <button class="btn btn-primary me-2" @click="syncProposedStartTimes" ><i class="bi bi-calendar-week"></i> Sync call start times</button>
-                                <div v-if="conference.id">
-                                    <p class="mb-2">Public schedule: <strong>{{ conference.schedule_published ? 'Published' : 'Unpublished' }}</strong></p>
+                            <div class="card-body d-flex flex-wrap align-items-center gap-2">
+                                <a class="btn btn-primary" href="/admin/import-session" ><i class="bi bi-upload"></i> Import sessions</a>
+                                <button class="btn btn-primary" @click="syncProposedStartTimes" ><i class="bi bi-calendar-week"></i> Sync call start times</button>
+                                <div v-if="conference.id" class="d-flex flex-wrap align-items-center gap-2">
                                     <button type="button" class="btn btn-primary" @click="updateSchedulePublication" :disabled="publishingSchedule">
                                         <i class="bi bi-calendar-check"></i>
                                         {{ conference.schedule_published ? 'Unpublish session schedule' : 'Publish session schedule' }}
                                     </button>
+                                    <span :style="{ color: conference.schedule_published ? 'var(--bs-success)' : 'var(--bs-orange)' }">
+                                        Schedule status: <strong>{{ conference.schedule_published ? 'Published' : 'Unpublished' }}</strong>
+                                    </span>
                                 </div>
                             </div>
                         </div>
