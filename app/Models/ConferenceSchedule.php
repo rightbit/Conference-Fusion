@@ -201,9 +201,9 @@ class ConferenceSchedule extends Model
 
                 if(!$request->skip_checks) {
                     //Check for problems
-                    if(!in_array($p->status_id, [4,5]) && !empty($schedule_warnings['check_status'])) {
-                        $schedule_list[$current_session]['errors']['status'] = 'Session status not ready for scheduling';
-                    }
+//                    if(!in_array($p->status_id, [4,5]) && !empty($schedule_warnings['check_status'])) {
+//                        $schedule_list[$current_session]['errors']['status'] = 'Session status not ready for scheduling';
+//                    }
 
                     if(!$p->user_id && !empty($schedule_warnings['zero_participants'])) {
                         $schedule_list[$current_session]['errors']['zero_participants'] = 'No participants assigned';
