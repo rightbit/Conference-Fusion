@@ -18,7 +18,7 @@ class PublicScheduleController extends Controller
     {
 
         $schedule = ConferenceSchedule::publicSchedule();
-        return $schedule;
+        return response()->json($schedule)->header('Cache-Control', 'no-store');
     }
 
     /**
@@ -28,7 +28,7 @@ class PublicScheduleController extends Controller
     {
 
         $schedule = ConferenceSchedule::publicScheduleTest();
-        return $schedule;
+        return response()->json($schedule)->header('Cache-Control', 'no-store');
     }
 
     /**

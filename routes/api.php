@@ -90,6 +90,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
 
     Route::apiResource('announcement', AnnouncementController::class);
     Route::apiResource('conference', ConferenceController::class);
+    Route::patch('conference/{conference}/schedule-publication', [ConferenceController::class, 'updateSchedulePublication'])
+        ->middleware(['auth:sanctum', 'can:admin']);
     Route::apiResource('conference-session', ConferenceSessionController::class);
     Route::apiResource('conference-schedule', ConferenceScheduleController::class);
     Route::apiResource('configuration', SiteConfigController::class);
@@ -116,7 +118,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
 
     Route::group(['prefix' => 'tools'], function() {
         Route::get('proposed-session-times/{conference_id}', [ConferenceController::class, 'proposedTimeSync'])->middleware('can:admin');
-        Route::get('sync-scheduled-status/{conference_id}', [ConferenceController::class, 'scheduledStatusSync'])->middleware('can:admin');
 
     });
 

@@ -39,6 +39,21 @@ THIS MUST BE CHANGED BEFORE USING THE SITE
   - resources/views/custom/terms.blade.php
   - resources/views/custom/welcome.blade.php
 
+## Public schedule publication
+
+Conferences start with `schedule_published=false`, including existing conferences
+when the publication migration runs. Apply schema updates with `php artisan migrate`.
+An admin can publish or unpublish a conference from its Conference Info page.
+This does not change session statuses or the internal planning schedule.
+
+Both `/api/public-schedule` and `/api/public-schedule-test` use the default
+conference's publication setting. Unpublished schedules return empty `events`,
+`presenters`, and `eventPresenters` arrays while retaining metadata, sponsors,
+and announcements. The test endpoint is not an unpublished schedule preview.
+Once published, scheduled sessions with public schedule entries are returned,
+and subsequent edits become public on the next fetch. Already-open clients
+must reload to see publication changes.
+
 ## To Dos
 - Make Session/panel/presentaion type names dynamic
   - Create flag to include them in the call

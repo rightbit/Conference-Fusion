@@ -143,28 +143,17 @@ class ConferenceController extends Controller
 
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $conference_id
-     * @return \Illuminate\Http\Response
+     * Publish or unpublish the public schedule without changing session statuses.
      */
-    public function scheduledStatusSync($conference_id)
+    public function updateSchedulePublication(Request $request, Conference $conference)
     {
-        $sessions = ConferenceSession::where('conference_id', '=', $conference_id)->get();
-        foreach ($sessions as $session) {
-            $schedule = ConferenceSchedule::where('conference_session_id', '=', $session->id)
-                ->where('conference_id', '=', $conference_id)
-                ->first();
-            if ($schedule) {
-                $session->session_status_id = 5;
-                $session->save();
-            } else {
-                if ($session->session_status_id == 5) {
-                    $session->session_status_id = 3;
-                    $session->save();
-                }
-            }
-        }
-        return response()->noContent();
+        $validated = $request->validate([
+            'schedule_published' => ['required', 'boolean'],
+        ]);
+
+        $conference->schedule_published = $validated['schedule_published'];
+        $conference->saveOrFail();
+
+        return new ConferenceResource($conference);
     }
 }
