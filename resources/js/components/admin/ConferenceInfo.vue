@@ -122,10 +122,22 @@
                             <div class="card-header d-flex justify-content-between">
                                 <div class="h4 align-self-center mb-lg-0">Tools</div>
                             </div>
-                            <div class="card-body d-flex">
-                                <a class="btn btn-primary me-2" href="/admin/import-session" ><i class="bi bi-upload"></i> Import sessions</a>
-                                <button class="btn btn-primary me-2" @click="syncProposedStartTimes" ><i class="bi bi-calendar-week"></i> Sync call start times</button>
-                                <button class="btn btn-primary me-2" @click="syncScheduledStatus" ><i class="bi bi-calendar-check"></i> Set session scheduled status</button>
+                            <div class="card-body d-flex flex-wrap align-items-center gap-2">
+                                <a class="btn btn-primary" href="/admin/import-session" ><i class="bi bi-upload"></i> Import sessions</a>
+                                <button class="btn btn-primary" @click="syncProposedStartTimes" ><i class="bi bi-calendar-week"></i> Sync call start times</button>
+                                <div v-if="conference.id" class="d-flex flex-wrap align-items-center gap-2">
+                                    <button type="button" class="btn btn-primary" @click="syncSessionSchedule" :disabled="syncingSchedule || publishingSchedule">
+                                        <i class="bi bi-arrow-repeat"></i>
+                                        {{ syncingSchedule ? 'Syncing session schedule…' : 'Sync session schedule' }}
+                                    </button>
+                                    <button type="button" class="btn btn-primary" @click="updateSchedulePublication" :disabled="publishingSchedule || syncingSchedule">
+                                        <i class="bi bi-calendar-check"></i>
+                                        {{ conference.schedule_published ? 'Unpublish session schedule' : 'Publish session schedule' }}
+                                    </button>
+                                    <span :style="{ color: conference.schedule_published ? 'var(--bs-success)' : 'var(--bs-orange)' }">
+                                        Schedule status: <strong>{{ conference.schedule_published ? 'Published' : 'Unpublished' }}</strong>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -142,6 +154,8 @@
         data: function() {
             return {
                 conference: {},
+                publishingSchedule: false,
+                syncingSchedule: false,
             }
         },
         mounted() {
@@ -212,15 +226,41 @@
                         });
                 }
             },
-            syncScheduledStatus: function() {
-                if(confirm("Do you really want to update all session statuses based on the schedule?")) {
-                    axios.get(`/api/admin/tools/sync-scheduled-status/${this.conference.id}`)
+            syncSessionSchedule: function() {
+                if (!confirm('Replace the saved public schedule with the current scheduled sessions? If published, these changes will become public immediately.')) {
+                    return;
+                }
+                this.syncingSchedule = true;
+                axios.post(`/api/admin/conference/${this.conference.id}/sync-schedule`)
+                    .then((response) => {
+                        this.$toast.success(`Synced ${response.data.events_synced} scheduled events`);
+                    })
+                    .catch((error) => {
+                        this.$toast.error('Could not sync session schedule<br />' + (error.response?.data?.message || error.message));
+                    })
+                    .finally(() => {
+                        this.syncingSchedule = false;
+                    });
+            },
+            updateSchedulePublication: function() {
+                const published = !this.conference.schedule_published;
+                const message = published
+                    ? 'Publish the saved schedule snapshot? Sync the session schedule first to include the latest edits.'
+                    : 'Hide the session schedule from the public page?';
+                if(confirm(message)) {
+                    this.publishingSchedule = true;
+                    axios.patch(`/api/admin/conference/${this.conference.id}/schedule-publication`, {
+                        schedule_published: published,
+                    })
                         .then((response) => {
-
-                            this.$toast.success(`Updated session statuses successfully`);
+                            this.conference.schedule_published = response.data.data.schedule_published;
+                            this.$toast.success(published ? 'Session schedule published' : 'Session schedule unpublished');
                         })
                         .catch((error) => {
-                            this.$toast.error(`Could not update session statuses<br />` + error.response.data.message);
+                            this.$toast.error('Could not update schedule publication<br />' + (error.response?.data?.message || error.message));
+                        })
+                        .finally(() => {
+                            this.publishingSchedule = false;
                         });
                 }
             }

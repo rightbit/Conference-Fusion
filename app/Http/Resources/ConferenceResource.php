@@ -16,6 +16,7 @@ class ConferenceResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'schedule_published' => $this->schedule_published,
             'name' => $this->name,
             'short_name' => $this->short_name,
             'description' => $this->description,
