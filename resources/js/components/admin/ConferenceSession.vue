@@ -237,7 +237,7 @@
 <script>
     import dayjs from "dayjs";
     import moment from "moment/moment";
-    import {sessionListReturnUrl} from '../../utils/sessionListNavigation.mjs';
+    import {sessionListReturnUrl} from '../../sessionListNavigation.js';
 
     export default {
         props: ['sessionId', 'conferenceId', 'sessionListLink', 'defaultSessionDuration'],

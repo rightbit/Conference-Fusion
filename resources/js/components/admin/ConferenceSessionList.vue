@@ -146,7 +146,7 @@
 <script>
 import dayjs from "dayjs";
 import {Tooltip} from "bootstrap";
-import {readSessionListFilters, sessionListUrl} from '../../utils/sessionListNavigation.mjs';
+import {readSessionListFilters, sessionListUrl} from '../../sessionListNavigation.js';
 
 export default {
     props: ['conferenceId', 'sessionLink'],
