@@ -92,6 +92,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['can:view_admin']], function
     Route::apiResource('conference', ConferenceController::class);
     Route::patch('conference/{conference}/schedule-publication', [ConferenceController::class, 'updateSchedulePublication'])
         ->middleware(['auth:sanctum', 'can:admin']);
+    Route::post('conference/{conference}/sync-schedule', [ConferenceController::class, 'syncSchedule'])
+        ->middleware(['auth:sanctum', 'can:admin']);
     Route::apiResource('conference-session', ConferenceSessionController::class);
     Route::apiResource('conference-schedule', ConferenceScheduleController::class);
     Route::apiResource('configuration', SiteConfigController::class);

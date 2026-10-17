@@ -8,6 +8,7 @@ use App\Http\Resources\ConferenceResource;
 use App\Models\Conference;
 use App\Models\ConferenceSchedule;
 use App\Models\ConferenceSession;
+use App\Services\PublicScheduleSnapshot;
 use Illuminate\Http\Request;
 
 class ConferenceController extends Controller
@@ -151,9 +152,20 @@ class ConferenceController extends Controller
             'schedule_published' => ['required', 'boolean'],
         ]);
 
+        if ($validated['schedule_published'] && !app(PublicScheduleSnapshot::class)->exists($conference)) {
+            abort(422, 'Sync the session schedule before publishing it.');
+        }
+
         $conference->schedule_published = $validated['schedule_published'];
         $conference->saveOrFail();
 
         return new ConferenceResource($conference);
+    }
+
+    public function syncSchedule(Conference $conference, PublicScheduleSnapshot $snapshots)
+    {
+        $schedule = $snapshots->sync($conference);
+
+        return response()->json(['events_synced' => count($schedule['events'])]);
     }
 }

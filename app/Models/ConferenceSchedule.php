@@ -250,11 +250,8 @@ class ConferenceSchedule extends Model
 
     }
 
-    private static function buildPublicSchedule(bool $preview)
+    private static function buildPublicSchedule(Conference $conference, bool $preview)
     {
-        $conferenceId = SiteConfig::where('key', 'default_conference_id')->value('value');
-        $conference = Conference::findOrFail($conferenceId);
-
         $schedule = [
             'conferenceName' => $conference->short_name,
             'schedulePublished' => $conference->schedule_published,
@@ -272,10 +269,6 @@ class ConferenceSchedule extends Model
                     ->orderByDesc('pinned')->orderByDesc('display_date')->get()
             ),
         ];
-
-        if (!$preview && !$conference->schedule_published) {
-            return $schedule;
-        }
 
         $events = self::with(['session.session_type', 'session.session_participants', 'room'])
             ->where('conference_id', $conference->id)
@@ -313,12 +306,21 @@ class ConferenceSchedule extends Model
 
     public static function publicSchedule()
     {
-        return self::buildPublicSchedule(false);
+        $conferenceId = SiteConfig::where('key', 'default_conference_id')->value('value');
+        $conference = Conference::findOrFail($conferenceId);
+
+        return app(\App\Services\PublicScheduleSnapshot::class)->read($conference);
+    }
+
+    public static function snapshotSchedule(Conference $conference)
+    {
+        return self::buildPublicSchedule($conference, false);
     }
 
     public static function publicScheduleTest()
     {
         // Draft preview includes all non-administrative scheduled entries.
-        return self::buildPublicSchedule(true);
+        $conferenceId = SiteConfig::where('key', 'default_conference_id')->value('value');
+        return self::buildPublicSchedule(Conference::findOrFail($conferenceId), true);
     }
 }

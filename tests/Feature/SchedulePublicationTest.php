@@ -4,7 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\Conference;
 use App\Models\User;
+use App\Services\PublicScheduleSnapshot;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class SchedulePublicationTest extends TestCase
@@ -19,6 +21,7 @@ class SchedulePublicationTest extends TestCase
         // Never migrate, truncate, or seed the developer's populated database.
         config(['database.default' => 'sqlite', 'database.connections.sqlite.database' => ':memory:']);
         DB::purge('sqlite');
+        Storage::fake('local');
         $this->artisan('migrate', ['--database' => 'sqlite'])->assertExitCode(0);
 
         $this->admin = User::factory()->create();
@@ -28,6 +31,7 @@ class SchedulePublicationTest extends TestCase
             'key' => 'default_conference_id', 'value' => $this->conference->id,
             'description' => 'Default conference', 'last_updated_user_id' => $this->admin->id,
         ]);
+        app(PublicScheduleSnapshot::class)->sync($this->conference);
     }
 
     public function test_new_and_existing_conferences_default_to_unpublished(): void
@@ -138,6 +142,81 @@ class SchedulePublicationTest extends TestCase
         return '/api/admin/conference/'.$this->conference->id.'/schedule-publication';
     }
 
+    public function test_sync_requires_admin_and_does_not_publish_or_change_statuses(): void
+    {
+        $this->addScheduleFixtures();
+        $url = '/api/admin/conference/'.$this->conference->id.'/sync-schedule';
+        $before = DB::table('conference_sessions')->orderBy('id')->get()->toJson();
+        $this->postJson($url)->assertUnauthorized();
+        $staff = User::factory()->create();
+        DB::table('user_permissions')->insert(['user_id' => $staff->id, 'permission' => 'view_admin']);
+        $this->actingAs($staff)->postJson($url)->assertForbidden();
+        $this->actingAs($this->admin)->postJson($url)->assertOk()->assertJsonPath('events_synced', 1);
+        $this->assertFalse($this->conference->fresh()->schedule_published);
+        $this->assertSame($before, DB::table('conference_sessions')->orderBy('id')->get()->toJson());
+    }
+
+    public function test_public_snapshot_changes_only_on_sync_while_test_endpoint_reads_live_data(): void
+    {
+        $fixtures = $this->addScheduleFixtures();
+        $this->actingAs($this->admin)->patchJson($this->publicationUrl(), ['schedule_published' => true])->assertOk();
+        $before = $this->getJson('/api/public-schedule')->assertOk()->json();
+        DB::table('conference_sessions')->where('name', 'Session 0')->update(['name' => 'Edited session']);
+        DB::table('conference_sponsors')->update(['name' => 'Edited sponsor']);
+        DB::table('conference_announcements')->update(['title' => 'Edited announcement']);
+        DB::table('rooms')->update(['name' => 'Edited room']);
+        DB::table('tracks')->where('administrative', false)->update(['name' => 'Edited track']);
+        DB::table('user_infos')->where('user_id', $fixtures['presenter'])->update(['badge_name' => 'Edited presenter']);
+
+        DB::enableQueryLog();
+        DB::flushQueryLog();
+        $this->assertSame($before, $this->getJson('/api/public-schedule')->assertOk()->json());
+        foreach (DB::getQueryLog() as $query) {
+            $this->assertDoesNotMatchRegularExpression('/from ["`]*(conference_sessions|conference_schedules|tracks|rooms|users|session_interests|conference_sponsors|conference_announcements)["`]*\b/i', $query['query']);
+        }
+        DB::disableQueryLog();
+        $this->getJson('/api/public-schedule-test')->assertOk()
+            ->assertJsonPath('events.0.name', 'Edited session')
+            ->assertJsonPath('sponsors.0.name', 'Edited sponsor');
+
+        $this->postJson('/api/admin/conference/'.$this->conference->id.'/sync-schedule')->assertOk();
+        $this->getJson('/api/public-schedule')->assertOk()
+            ->assertJsonPath('events.0.id', $fixtures['event'])
+            ->assertJsonPath('events.0.name', 'Edited session')
+            ->assertJsonPath('events.0.room', 'Edited room')
+            ->assertJsonPath('presenters.0.firstName', 'Edited presenter')
+            ->assertJsonPath('sponsors.0.name', 'Edited sponsor')
+            ->assertJsonPath('announcements.0.title', 'Edited announcement');
+    }
+
+    public function test_sync_targets_the_selected_conference_and_missing_snapshots_cannot_publish(): void
+    {
+        $this->addScheduleFixtures();
+        $other = Conference::create(['name' => 'Other', 'short_name' => 'Other']);
+        $this->actingAs($this->admin)->postJson('/api/admin/conference/'.$other->id.'/sync-schedule')
+            ->assertOk()->assertJsonPath('events_synced', 0);
+        $this->getJson('/api/public-schedule')->assertJsonPath('conferenceName', 'TestCon');
+
+        Storage::disk('local')->delete('schedule-snapshots/conference-'.$this->conference->id.'.json');
+        $this->patchJson($this->publicationUrl(), ['schedule_published' => true])->assertUnprocessable();
+        $this->getJson('/api/public-schedule')->assertOk()->assertJsonPath('events', []);
+        $this->conference->schedule_published = true;
+        $this->conference->save();
+        $this->getJson('/api/public-schedule')->assertStatus(503);
+        $this->getJson('/api/public-schedule-test')->assertOk()->assertJsonCount(2, 'events');
+    }
+
+    public function test_failed_serialization_preserves_previous_snapshot(): void
+    {
+        $this->addScheduleFixtures();
+        $path = 'schedule-snapshots/conference-'.$this->conference->id.'.json';
+        $before = Storage::disk('local')->get($path);
+        DB::table('conference_sessions')->where('name', 'Session 0')->update(['name' => "\xB1"]);
+        $this->actingAs($this->admin)->postJson('/api/admin/conference/'.$this->conference->id.'/sync-schedule')
+            ->assertStatus(500);
+        $this->assertSame($before, Storage::disk('local')->get($path));
+    }
+
     private function addScheduleFixtures(): array
     {
         $scheduled = DB::table('session_statuses')->insertGetId(['status' => 'Scheduled']);
@@ -156,6 +235,9 @@ class SchedulePublicationTest extends TestCase
                 'session_status_id' => $status, 'track_id' => $trackId,
             ]);
             $presenter = User::factory()->create();
+            DB::table('user_infos')->insert([
+                'user_id' => $presenter->id, 'badge_name' => 'Presenter '.$i, 'contact_email' => $presenter->email,
+            ]);
             DB::table('session_interests')->insert([
                 'conference_session_id' => $session, 'user_id' => $presenter->id, 'is_participant' => true,
             ]);
@@ -169,6 +251,7 @@ class SchedulePublicationTest extends TestCase
                 }
             }
         }
+        app(PublicScheduleSnapshot::class)->sync($this->conference);
         return $visible;
     }
 }
