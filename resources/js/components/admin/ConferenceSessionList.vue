@@ -6,7 +6,7 @@
                     <div class="card-header d-flex justify-content-between">
                         <div class="h4 align-self-center mb-lg-0">Sessions List</div>
                         <div class="d-flex gap-2">
-                            <a class="btn btn-primary" :href="this.sessionLink +'/0'"><i class="bi bi-plus-circle"></i> Add new</a>
+                            <a class="btn btn-primary" :href="sessionEditLink(0)"><i class="bi bi-plus-circle"></i> Add new</a>
                             <a class="btn btn-secondary-outline" href="/admin/import-session"><i class="bi bi-upload"></i> Import Sessions</a>
                         </div>
                     </div>
@@ -99,7 +99,7 @@
                                     ></i>
 
                                 </td>
-                                <td><a class="btn btn-sm btn-outline-secondary" v-bind:href="this.sessionLink +'/'+ session.id"><i class="bi bi-pencil-square"></i></a></td>
+                                <td><a class="btn btn-sm btn-outline-secondary" :href="sessionEditLink(session.id)"><i class="bi bi-pencil-square"></i></a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -146,6 +146,7 @@
 <script>
 import dayjs from "dayjs";
 import {Tooltip} from "bootstrap";
+import {readSessionListFilters, sessionListUrl} from '../../utils/sessionListNavigation.mjs';
 
 export default {
     props: ['conferenceId', 'sessionLink'],
@@ -159,6 +160,9 @@ export default {
             searchNotScheduled: false,
             keyword: '',
             laravelData: {},
+            currentPage: 1,
+            listUrl: window.location.pathname + window.location.search,
+            sessionsRequestId: 0,
             new_session: {
                 conference_id: '',
                 track_id: '',
@@ -176,11 +180,35 @@ export default {
             selector: "[data-bs-toggle='tooltip']",
         }),
         this.populateStatusIcons();
-        this.loadSessions();
+        this.restoreListFilters();
+        this.loadSessions(this.currentPage);
         this.loadTracks();
         this.loadTypes();
+        window.addEventListener('pageshow', this.refreshRestoredList);
+    },
+    beforeUnmount() {
+        window.removeEventListener('pageshow', this.refreshRestoredList);
     },
     methods: {
+        restoreListFilters() {
+            const filters = readSessionListFilters(window.location.search);
+            this.searchTrackId = filters.track_id;
+            this.searchTypeId = filters.type_id;
+            this.searchAllStatuses = filters.all_statuses;
+            this.searchNotScheduled = filters.not_scheduled;
+            this.keyword = filters.keyword;
+            this.currentPage = filters.page;
+        },
+        refreshRestoredList(event) {
+            if (event.persisted) {
+                this.restoreListFilters();
+                this.loadSessions(this.currentPage);
+            }
+        },
+        sessionEditLink(id) {
+            const path = new URL(this.sessionLink, window.location.origin).pathname;
+            return path + '/' + id + '?' + new URLSearchParams({return_to: this.listUrl}).toString();
+        },
         populateStatusIcons() {
             this.statusIcons[1] = 'bi bi-lightbulb-fill text-warning me-1';
             this.statusIcons[2] = 'bi bi-c-square-fill text-success me-1';
@@ -213,25 +241,45 @@ export default {
                     this.$toast.error(`Could not load the session types`);
                 });
         },
-        loadSessions: function (page = 1) {
-            axios.get('/api/admin/conference-session', {
+        loadSessions: function (page = 1, appliedFilters = null) {
+            // DOM change/click events should reset pagination, never become a page parameter.
+            page = Number.isInteger(page) && page > 0 ? page : 1;
+            const filters = appliedFilters || {
+                track_id: this.searchTrackId,
+                type_id: this.searchTypeId,
+                all_statuses: this.searchAllStatuses,
+                not_scheduled: this.searchNotScheduled,
+                keyword: this.keyword,
+            };
+            const requestId = ++this.sessionsRequestId;
+            return axios.get('/api/admin/conference-session', {
+                    headers: {'Cache-Control': 'no-cache'},
                     params: {
                         conference_id: this.conferenceId,
-                        track_id: this.searchTrackId,
-                        type_id: this.searchTypeId,
-                        all_statuses: this.searchAllStatuses ? '1' : '',
-                        not_scheduled: this.searchNotScheduled ? '1' : '',
-                        keyword: this.keyword,
+                        track_id: filters.track_id,
+                        type_id: filters.type_id,
+                        all_statuses: filters.all_statuses ? '1' : '',
+                        not_scheduled: filters.not_scheduled ? '1' : '',
+                        keyword: filters.keyword,
                         page: page
                     }
                 })
                 .then((response) => {
+                    if (requestId !== this.sessionsRequestId) return;
+                    if (page > response.data.meta.last_page) {
+                        return this.loadSessions(Math.max(1, response.data.meta.last_page), filters);
+                    }
                     this.totalSessions = response.data.meta.total;
                     this.conferenceSessions = response.data.data;
                     this.laravelData = response.data;
+                    this.currentPage = response.data.meta.current_page;
+                    this.listUrl = sessionListUrl(window.location.pathname, filters, this.currentPage);
+                    window.history.replaceState(window.history.state, '', this.listUrl);
                 })
                 .catch((error) => {
-                    this.$toast.error(`Could not find the sessions`);
+                    if (requestId === this.sessionsRequestId) {
+                        this.$toast.error(`Could not find the sessions`);
+                    }
                 });
         },
         addSession: function() {
@@ -241,7 +289,7 @@ export default {
             axios.post('/api/admin/conference-session', this.new_session)
                 .then((response) =>{
                     this.$toast.success(`New session added`);
-                    this.loadSessions();
+                    this.loadSessions(this.currentPage);
                     this.new_session.name = '';
                     this.new_session.description = '';
                 })
