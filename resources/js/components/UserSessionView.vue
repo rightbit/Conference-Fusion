@@ -24,6 +24,11 @@
                         <div class="mb-4 ms-1"><b>Track:</b> {{ session.track_name }}</div>
 <!--                    <div class="mb-4 ms-1"><b>Track head:</b> </div> -->
 
+                        <div v-if="session.participant_notes">
+                            <h4>Participant notes</h4>
+                            <div class="col-lg-9 mb-3 ms-1" style="white-space: pre-wrap">{{ session.participant_notes }}</div>
+                        </div>
+
                         <h4>Participants</h4>
                         <div v-if="session.session_participants?.length > 1" class="alert alert-info col-lg-10 d-flex my-2 py-2" role="alert">
                             <div><i class="bi bi-exclamation-circle-fill me-1"></i></div>
