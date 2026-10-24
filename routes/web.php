@@ -73,15 +73,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','can:view_admin']], f
 
     //Vue Only
     Route::view('conference-session-list', 'admin.conference_session_list')->name('admin_conference_session_list');
-    Route::get('conference-session/{id}', function($id) {
+    Route::get('conference-session/{id?}', function($id = 0) {
                 $default_session_duration = SiteConfig::where('key', 'default_session_duration')->first()->value ?? 0;
                 return view('admin.conference_session', ['id' => $id, 'default_session_duration' => $default_session_duration]);
-            })->name('admin_conference_session');
+            })->whereNumber('id')->name('admin_conference_session');
 
     Route::view('conference-list', 'admin.conference_list')->name('admin_conference_list');
-    Route::get('conference-info/{id}', function($id) {
+    Route::get('conference-info/{id?}', function($id = 0) {
                 return view('admin.conference_info', ['id' => $id]);
-            })->name('admin_conference_info');
+            })->whereNumber('id')->name('admin_conference_info');
 
     Route::view('configuration', 'admin.configuration')->name('admin_configuration');
 
@@ -104,9 +104,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','can:view_admin']], f
     Route::view('user-list', 'admin.user_list')->name('admin_user_list');
     Route::view('volunteer-list', 'admin.volunteer_list')->name('admin_volunteer_list');
     Route::view('volunteer-schedule', 'admin.volunteer_schedule')->name('admin_volunteer_schedule');
-    Route::get('user-profile/{id}', function($id) {
+    Route::get('user-profile/{id?}', function($id = null) {
+        $id = $id ?: Auth::id();
         return view('user.profile', ['id' => $id]);
-    })->name('user_profile');
+    })->whereNumber('id')->name('user_profile');
 
     // Session import routes
     Route::get('import-session', [App\Http\Controllers\ImportSessionController::class, 'form'])

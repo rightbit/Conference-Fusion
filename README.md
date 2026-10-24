@@ -28,7 +28,7 @@ This is just placeholder readme until the app reaches a full beta. If you are in
 ### To Run Locally with Laravel Sail
 Start Docker Desktop, then run these commands from the project directory.
 On a fresh checkout, copy `.env.example` to `.env` and install the locked PHP
-dependencies using PHP 8.3:
+dependencies using PHP 8.4:
 
 ```sh
 cp .env.example .env
@@ -36,7 +36,7 @@ docker run --rm \
     -u "$(id -u):$(id -g)" \
     -v "$PWD:/var/www/html" \
     -w /var/www/html \
-    laravelsail/php83-composer:latest \
+    laravelsail/php84-composer:latest \
     composer install --no-interaction --prefer-dist
 ./vendor/bin/sail up -d
 ./vendor/bin/sail artisan key:generate
