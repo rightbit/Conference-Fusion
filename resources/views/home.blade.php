@@ -86,7 +86,7 @@
                             <partials-presenter-promo
                                     :badge-name="'{{ addslashes($user->info->badge_name) }}'"
                                     :profile-image="'{{ str_replace('-thumb', '', $user->info->profile_image) }}'"
-                                    :conference-image="'{{ asset('/images/presenter-promos/' . $session_conference['short_name'] . '-presenter-promo.jpg') }}'"
+                                    :conference-image="'{{ asset('/images/presenter-promos/' . $session_conference['short_name'] . '-presenter-promo.png') }}'"
                             />
                         </div>
                     @endif
