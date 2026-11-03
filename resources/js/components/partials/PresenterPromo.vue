@@ -8,7 +8,9 @@
         <img class="profile-image" :src="profileImage" />
     </div>
     <button @click="saveimage" class="btn btn-primary mt-2 me-2">Save as an image</button>
-    <a href="/user/profile" class="btn btn-secondary mt-2"><i class="bi bi-person-circle"></i> Update my Profile Picture</a>
+    <a href="/user/profile" class="btn btn-secondary mt-2 me-2"><i class="bi bi-person-circle"></i> Update my Profile Picture</a>
+    <a :href="conferenceImage" download class="btn btn-secondary mt-2 ">Download a blank template</a>
+
   </div>
 </template>
 
