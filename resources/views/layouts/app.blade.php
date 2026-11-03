@@ -88,6 +88,7 @@
                         {{-- Admin Section --}}
                         @can('view_admin', 'user')
                             <li class="nav-item dropdown">
+                                <!--suppress HtmlUnknownAttribute -->
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ $session_conference['short_name'] }}
                                 </a>
@@ -118,6 +119,7 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
+                                <!--suppress HtmlUnknownAttribute -->
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
                                 </a>
