@@ -6,7 +6,7 @@
 <template>
     <div class="">
         <h2>Schedule List</h2>
-        <h6>Alphabetical list of sessions on the schedule including participants and errors</h6>
+        <h6>List of sessions on the schedule including participants and errors (click Session Name or Date & Time to sort)</h6>
         {{ data.length }} sessions found
         <select v-model="trackId" class="form-select w-25 mb-2 me-2 float-end" @change="loadReport">
             <option value="0">All Tracks</option>
@@ -17,16 +17,24 @@
             <thead style="z-index: 500">
             <tr class="bg-secondary text-white">
                 <td class="ts-sc"><button class="btn btn-sm btn-link" @click="scrollToTop"><i class="bi bi-chevron-bar-up"></i></button></td>
-                <td class="ts-sc w-100">Session Name</td>
+                <td class="ts-sc w-100">
+                    <button class="btn btn-sm btn-link text-primary text-decoration-none fw-bold p-0" @click="setSort('name')">
+                        Session Name <i :class="['bi', sortIcon('name')]"></i>
+                    </button>
+                </td>
                 <td class="ts-sc text-center">Track</td>
                 <td class="ts-sc text-center">Type</td>
-                <td class="ts-sc text-center">Date & Time </td>
+                <td class="ts-sc text-center text-nowrap">
+                    <button class="btn btn-sm btn-link text-primary text-decoration-none fw-bold p-0" @click="setSort('date')">
+                        Date & Time <i :class="['bi', sortIcon('date')]"></i>
+                    </button>
+                </td>
                 <td class="ts-sc text-center">Room</td>
                 <td class="ts-sc w-auto pe-2">Status</td>
                 <td class="ts-sc w-auto pe-2"></td>
             </tr>
             </thead>
-            <tbody v-for="d in data">
+            <tbody v-for="d in sortedData" :key="d.session_id">
             <tr>
                 <td><button v-if="d.errors"
                             ref="errors"
@@ -46,7 +54,7 @@
                 <td class="text-nowrap text-center">
                     {{ formattedDate(d.date_time[0]) }} <span v-if="d.date_time.length > 1">+{{ d.date_time.length - 1 }} </span>
                 </td>
-                <td class="text-nowrap  text-center">{{ d.room_name }} {{ d.capacity }} <i v-if="d.has_av" class="bi bi-person-video3"></i></td>
+                <td class="text-nowrap  text-center">{{ d.room_name }}<span v-if="d.room_number != null && d.room_number !== ''"> ({{ d.room_number }})</span> {{ d.capacity }} <i v-if="d.has_av" class="bi bi-person-video3"></i></td>
                 <td class="text-center"><i :class="[goodStatuses.includes(d.status_id) ? 'bi-check-square text-success':'bi-exclamation-triangle-fill text-warning']" ></i></td>
                 <td class="text-center"><button class="btn btn-sm btn-link float-end" @click="loadReport"><b><i class="bi bi-arrow-repeat"></i></b></button></td>
             </tr>
@@ -112,8 +120,29 @@ export default {
             goodStatuses: [4,5],
             sessionErrors: {},
             errorNumber: 1,
-
+            sortKey: 'name',
+            sortDirection: 'asc',
         }
+    },
+    computed: {
+        sortedData: function () {
+            if (!Array.isArray(this.data)) {
+                return [];
+            }
+            const direction = this.sortDirection === 'asc' ? 1 : -1;
+            return [...this.data].sort((a, b) => {
+                if (this.sortKey === 'date') {
+                    const aTime = this.earliestTime(a);
+                    const bTime = this.earliestTime(b);
+                    // Unscheduled sessions always go last
+                    if (aTime === null && bTime === null) return this.compareNames(a, b);
+                    if (aTime === null) return 1;
+                    if (bTime === null) return -1;
+                    return (aTime - bTime) * direction || this.compareNames(a, b);
+                }
+                return this.compareNames(a, b) * direction;
+            });
+        },
     },
     emits: ['queryParams'],
     mounted() {
@@ -153,6 +182,31 @@ export default {
                 .catch((error) => {
                     this.$toast.error(`Could not save the ignore errors setting`);
                 });
+        },
+        setSort: function (key) {
+            if (this.sortKey === key) {
+                this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                this.sortKey = key;
+                this.sortDirection = 'asc';
+            }
+        },
+        sortIcon: function (key) {
+            if (this.sortKey !== key) {
+                return 'bi-arrow-down-up opacity-50';
+            }
+            const type = key === 'date' ? 'numeric' : 'alpha';
+            return `bi-sort-${type}-${this.sortDirection === 'asc' ? 'down' : 'up'}`;
+        },
+        compareNames: function (a, b) {
+            return (a.session_name ?? '').localeCompare(b.session_name ?? '', undefined, { sensitivity: 'base', numeric: true });
+        },
+        earliestTime: function (session) {
+            const times = (session.date_time ?? [])
+                .map((date) => moment(date))
+                .filter((date) => date.isValid())
+                .map((date) => date.valueOf());
+            return times.length ? Math.min(...times) : null;
         },
         formattedDate: function (date) {
             return moment(date).format('MM-DD HH:mm');
