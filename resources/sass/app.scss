@@ -1,4 +1,7 @@
-// Fonts
+// Per-installation overrides (gitignored; see _custom.example.scss)
+@import 'custom';
+
+// Default font
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
 // Variables
