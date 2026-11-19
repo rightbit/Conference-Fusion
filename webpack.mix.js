@@ -1,4 +1,10 @@
 const mix = require('laravel-mix');
+const fs = require('fs');
+
+// Ensure the per-installation sass overrides file exists
+if (!fs.existsSync('resources/sass/_custom.scss')) {
+    fs.writeFileSync('resources/sass/_custom.scss', '// Per-installation overrides\n');
+}
 
 /*
  |--------------------------------------------------------------------------
