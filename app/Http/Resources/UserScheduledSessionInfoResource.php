@@ -18,6 +18,7 @@ class UserScheduledSessionInfoResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
+            'participant_notes' => $this->participant_notes,
             'seed_questions' => $this->seed_questions,
             'duration_minutes' => $this->duration_minutes,
             'conference_name' => $this->conference->name,

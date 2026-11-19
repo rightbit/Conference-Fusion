@@ -9,6 +9,14 @@ class Conference extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'schedule_published' => 'boolean',
+    ];
+
+    protected $attributes = [
+        'schedule_published' => false,
+    ];
+
     protected $fillable = [
         'name',
         'short_name',

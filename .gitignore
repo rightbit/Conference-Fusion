@@ -8,6 +8,7 @@
 .env
 .env.backup
 .phpunit.result.cache
+/.phpunit.cache/
 docker-compose.override.yml
 Homestead.json
 Homestead.yaml
@@ -15,3 +16,10 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+/resources/sass/_custom.scss
+/public/css/app.css
+/public/css/app.css.map
+/public/js/*.js
+/public/js/*.js.map
+/public/js/*.LICENSE.txt
+/public/mix-manifest.json

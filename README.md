@@ -28,7 +28,7 @@ This is just placeholder readme until the app reaches a full beta. If you are in
 ### To Run Locally with Laravel Sail
 Start Docker Desktop, then run these commands from the project directory.
 On a fresh checkout, copy `.env.example` to `.env` and install the locked PHP
-dependencies using PHP 8.3:
+dependencies using PHP 8.4:
 
 ```sh
 cp .env.example .env
@@ -36,7 +36,7 @@ docker run --rm \
     -u "$(id -u):$(id -g)" \
     -v "$PWD:/var/www/html" \
     -w /var/www/html \
-    laravelsail/php83-composer:latest \
+    laravelsail/php84-composer:latest \
     composer install --no-interaction --prefer-dist
 ./vendor/bin/sail up -d
 ./vendor/bin/sail artisan key:generate
@@ -77,6 +77,34 @@ THIS MUST BE CHANGED BEFORE USING THE SITE
 - Custom Views for terms and conditions and welcome can be added to
   - resources/views/custom/terms.blade.php
   - resources/views/custom/welcome.blade.php
+
+## Public schedule publication
+
+Conferences start with `schedule_published=false`, including existing conferences
+when the publication migration runs. Apply schema updates with `php artisan migrate`.
+An admin can sync, publish, or unpublish a conference from its Conference Info
+page. First click **Sync session schedule** to save the current scheduled events
+and their public data, then **Publish session schedule** to make that snapshot
+visible. Neither action changes session statuses or the internal planning schedule.
+
+`/api/public-schedule` uses the default conference's publication setting.
+Unpublished schedules return empty `events`, `presenters`, and `eventPresenters`
+arrays while retaining metadata, sponsors, and announcements.
+`/api/public-schedule-test` is an ungated draft preview: it returns all schedule
+entries on non-administrative tracks, regardless of session status or publication.
+The public endpoint loads its schedule data from the saved JSON snapshot. It
+only queries the database to select the default conference and check publication.
+Edits to events, presenters, rooms, tracks, sponsors, and announcements become
+public only after another sync. Syncing a published conference updates its public
+snapshot immediately; syncing an unpublished conference does not publish it.
+Unpublishing hides schedule events immediately without deleting the snapshot.
+Already-open clients must reload to see these changes.
+
+Snapshots are stored per conference in `storage/app/schedule-snapshots/` on the
+local filesystem disk, outside the web root. Preserve this directory across
+deployments and share it between web instances if using multiple servers. A sync
+replaces the JSON file atomically. Publishing requires an existing snapshot; if
+a published snapshot is lost, the public endpoint returns HTTP 503 until synced.
 
 ## To Dos
 - Make Session/panel/presentaion type names dynamic

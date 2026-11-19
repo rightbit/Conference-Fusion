@@ -8,6 +8,7 @@ use App\Http\Resources\ConferenceResource;
 use App\Models\Conference;
 use App\Models\ConferenceSchedule;
 use App\Models\ConferenceSession;
+use App\Services\PublicScheduleSnapshot;
 use Illuminate\Http\Request;
 
 class ConferenceController extends Controller
@@ -143,28 +144,28 @@ class ConferenceController extends Controller
 
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $conference_id
-     * @return \Illuminate\Http\Response
+     * Publish or unpublish the public schedule without changing session statuses.
      */
-    public function scheduledStatusSync($conference_id)
+    public function updateSchedulePublication(Request $request, Conference $conference)
     {
-        $sessions = ConferenceSession::where('conference_id', '=', $conference_id)->get();
-        foreach ($sessions as $session) {
-            $schedule = ConferenceSchedule::where('conference_session_id', '=', $session->id)
-                ->where('conference_id', '=', $conference_id)
-                ->first();
-            if ($schedule) {
-                $session->session_status_id = 5;
-                $session->save();
-            } else {
-                if ($session->session_status_id == 5) {
-                    $session->session_status_id = 3;
-                    $session->save();
-                }
-            }
+        $validated = $request->validate([
+            'schedule_published' => ['required', 'boolean'],
+        ]);
+
+        if ($validated['schedule_published'] && !app(PublicScheduleSnapshot::class)->exists($conference)) {
+            abort(422, 'Sync the session schedule before publishing it.');
         }
-        return response()->noContent();
+
+        $conference->schedule_published = $validated['schedule_published'];
+        $conference->saveOrFail();
+
+        return new ConferenceResource($conference);
+    }
+
+    public function syncSchedule(Conference $conference, PublicScheduleSnapshot $snapshots)
+    {
+        $schedule = $snapshots->sync($conference);
+
+        return response()->json(['events_synced' => count($schedule['events'])]);
     }
 }
