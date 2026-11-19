@@ -78,6 +78,34 @@ THIS MUST BE CHANGED BEFORE USING THE SITE
   - resources/views/custom/terms.blade.php
   - resources/views/custom/welcome.blade.php
 
+## Public schedule publication
+
+Conferences start with `schedule_published=false`, including existing conferences
+when the publication migration runs. Apply schema updates with `php artisan migrate`.
+An admin can sync, publish, or unpublish a conference from its Conference Info
+page. First click **Sync session schedule** to save the current scheduled events
+and their public data, then **Publish session schedule** to make that snapshot
+visible. Neither action changes session statuses or the internal planning schedule.
+
+`/api/public-schedule` uses the default conference's publication setting.
+Unpublished schedules return empty `events`, `presenters`, and `eventPresenters`
+arrays while retaining metadata, sponsors, and announcements.
+`/api/public-schedule-test` is an ungated draft preview: it returns all schedule
+entries on non-administrative tracks, regardless of session status or publication.
+The public endpoint loads its schedule data from the saved JSON snapshot. It
+only queries the database to select the default conference and check publication.
+Edits to events, presenters, rooms, tracks, sponsors, and announcements become
+public only after another sync. Syncing a published conference updates its public
+snapshot immediately; syncing an unpublished conference does not publish it.
+Unpublishing hides schedule events immediately without deleting the snapshot.
+Already-open clients must reload to see these changes.
+
+Snapshots are stored per conference in `storage/app/schedule-snapshots/` on the
+local filesystem disk, outside the web root. Preserve this directory across
+deployments and share it between web instances if using multiple servers. A sync
+replaces the JSON file atomically. Publishing requires an existing snapshot; if
+a published snapshot is lost, the public endpoint returns HTTP 503 until synced.
+
 ## To Dos
 - Make Session/panel/presentaion type names dynamic
   - Create flag to include them in the call
