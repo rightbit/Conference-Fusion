@@ -142,18 +142,17 @@ class SchedulePublicationTest extends TestCase
         return '/api/admin/conference/'.$this->conference->id.'/schedule-publication';
     }
 
-    public function test_sync_requires_admin_and_does_not_publish_or_change_statuses(): void
+    public function test_sync_requires_admin_does_not_publish_and_updates_session_statuses(): void
     {
         $this->addScheduleFixtures();
         $url = '/api/admin/conference/'.$this->conference->id.'/sync-schedule';
-        $before = DB::table('conference_sessions')->orderBy('id')->get()->toJson();
         $this->postJson($url)->assertUnauthorized();
         $staff = User::factory()->create();
         DB::table('user_permissions')->insert(['user_id' => $staff->id, 'permission' => 'view_admin']);
         $this->actingAs($staff)->postJson($url)->assertForbidden();
-        $this->actingAs($this->admin)->postJson($url)->assertOk()->assertJsonPath('events_synced', 1);
+        $this->actingAs($this->admin)->postJson($url)->assertOk()->assertJsonPath('events_synced', 2);
         $this->assertFalse($this->conference->fresh()->schedule_published);
-        $this->assertSame($before, DB::table('conference_sessions')->orderBy('id')->get()->toJson());
+        $this->assertSame([5, 5, 5, 3], DB::table('conference_sessions')->orderBy('id')->pluck('session_status_id')->all());
     }
 
     public function test_public_snapshot_changes_only_on_sync_while_test_endpoint_reads_live_data(): void
@@ -219,8 +218,8 @@ class SchedulePublicationTest extends TestCase
 
     private function addScheduleFixtures(): array
     {
-        $scheduled = DB::table('session_statuses')->insertGetId(['status' => 'Scheduled']);
-        $planning = DB::table('session_statuses')->insertGetId(['status' => 'Planning']);
+        $scheduled = DB::table('session_statuses')->insertGetId(['id' => 5, 'status' => 'Scheduled']);
+        $planning = DB::table('session_statuses')->insertGetId(['id' => 3, 'status' => 'Planning']);
         $track = DB::table('tracks')->insertGetId(['name' => 'Public', 'administrative' => false]);
         $internal = DB::table('tracks')->insertGetId(['name' => 'Internal', 'administrative' => true]);
         $room = DB::table('rooms')->insertGetId([
