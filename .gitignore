@@ -23,3 +23,4 @@ yarn-error.log
 /public/js/*.js.map
 /public/js/*.LICENSE.txt
 /public/mix-manifest.json
+.DS_Store
