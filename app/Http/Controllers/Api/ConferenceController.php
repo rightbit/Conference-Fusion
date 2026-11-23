@@ -10,6 +10,7 @@ use App\Models\ConferenceSchedule;
 use App\Models\ConferenceSession;
 use App\Services\PublicScheduleSnapshot;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ConferenceController extends Controller
 {
@@ -164,8 +165,28 @@ class ConferenceController extends Controller
 
     public function syncSchedule(Conference $conference, PublicScheduleSnapshot $snapshots)
     {
-        $schedule = $snapshots->sync($conference);
+        $schedule = DB::transaction(function () use ($conference, $snapshots) {
+            $this->syncSessionStatuses($conference);
+
+            return $snapshots->sync($conference);
+        });
 
         return response()->json(['events_synced' => count($schedule['events'])]);
+    }
+
+    private function syncSessionStatuses(Conference $conference): void
+    {
+        $scheduledIds = ConferenceSchedule::where('conference_id', $conference->id)
+            ->whereNotNull('conference_session_id')
+            ->select('conference_session_id');
+
+        ConferenceSession::where('conference_id', $conference->id)
+            ->whereIn('id', $scheduledIds)
+            ->update(['session_status_id' => 5]);
+
+        ConferenceSession::where('conference_id', $conference->id)
+            ->where('session_status_id', 5)
+            ->whereNotIn('id', $scheduledIds)
+            ->update(['session_status_id' => 3]);
     }
 }
